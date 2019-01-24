@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Applicant;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreApplicant;
 
 class ApplicantsController extends Controller
 {
@@ -26,18 +26,22 @@ class ApplicantsController extends Controller
      */
     public function create()
     {
-        //
+        return view('applicants.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param StoreApplicant $request
+     * @param Applicant $applicant
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreApplicant $request, Applicant $applicant)
     {
-        //
+        $attributes = $request->validated();
+        $newApplicant = $applicant->createApplicant($attributes);
+
+        return redirect(route('applicants.show', ['applicant' => $newApplicant]));
     }
 
     /**
@@ -48,7 +52,9 @@ class ApplicantsController extends Controller
      */
     public function show($id)
     {
-        //
+        $applicant = Applicant::find($id);
+
+        return view('applicants.show', ['applicant' => $applicant]);
     }
 
     /**
@@ -59,19 +65,26 @@ class ApplicantsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $applicant = Applicant::find($id);
+
+        return view('applicants.edit', ['applicant' => $applicant]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param StoreApplicant $request
+     * @param Applicant $applicant
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreApplicant $request, $id)
     {
-        //
+        $attributes = $request->validated();
+        $applicant = Applicant::find($id);
+        $applicant->updateApplicant($attributes);
+
+        return $this->show($id);
     }
 
     /**
@@ -82,6 +95,8 @@ class ApplicantsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Applicant::destroy($id);
+
+        return redirect(route('applicants.index'));
     }
 }

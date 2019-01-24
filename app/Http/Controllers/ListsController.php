@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\ApiControllers\Applicants;
+namespace App\Http\Controllers;
 
-use App\Applicant;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
-class ApplicantsApiController extends Controller
+class ListsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,13 +13,17 @@ class ApplicantsApiController extends Controller
      */
     public function index()
     {
-        /** @todo use a Resource */
+        //
+    }
 
-        $applicants = Applicant::all();
-
-        return response()->json([
-            'applicants' => $applicants,
-        ]);
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
     }
 
     /**
@@ -42,6 +44,17 @@ class ApplicantsApiController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
     {
         //
     }
