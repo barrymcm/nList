@@ -15,6 +15,8 @@ class CreateApplicantsTable extends Migration
     {
         Schema::create('applicants', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('list_id');
+            $table->foreign('list_id')->references('id')->on('lists');
             $table->string('first_name', 50);
             $table->string('last_name', 100);
             $table->date('dob');
@@ -31,6 +33,6 @@ class CreateApplicantsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ApplicantSeeds');
+        Schema::dropIfExists('applicants');
     }
 }

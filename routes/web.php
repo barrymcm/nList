@@ -20,6 +20,11 @@ Route::get('/contact', function () {
     return view('contact_us');
 })->name('contact_us');
 
-Route::resources([
-    'applicants' => 'ApplicantsController'
-]);
+
+
+Route::resources(['events' => 'EventsController']);
+Route::resources(['applicant_lists' => 'ApplicantListsController']);
+Route::get('/applicant_list/{applicant_list}/event/{event}', 'ApplicantListsController@show')
+    ->name('applicant_list.show');
+
+Route::resources(['applicants' => 'ApplicantsController']);

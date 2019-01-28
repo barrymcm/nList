@@ -8,17 +8,17 @@
     <title>Document</title>
 </head>
 <body>
-    @section('nav')
-        <ul>
-            <li><a href="{{ route('home') }}">Home</a></li>
-            <li><a href="{{ route('about') }}">About</a></li>
-            <li><a href="{{ route('contact_us') }}">Contact</a></li>
-            <li><a href="{{ route('applicants.index') }}">List</a></li>
-        </ul>
-    @show
+@section('nav')
+    <ul>
+        <li><a href="{{ route('home') }}">Home</a></li>
+        <li><a href="{{ route('about') }}">About</a></li>
+        <li><a href="{{ route('contact_us') }}">Contact</a></li>
+        <li><a href="{{ route('events.index') }}">Events</a></li>
+    </ul>
+@show
 
-    <h1>@yield('title')</h1>
+<h1>@yield('title')</h1>
 
-    @yield('content')
+@yield('content')
 </body>
 </html>

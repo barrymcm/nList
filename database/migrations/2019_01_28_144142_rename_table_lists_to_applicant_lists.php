@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateListsTable extends Migration
+class RenameTableListsToApplicantLists extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,7 @@ class CreateListsTable extends Migration
      */
     public function up()
     {
-        Schema::create('lists', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('slot_id');
-            $table->foreign('slot_id')->references('id')->on('slots');
-            $table->timestamps();
-        });
+        Schema::rename('lists', 'applicant_lists');
     }
 
     /**
@@ -28,6 +23,6 @@ class CreateListsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lists');
+        Schema::rename('lists', 'applicant_lists');
     }
 }

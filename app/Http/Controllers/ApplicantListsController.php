@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\ApplicantList;
 use Illuminate\Http\Request;
 
-class ListsController extends Controller
+class ApplicantListsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -45,7 +46,10 @@ class ListsController extends Controller
      */
     public function show($id)
     {
-        //
+        $list = ApplicantList::find($id);
+        $event = request('event');
+
+        return view('applicant_lists.show', ['list' => $list, 'event' => $event]);
     }
 
     /**

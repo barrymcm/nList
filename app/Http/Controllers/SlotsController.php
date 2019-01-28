@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
-use App\Event;
-use App\Http\Requests\EventRequest;
 use Illuminate\Http\Request;
 
-class EventsController extends Controller
+class SlotsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +13,7 @@ class EventsController extends Controller
      */
     public function index()
     {
-        $events = Event::all();
-
-        return view('events.index', ['events' => $events]);
+        //
     }
 
     /**
@@ -28,8 +23,7 @@ class EventsController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
-        return view('events.create', ['categories' => $categories]);
+        //
     }
 
     /**
@@ -51,9 +45,7 @@ class EventsController extends Controller
      */
     public function show($id)
     {
-        $event = Event::find($id);
-
-        return view('events.show', ['event' => $event]);
+        //
     }
 
     /**
@@ -62,11 +54,9 @@ class EventsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Event $event)
+    public function edit($id)
     {
-        $categories = Category::all();
-
-        return view('events.edit', ['event' => $event, 'categories' => $categories->all()]);
+        //
     }
 
     /**
@@ -76,13 +66,9 @@ class EventsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(EventRequest $request, Event $event)
+    public function update(Request $request, $id)
     {
-        $request->validated();
-        $event->updateEvent($request);
-
-        return view('events.show', ['event' => $event]);
-
+        //
     }
 
     /**
