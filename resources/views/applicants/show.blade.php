@@ -11,4 +11,6 @@
         <li>Gender: {{  $applicant->created_at }}</li>
     </ul>
     <a href="{{ route('applicants.edit', $applicant) }}">Edit details</a>
+    <br><br>
+    <a href="{{ route('applicant_lists.show', ['list' => $applicant->list_id]) }}">Back to List</a>
 @endsection

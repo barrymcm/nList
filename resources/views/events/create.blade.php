@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Edit event')
+@section('title', 'Create event')
 
 @section('content')
+
     <form class="form form-group" action="{{ route('events.store') }}" method="post">
         @csrf
-        {{ method_field('PATCH') }}
         <label for="name">Name</label>
         <input type="text" name="name" value="">
         <label for="description">Description</label>
@@ -24,4 +24,6 @@
         </select>
         <input type="submit" value="submit">
     </form>
+    <br>
+    <div><a href="{{ route('events.index') }}">Back to events</a></div>
 @endsection

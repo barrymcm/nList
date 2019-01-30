@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Applicant;
+use App\Models\Applicant;
 use App\Http\Requests\StoreApplicant;
 
 class ApplicantsController extends Controller
@@ -26,11 +26,14 @@ class ApplicantsController extends Controller
      */
     public function create()
     {
-        return view('applicants.create');
+        return view('applicants.create', [
+            'list' => request('list'),
+            'event' => request('event')
+        ]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly cre\ated resource in storage.
      *
      * @param StoreApplicant $request
      * @param Applicant $applicant
@@ -67,7 +70,10 @@ class ApplicantsController extends Controller
     {
         $applicant = Applicant::find($id);
 
-        return view('applicants.edit', ['applicant' => $applicant]);
+        return view('applicants.edit', [
+            'applicant' => $applicant,
+            'list_id' => request('list')
+        ]);
     }
 
     /**

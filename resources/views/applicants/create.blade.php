@@ -6,12 +6,20 @@
 
     <form action="{{ route('applicants.store') }}" method="POST">
         @csrf
+        <input type="hidden" name="list_id" value="{{ $list }}">
+        <label for="first_name">First Name:</label>
         <input type="text" name="first_name" value="">
+        <label for="last_name">Last Name:</label>
         <input type="text" name="last_name" value="">
+        <label for="dob">Date of Birth</label>
         <input type="date" name="dob" value="">
+        <label for="gender">Male</label>
         <input type="radio" name="gender" value="male" checked="checked">
+        <label for="gender">Female</label>
         <input type="radio" name="gender" value="female">
         <input type="submit" value="submit">
     </form>
+    <br>
+    {{--<a href="{{ route('applicant_lists.show', $list) }}">Back to List</a>--}}
 
 @endsection

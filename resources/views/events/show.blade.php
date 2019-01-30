@@ -6,8 +6,8 @@
     <ul>
         <li>Name: {{ $event->name }}</li>
         <li>Description: {{ $event->description }}</li>
-        <li>Category: {{ $event->category() }}</li>
-        <li>Slots: {{ count($event->slots) }}</li>
+        <li>Category: {{ $event->category()->name }}</li>
+        <li>Slots: {{ count($event->total_slots) }}</li>
 
         @foreach($event->slots as $slot)
             <ul>
@@ -17,11 +17,10 @@
                 <li>End Date: {{ $slot->end_date }}</li>
                 <li>Lists:</li>
                 <ol>
-                    @foreach($slot->applicantLists as $applicantLists)
+                    @foreach($slot->applicantLists as $list)
                         <li>
-                            <a href="{{ route('applicant_list.show',
-                                ['list_id' => $applicantLists->id, 'event_id' => $event->id])}}">
-                                {{ $applicantLists->name }}
+                            <a href="{{ route('applicant_lists.show',
+                                ['list' => $list, 'event' => $event]) }}">{{ $list->name . ' ' . $list->id}}
                             </a>
                         </li>
                     @endforeach
@@ -32,7 +31,11 @@
     </ul>
     <div>
         <a href="{{ route('events.edit', $event->id) }}">Edit event</a>
-        <br/>
+        <br>
+        <br>
+        <a href="{{ route('events.index') }}">Back to events list</a>
+        <br>
+        <br>
         <form action="{{ route('events.destroy', $event->id) }}" method="post">
             @csrf
             {{ method_field('DELETE') }}

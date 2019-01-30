@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
-use App\Event;
-use App\Http\Requests\EventRequest;
-use Illuminate\Http\Request;
+use App\Models\Category;
+use App\Models\Event;
+use App\Http\Requests\StoreEvent;
 
 class EventsController extends Controller
 {
@@ -29,6 +28,7 @@ class EventsController extends Controller
     public function create()
     {
         $categories = Category::all();
+
         return view('events.create', ['categories' => $categories]);
     }
 
@@ -38,9 +38,12 @@ class EventsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreEvent $request, Event $event)
     {
-        //
+        $attributes = $request->validated();
+        $event = $event->createEvent($attributes);
+
+        return view('events.show', ['event' => $event]);
     }
 
     /**
@@ -76,7 +79,7 @@ class EventsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(EventRequest $request, Event $event)
+    public function update(StoreEvent $request, Event $event)
     {
         $request->validated();
         $event->updateEvent($request);

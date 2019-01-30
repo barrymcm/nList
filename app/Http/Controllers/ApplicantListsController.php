@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\ApplicantList;
+use App\Models\ApplicantList;
 use Illuminate\Http\Request;
 
 class ApplicantListsController extends Controller
@@ -47,9 +47,11 @@ class ApplicantListsController extends Controller
     public function show($id)
     {
         $list = ApplicantList::find($id);
-        $event = request('event');
 
-        return view('applicant_lists.show', ['list' => $list, 'event' => $event]);
+        return view('applicant_lists.show', [
+            'list' => $list,
+            'event' => request('event')
+        ]);
     }
 
     /**

@@ -23,8 +23,13 @@ Route::get('/contact', function () {
 
 
 Route::resources(['events' => 'EventsController']);
-Route::resources(['applicant_lists' => 'ApplicantListsController']);
-Route::get('/applicant_list/{applicant_list}/event/{event}', 'ApplicantListsController@show')
-    ->name('applicant_list.show');
-
 Route::resources(['applicants' => 'ApplicantsController']);
+
+//Route::resources(['applicant_lists' => 'ApplicantListsController']);
+
+/**
+ * @todo add these routes to a group
+ */
+Route::get('show/list/{list}/event/{event}', 'ApplicantListsController@show')->name('applicant_lists.show');
+Route::get('applicant/list/{list}/event{event}', 'ApplicantsController@create')->name('applicant.create');
+
