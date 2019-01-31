@@ -3,10 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\ApplicantList;
+use App\Services\ApplicantListService;
 use Illuminate\Http\Request;
 
 class ApplicantListsController extends Controller
 {
+    private $applicantListService;
+
+    public function __construct(ApplicantListService $applicantListService)
+    {
+        $this->applicantListService = $applicantListService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -44,14 +52,17 @@ class ApplicantListsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $list = ApplicantList::find($id);
 
-        return view('applicant_lists.show', [
-            'list' => $list,
-            'event' => request('event')
-        ]);
+        return view(
+            'applicant_lists.show',
+            [
+                'list' => $list,
+                'event' => request('event')
+            ]
+        );
     }
 
     /**

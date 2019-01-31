@@ -7,7 +7,8 @@
         <li>Name: {{ $event->name }}</li>
         <li>Description: {{ $event->description }}</li>
         <li>Category: {{ $event->category()->name }}</li>
-        <li>Slots: {{ count($event->total_slots) }}</li>
+        <li>Slots Allocated: {{ $event->total_slots }}</li>
+        <li>Slots Created: {{ count($event->slots) }}</li>
 
         @foreach($event->slots as $slot)
             <ul>

@@ -8,28 +8,27 @@
 | contains the "web" middleware group. Now create something great!
 */
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+Route::get(
+    '/',
+    function () {
+        return view('home');
+    }
+)->name('home');
 
-Route::get('/about', function () {
-    return view('about');
-})->name('about');
+Route::get(
+    '/about',
+    function () {
+        return view('about');
+    }
+)->name('about');
 
-Route::get('/contact', function () {
-    return view('contact_us');
-})->name('contact_us');
-
-
+Route::get(
+    '/contact',
+    function () {
+        return view('contact_us');
+    }
+)->name('contact_us');
 
 Route::resources(['events' => 'EventsController']);
 Route::resources(['applicants' => 'ApplicantsController']);
-
-//Route::resources(['applicant_lists' => 'ApplicantListsController']);
-
-/**
- * @todo add these routes to a group
- */
-Route::get('show/list/{list}/event/{event}', 'ApplicantListsController@show')->name('applicant_lists.show');
-Route::get('applicant/list/{list}/event{event}', 'ApplicantsController@create')->name('applicant.create');
-
+Route::resources(['applicant_lists' => 'ApplicantListsController']);

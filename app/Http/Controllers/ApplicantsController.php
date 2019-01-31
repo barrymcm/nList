@@ -4,9 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Applicant;
 use App\Http\Requests\StoreApplicant;
+use App\Services\ApplicantService;
+
 
 class ApplicantsController extends Controller
 {
+    private $applicantService;
+
+    public function __construct(ApplicantService $applicantService)
+    {
+        $this->applicantService = $applicantService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -20,16 +29,32 @@ class ApplicantsController extends Controller
     }
 
     /**
+     * @todo Refactor to remove the need for the if statment
+     *
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        return view('applicants.create', [
-            'list' => request('list'),
-            'event' => request('event')
-        ]);
+        if (!$this->applicantService->isListFull(request('list'))) {
+
+            return view(
+                'applicants.create', [
+                    'list' => (int)request('list'),
+                    'event' => (int)request('event')
+                ]
+            );
+        }
+
+        return redirect(
+            route(
+                'applicant_lists.show', [
+                    'list' => (int)request('list'),
+                    'event' => (int)request('event')
+                ]
+            )
+        );
     }
 
     /**
@@ -39,12 +64,22 @@ class ApplicantsController extends Controller
      * @param Applicant $applicant
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreApplicant $request, Applicant $applicant)
+    public function store(StoreApplicant $request)
     {
-        $attributes = $request->validated();
-        $newApplicant = $applicant->createApplicant($attributes);
+        $event = (int) request('event_id');
+        $list = (int) request('list_id');
 
-        return redirect(route('applicants.show', ['applicant' => $newApplicant]));
+        $attributes = $request->validated();
+        $this->applicantService->tryAddApplicantToList($attributes);
+
+        return redirect(
+            route(
+                'applicant_lists.show', [
+                    'list' => $list,
+                    'event' => $event
+                ]
+            )
+        );
     }
 
     /**
@@ -70,10 +105,12 @@ class ApplicantsController extends Controller
     {
         $applicant = Applicant::find($id);
 
-        return view('applicants.edit', [
-            'applicant' => $applicant,
-            'list_id' => request('list')
-        ]);
+        return view(
+            'applicants.edit', [
+                'applicant' => $applicant,
+                'list_id' => (int) request('list')
+            ]
+        );
     }
 
     /**

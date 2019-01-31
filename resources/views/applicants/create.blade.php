@@ -7,6 +7,7 @@
     <form action="{{ route('applicants.store') }}" method="POST">
         @csrf
         <input type="hidden" name="list_id" value="{{ $list }}">
+        <input type="hidden" name="event_id" value="{{ $event }}">
         <label for="first_name">First Name:</label>
         <input type="text" name="first_name" value="">
         <label for="last_name">Last Name:</label>
@@ -20,6 +21,6 @@
         <input type="submit" value="submit">
     </form>
     <br>
-    {{--<a href="{{ route('applicant_lists.show', $list) }}">Back to List</a>--}}
+    <a href="{{ route('applicant_lists.show', ['list' => $list, 'event' => $event]) }}">Back to List</a>
 
 @endsection
