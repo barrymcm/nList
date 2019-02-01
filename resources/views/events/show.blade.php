@@ -6,7 +6,7 @@
     <ul>
         <li>Name: {{ $event->name }}</li>
         <li>Description: {{ $event->description }}</li>
-        <li>Category: {{ $event->category()->name }}</li>
+        <li>Category: {{ $event->category->name }}</li>
         <li>Slots Allocated: {{ $event->total_slots }}</li>
         <li>Slots Created: {{ count($event->slots) }}</li>
 

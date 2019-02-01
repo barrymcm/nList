@@ -29,11 +29,6 @@ class ApplicantRepository implements RepositoryInterface
         return $this->applicantModel::create($applicant);
     }
 
-    public function edit($id)
-    {
-
-    }
-
     public function update()
     {
 

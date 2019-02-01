@@ -9,11 +9,9 @@ interface RepositoryInterface
 
     public function show($id);
 
-    public function store(array $applicant);
+    public function store(array $var);
 
-    public function edit($id);
-
-    public function update();
+    public function update(array $var);
 
     public function softDelete();
 

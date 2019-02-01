@@ -29,11 +29,6 @@ class ApplicantListRepository implements RepositoryInterface
         return $this->applicantListModel::create($applicantList);
     }
 
-    public function edit($id)
-    {
-
-    }
-
     public function update()
     {
 

@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Models\Applicant;
-use App\Models\ApplicantList;
 use App\Repositories\ApplicantRepository;
+use App\Repositories\EventRepository;
 use App\Services\ApplicantService;
+use App\Services\EventService;
 use Illuminate\Support\ServiceProvider;
 use App\Services\ApplicantListService;
 
@@ -28,12 +28,16 @@ class ServicesServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(ApplicantListService::class, function () {
-            return new ApplicantListService(new ApplicantList());
+        $this->app->bind(ApplicantListService::class, function ($app) {
+            return new ApplicantListService($app->make('App\ApplicantList'));
         });
 
         $this->app->bind(ApplicantService::class, function ($app) {
             return new ApplicantService(new ApplicantRepository($app->make('App\Applicant')));
+        });
+
+        $this->app->bind(EventService::class, function ($app) {
+            return new EventService(new EventRepository($app->make('App\Event')));
         });
     }
 }

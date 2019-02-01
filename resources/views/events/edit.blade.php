@@ -5,7 +5,8 @@
 @section('content')
     <form class="form form-group" action="{{ route('events.update', $event) }}" method="post">
         @csrf
-        {{ method_field('PATCH') }}
+        {{ method_field('PUT') }}
+        <input type="hidden" name="event_id" value="{{ $event->id }}">
         <label for="name">Name</label>
         <input type="text" name="name" value="{{ $event->name }}">
         <label for="description">Description</label>
@@ -22,7 +23,7 @@
         </select>
 
         <label for="slots">Slots</label>
-        <select name="slots" id="">
+        <select name="total_slots" id="">
             @for($i = 1; $i <= 15; $i++)
                 @if($i == $event->total_slots)
                     <option value="{{ $event->total_slots }}" selected>{{ $event->total_slots  }}</option>

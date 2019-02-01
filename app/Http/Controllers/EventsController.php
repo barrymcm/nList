@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use App\Models\Event;
+use App\Models\Category;
 use App\Http\Requests\StoreEvent;
+use App\Http\Requests\UpdateEvent;
+use Facades\App\Repositories\EventRepository;
+
 
 class EventsController extends Controller
 {
@@ -38,10 +41,10 @@ class EventsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreEvent $request, Event $event)
+    public function store(StoreEvent $request)
     {
         $attributes = $request->validated();
-        $event = $event->createEvent($attributes);
+        $event = EventRepository::store($attributes);
 
         return view('events.show', ['event' => $event]);
     }
@@ -54,7 +57,7 @@ class EventsController extends Controller
      */
     public function show($id)
     {
-        $event = Event::find($id);
+        $event = EventRepository::show($id);
 
         return view('events.show', ['event' => $event]);
     }
@@ -79,10 +82,10 @@ class EventsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreEvent $request, Event $event)
+    public function update(UpdateEvent $request)
     {
-        $request->validated();
-        $event->updateEvent($request);
+        $attributes = $request->validated();
+        $event = EventRepository::update($attributes);
 
         return view('events.show', ['event' => $event]);
 

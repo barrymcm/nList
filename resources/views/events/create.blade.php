@@ -17,7 +17,7 @@
             @endforeach
         </select>
         <label for="slots">Slots</label>
-        <select name="slots" id="">
+        <select name="total_slots" id="">
             @for($i = 1; $i <= 15; $i++)
                 <option value="{{ $i }}">{{ $i }}</option>
             @endfor
