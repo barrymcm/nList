@@ -14,9 +14,15 @@
             <ul>
                 <li>Name: {{ $slot->name }}</li>
                 <li>Capacity: {{ $slot->slot_capacity }}</li>
+                <li>Number of lists: {{ $slot->total_lists }}</li>
                 <li>Start Date: {{ $slot->start_date }}</li>
                 <li>End Date: {{ $slot->end_date }}</li>
-                <li>Lists:</li>
+                <li>Lists:
+                @if(count($slot->applicantLists) < $slot->total_lists)
+                    <a href="{{ route('applicant_lists.create', ['slot' => $slot, 'event' => $event]) }}">Add a list</a>
+                @endif
+                </li>
+
                 <ol>
                     @foreach($slot->applicantLists as $list)
                         <li>
@@ -27,6 +33,12 @@
                     @endforeach
                 </ol>
             </ul>
+            @if(empty($slot->name))
+                <a href="{{ route('slots.edit', ['slot' => $slot->id, 'event' => $event->id])}}">Add slot details</a>
+                @else
+                <a href="{{ route('slots.edit', ['slot' => $slot->id, 'event' => $event->id])}}">Edit slot details</a>
+            @endif
+            <br>
             <br>
         @endforeach
     </ul>

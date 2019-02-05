@@ -14,27 +14,37 @@ class SlotRepository implements RepositoryInterface
         $this->slotModel = $slotModel;
     }
 
-    public function index()
+    public function all()
     {
 
     }
 
-    public function show($id)
+    public function find($id)
     {
-
+        return $this->slotModel::find($id);
     }
 
-    public function store(array $event)
+    public function create(array $event)
     {
 
     }
 
     public function update(array $slot)
     {
+        $slotModel = $this->slotModel::find($slot['slot_id']);
 
+        $slotModel->name = $slot['name'];
+        $slotModel->slot_capacity = $slot['slot_capacity'];
+        $slotModel->total_lists = $slot['total_lists'];
+        $slotModel->start_date = $slot['start_date'];
+        $slotModel->end_date = $slot['end_date'];
+
+        $slotModel->save();
+
+        return $slotModel;
     }
 
-    public function softDelete()
+    public function softDelete($id)
     {
 
     }

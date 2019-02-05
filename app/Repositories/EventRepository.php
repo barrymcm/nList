@@ -5,7 +5,6 @@ namespace App\Repositories;
 
 use App\Models\Category;
 use App\Models\Event;
-use Facades\App\Repositories\SlotRepository;
 use Illuminate\Support\Facades\DB;
 
 class EventRepository implements RepositoryInterface
@@ -18,12 +17,12 @@ class EventRepository implements RepositoryInterface
         $this->eventModel = $event;
     }
 
-    public function index()
+    public function all()
     {
-
+        return $this->eventModel::all();
     }
 
-    public function show($eventId)
+    public function find($eventId)
     {
         $event = $this->eventModel::find($eventId);
         $category = Category::find($event->category_id);
@@ -33,7 +32,7 @@ class EventRepository implements RepositoryInterface
 
     }
 
-    public function store(array $event)
+    public function create(array $event)
     {
         try {
             DB::beginTransaction();
@@ -73,7 +72,7 @@ class EventRepository implements RepositoryInterface
         return $event;
     }
 
-    public function softDelete()
+    public function softDelete($id)
     {
 
     }

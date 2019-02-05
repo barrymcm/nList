@@ -18,7 +18,7 @@ class EventsController extends Controller
      */
     public function index()
     {
-        $events = Event::all();
+        $events = EventRepository::all();
 
         return view('events.index', ['events' => $events]);
     }
@@ -57,7 +57,7 @@ class EventsController extends Controller
      */
     public function show($id)
     {
-        $event = EventRepository::show($id);
+        $event = EventRepository::find($id);
 
         return view('events.show', ['event' => $event]);
     }
@@ -88,7 +88,6 @@ class EventsController extends Controller
         $event = EventRepository::update($attributes);
 
         return view('events.show', ['event' => $event]);
-
     }
 
     /**

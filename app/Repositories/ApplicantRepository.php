@@ -14,27 +14,27 @@ class ApplicantRepository implements RepositoryInterface
         $this->applicantModel = $applicantModel;
     }
 
-    public function index()
+    public function all()
     {
         return $this->applicantModel::all();
     }
 
-    public function show($id)
+    public function find($id)
     {
 
     }
 
-    public function store(array $applicant)
+    public function create(array $applicant)
     {
         return $this->applicantModel::create($applicant);
     }
 
-    public function update()
+    public function update(array $applicant)
     {
 
     }
 
-    public function softDelete()
+    public function softDelete($id)
     {
 
     }

@@ -35,6 +35,16 @@
         @endforeach
         </tbody>
     </table>
+    <br>
+    @if(count($list->applicants) < 1)
+        <form action="{{ route('applicant_lists.destroy', $list->id) }}" method="POST">
+            @csrf
+            @method('DELETE')
+            <input type="hidden" name="event" value="{{ $event }}">
+            <input type="submit" name="submit" value="Delete List">
+        </form>
+    @endif
+    <br><br>
     <a href="{{ route('events.show', ['event' => $event]) }}">Back to events</a>
     <br><br>
     @if(count($list->applicants) < $list->max_applicants)
