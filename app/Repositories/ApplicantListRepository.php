@@ -4,6 +4,7 @@
 namespace App\Repositories;
 
 use App\Models\ApplicantList;
+use Illuminate\Support\Facades\DB;
 
 class ApplicantListRepository implements RepositoryInterface
 {
@@ -14,39 +15,52 @@ class ApplicantListRepository implements RepositoryInterface
         $this->applicantListModel = $applicantListModel;
     }
 
-    public function index()
+    public function all()
     {
         return $this->applicantListModel::all();
     }
 
-    public function show($id)
+    public function find($id)
     {
         return $this->applicantListModel::find($id);
     }
 
-    public function store(array $applicantList)
+    public function create(array $list)
     {
-        return $this->applicantListModel::create($applicantList);
+        $event = $list['event_id'];
+        $this->applicantListModel::create($list);
+
+        return redirect()->route('events.show', ['event' => $event]);
     }
 
-    public function edit($id)
-    {
-
-    }
-
-    public function update()
+    public function update(array $list, $id)
     {
 
     }
 
-    public function softDelete()
+    public function softDelete(int $id)
     {
+        try {
+            DB::beginTransaction();
+            $result = $this->applicantListModel::destroy($id);
+            DB::commit();
 
+            return $result;
+        } catch (\PDOException $e) {
+            DB::rollBack();
+        }
     }
+
 
     public function hardDelete()
     {
 
+    }
+
+    /** select * from applicant_lists where slot_id = */
+    public function getListCountBySlotId(int $id) : int
+    {
+        return $this->applicantListModel::where('slot_id', $id)->count();
     }
 
 }

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateSlot;
+use Facades\App\Repositories\EventRepository;
+use Facades\App\Repositories\SlotRepository;
 use Illuminate\Http\Request;
 
 class SlotsController extends Controller
@@ -13,7 +16,7 @@ class SlotsController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -23,7 +26,7 @@ class SlotsController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -34,7 +37,7 @@ class SlotsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
@@ -54,9 +57,12 @@ class SlotsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        //
+        $slot = SlotRepository::find($id);
+        $event = $request->get('event');
+
+        return view('slots.edit', ['slot' => $slot, 'event' => $event]);
     }
 
     /**
@@ -66,9 +72,13 @@ class SlotsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateSlot $request, $id)
     {
-        //
+        $attributes = $request->validated();
+        $slot = SlotRepository::update($attributes, $id);
+        $event = EventRepository::find($slot->event_id);
+
+        return redirect()->route('events.show', ['event' => $event]);
     }
 
     /**

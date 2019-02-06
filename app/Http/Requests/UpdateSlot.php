@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreEvent extends FormRequest
+class UpdateSlot extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,13 @@ class StoreEvent extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            'category_id' => 'required|integer',
-            'total_slots' => 'required|integer'
+            'event_id' => 'required|integer',
+            'slot_id' => 'required|integer',
+            'name' => 'required|max:255',
+            'slot_capacity' => 'integer',
+            'total_lists' => 'integer|min:0',
+            'start_date' => 'date|after:today',
+            'end_date' => 'date|after:today'
         ];
     }
 }

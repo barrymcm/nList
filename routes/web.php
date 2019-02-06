@@ -32,3 +32,4 @@ Route::get(
 Route::resources(['events' => 'EventsController']);
 Route::resources(['applicants' => 'ApplicantsController']);
 Route::resources(['applicant_lists' => 'ApplicantListsController']);
+Route::resources(['slots' => 'SlotsController']);

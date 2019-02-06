@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ApplicantList;
+use App\Http\Requests\StoreApplicantList;
+use Facades\App\Repositories\ApplicantListRepository;
 use App\Services\ApplicantListService;
 use Illuminate\Http\Request;
 
@@ -30,9 +31,12 @@ class ApplicantListsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $slot = $request->get('slot');
+        $event = $request->get('event');
+
+        return view('applicant_lists.create', ['slot' => $slot, 'event' => $event]);
     }
 
     /**
@@ -41,9 +45,12 @@ class ApplicantListsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreApplicantList $request)
     {
-        //
+        $attributes = $request->validated();
+        $this->applicantListService->createApplicantList($attributes);
+
+        return redirect()->route('events.show', ['event' => $attributes['event_id']]);
     }
 
     /**
@@ -54,13 +61,13 @@ class ApplicantListsController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $list = ApplicantList::find($id);
+        $list = ApplicantListRepository::find($id);
 
         return view(
             'applicant_lists.show',
             [
                 'list' => $list,
-                'event' => request('event')
+                'event' => $request->get('event')
             ]
         );
     }
@@ -94,8 +101,11 @@ class ApplicantListsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $event = $request->validate(['event' => 'required|integer']);
+        ApplicantListRepository::softDelete($id);
+
+        return redirect()->route('events.show', $event);
     }
 }

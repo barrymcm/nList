@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Applicant;
 use App\Http\Requests\StoreApplicant;
+use Facades\App\Repositories\ApplicantRepository;
 use App\Services\ApplicantService;
+use Illuminate\Http\Request;
 
 
 class ApplicantsController extends Controller
@@ -72,14 +74,7 @@ class ApplicantsController extends Controller
         $attributes = $request->validated();
         $this->applicantService->tryAddApplicantToList($attributes);
 
-        return redirect(
-            route(
-                'applicant_lists.show', [
-                    'list' => $list,
-                    'event' => $event
-                ]
-            )
-        );
+        return redirect(route('applicant_lists.show', ['list' => $list, 'event' => $event]));
     }
 
     /**
@@ -90,7 +85,7 @@ class ApplicantsController extends Controller
      */
     public function show($id)
     {
-        $applicant = Applicant::find($id);
+        $applicant = ApplicantRepository::find($id);
 
         return view('applicants.show', ['applicant' => $applicant]);
     }
@@ -124,10 +119,9 @@ class ApplicantsController extends Controller
     public function update(StoreApplicant $request, $id)
     {
         $attributes = $request->validated();
-        $applicant = Applicant::find($id);
-        $applicant->updateApplicant($attributes);
+        $applicant = ApplicantRepository::update($attributes, $id);
 
-        return $this->show($id);
+        return view('applicants.show', ['applicant' => $applicant]);
     }
 
     /**
@@ -136,10 +130,10 @@ class ApplicantsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        Applicant::destroy($id);
+        ApplicantRepository::softDelete($id);
 
-        return redirect(route('applicants.index'));
+        return redirect()->to(route('applicant_lists.show', $request->get('list_id')));
     }
 }

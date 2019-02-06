@@ -31,10 +31,30 @@
                 <td>{{ $applicant->first_name }} {{ $applicant->last_name }}</td>
                 <td>{{ $applicant->created_at->format('l jS \\of F Y') }}</td>
                 <td>{{ $applicant->created_at->format('h:i:s A') }}</td>
+                <td><a href="{{ route('applicants.show', $applicant) }}">Details</a></td>
+                <td>
+                    <form action="{{ route('applicants.destroy', $applicant) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
+                        <input type="hidden" name="list_id" value="{{ $list->id }}">
+                        <input type="submit" value="Delete">
+                    </form>
+                </td>
             </tr>
         @endforeach
         </tbody>
     </table>
+    <br>
+    @if(count($list->applicants) < 1)
+        <form action="{{ route('applicant_lists.destroy', $list->id) }}" method="POST">
+            @csrf
+            @method('DELETE')
+            <input type="hidden" name="event" value="{{ $event }}">
+            <input type="submit" name="submit" value="Delete List">
+        </form>
+    @endif
+    <br><br>
     <a href="{{ route('events.show', ['event' => $event]) }}">Back to events</a>
     <br><br>
     @if(count($list->applicants) < $list->max_applicants)

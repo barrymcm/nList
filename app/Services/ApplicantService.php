@@ -21,7 +21,7 @@ class ApplicantService
         $listId = $applicant['list_id'];
 
         if (!$this->isListFull($listId)) {
-            return $this->applicantRepository->store($applicant);
+            return $this->applicantRepository->create($applicant);
         }
 
         return false;
@@ -42,10 +42,10 @@ class ApplicantService
     /** @todo create a test */
     public function isListFull(int $listId) : bool
     {
-        $applicants = $this->applicantRepository->getApplicantList($listId);
-        $list = ApplicantListRepository::show($listId);
+        $listCount = $this->applicantRepository->getListCount($listId);
+        $list = ApplicantListRepository::find($listId);
 
-        if ($applicants->count() == $list->max_applicants) {
+        if ($listCount == $list->max_applicants) {
 
            return true;
         }
