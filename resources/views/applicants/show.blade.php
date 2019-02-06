@@ -9,6 +9,14 @@
         <li>DOB: {{ $applicant->dob }}</li>
         <li>Gender: {{ $applicant->gender }}</li>
         <li>Gender: {{ $applicant->created_at }}</li>
+        <li>Email: {{ $applicant->contactDetails->email }}</li>
+        <li>Phone: {{ $applicant->contactDetails->phone }}</li>
+        <li>Address: {{ $applicant->contactDetails->address_1 }}</li>
+        <li>Address: {{ $applicant->contactDetails->address_2 }}</li>
+        <li>Address: {{ $applicant->contactDetails->address_3 }}</li>
+        <li>City: {{ $applicant->contactDetails->city }}</li>
+        <li>Email: {{ $applicant->contactDetails->post_code }}</li>
+        <li>Country: {{ $applicant->contactDetails->country }}</li>
     </ul>
     <form action="{{ route('applicants.destroy', $applicant) }}" method="POST">
         @csrf

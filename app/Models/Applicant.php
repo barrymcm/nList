@@ -16,4 +16,9 @@ class Applicant extends Model
     {
         return $this->belongsTo(ApplicantList::class);
     }
+
+    public function contactDetails()
+    {
+        return $this->hasOne(ApplicantContactDetails::class);
+    }
 }

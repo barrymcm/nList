@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Models\Applicant;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\DB;
 
 class ApplicantRepository implements RepositoryInterface
 {
@@ -13,6 +12,7 @@ class ApplicantRepository implements RepositoryInterface
     public function __construct(Applicant $applicantModel)
     {
         $this->applicantModel = $applicantModel;
+
     }
 
     public function all()
@@ -27,7 +27,10 @@ class ApplicantRepository implements RepositoryInterface
     public function find($id)
     {
         try {
-            return $this->applicantModel::find($id);
+            $applicant = $this->applicantModel::find($id);
+            $applicant->contactDetails;
+
+            return $applicant;
         } catch (ModelNotFoundException $e) {
             return false;
         }
