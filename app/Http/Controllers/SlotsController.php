@@ -72,10 +72,10 @@ class SlotsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateSlot $request)
+    public function update(UpdateSlot $request, $id)
     {
         $attributes = $request->validated();
-        $slot = SlotRepository::update($attributes);
+        $slot = SlotRepository::update($attributes, $id);
         $event = EventRepository::find($slot->event_id);
 
         return redirect()->route('events.show', ['event' => $event]);

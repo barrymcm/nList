@@ -42,10 +42,10 @@ class ApplicantService
     /** @todo create a test */
     public function isListFull(int $listId) : bool
     {
-        $applicants = $this->applicantRepository->getApplicantList($listId);
+        $listCount = $this->applicantRepository->getListCount($listId);
         $list = ApplicantListRepository::find($listId);
 
-        if ($applicants->count() == $list->max_applicants) {
+        if ($listCount == $list->max_applicants) {
 
            return true;
         }

@@ -10,7 +10,13 @@
         <li>Gender: {{ $applicant->gender }}</li>
         <li>Gender: {{ $applicant->created_at }}</li>
     </ul>
-    <a href="{{ route('applicant.destroy', $applicant) }}">Delete</a>
+    <form action="{{ route('applicants.destroy', $applicant) }}" method="POST">
+        @csrf
+        @method('DELETE')
+        <input type="hidden" name="list_id" value="{{ $applicant->list_id }}">
+        <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
+        <input type="submit" name="submit" value="Delete" >
+    </form>
     <br><br>
     <a href="{{ route('applicants.edit', $applicant) }}">Edit details</a>
     <br><br>

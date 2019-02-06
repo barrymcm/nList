@@ -24,14 +24,36 @@ class SlotRepository implements RepositoryInterface
         return $this->slotModel::find($id);
     }
 
-    public function create(array $event)
+    public function create(array $slot)
     {
+        try {
+            DB::beginTransaction();
+            $slot = $this->slotModel::create($slot);
+            DB::table('applicant_lists')->insert($this->createLists($slot));
+            BD::commit();
 
+            return $slot;
+
+        } catch (\PDOException $e) {
+            DB::rollback();
+        }
     }
 
-    public function update(array $slot)
+    private function createLists($event)
     {
-        $slotModel = $this->slotModel::find($slot['slot_id']);
+        $rows = [];
+        $lists = $event['total_lists'];
+
+        for ($i = 0; $i < $lists; $i++) {
+            $rows[] = (array) ['list_id' => $lists['id']];
+        }
+
+        return $rows;
+    }
+
+    public function update(array $slot, $id)
+    {
+        $slotModel = $this->slotModel::find($id);
 
         $slotModel->name = $slot['name'];
         $slotModel->slot_capacity = $slot['slot_capacity'];
@@ -44,7 +66,7 @@ class SlotRepository implements RepositoryInterface
         return $slotModel;
     }
 
-    public function softDelete($id)
+    public function softDelete(int $id)
     {
 
     }

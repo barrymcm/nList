@@ -33,12 +33,12 @@ class ApplicantListRepository implements RepositoryInterface
         return redirect()->route('events.show', ['event' => $event]);
     }
 
-    public function update(array $list)
+    public function update(array $list, $id)
     {
 
     }
 
-    public function softDelete($id)
+    public function softDelete(int $id)
     {
         try {
             DB::beginTransaction();

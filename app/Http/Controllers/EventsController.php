@@ -44,7 +44,7 @@ class EventsController extends Controller
     public function store(StoreEvent $request)
     {
         $attributes = $request->validated();
-        $event = EventRepository::store($attributes);
+        $event = EventRepository::create($attributes);
 
         return view('events.show', ['event' => $event]);
     }
@@ -82,10 +82,10 @@ class EventsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateEvent $request)
+    public function update(UpdateEvent $request, $id)
     {
         $attributes = $request->validated();
-        $event = EventRepository::update($attributes);
+        $event = EventRepository::update($attributes, $id);
 
         return view('events.show', ['event' => $event]);
     }

@@ -41,6 +41,7 @@ class EventRepository implements RepositoryInterface
             DB::commit();
 
             return $newEvent;
+
         } catch (\PDOException $e) {
             DB::rollBack();
         }
@@ -58,9 +59,9 @@ class EventRepository implements RepositoryInterface
         return $rows;
     }
 
-    public function update(array $attributes)
+    public function update(array $attributes, $id)
     {
-        $event = $this->eventModel::find($attributes['event_id']);
+        $event = $this->eventModel::find($id);
 
         $event->total_slots = $attributes['total_slots'];
         $event->category_id = $attributes['category_id'];
@@ -72,7 +73,7 @@ class EventRepository implements RepositoryInterface
         return $event;
     }
 
-    public function softDelete($id)
+    public function softDelete(int $id)
     {
 
     }

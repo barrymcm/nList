@@ -9,11 +9,11 @@ interface RepositoryInterface
 
     public function find($id);
 
-    public function create(array $var);
+    public function create(array $attributes);
 
-    public function update(array $var);
+    public function update(array $attributes, $id);
 
-    public function softDelete($id);
+    public function softDelete(int $id);
 
     public function hardDelete();
 }
