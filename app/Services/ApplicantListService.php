@@ -3,42 +3,56 @@
 
 namespace App\Services;
 
-use App\Models\ApplicantList;
-use Facades\App\Repositories\ApplicantListRepository;
-use Facades\App\Repositories\SlotRepository;
+use App\Repositories\ApplicantListRepository;
+use App\Repositories\SlotRepository;
 
 class ApplicantListService
 {
     private $applicantListRepository;
+    private $slotRepository;
 
-    public function __construct(ApplicantListRepository $applicantListRepository)
+    public function __construct(
+        ApplicantListRepository $applicantListRepository,
+        SlotRepository $slotRepository
+    )
     {
         $this->applicantListRepository = $applicantListRepository;
+        $this->slotRepository = $slotRepository;
     }
 
-    public function getListOfApplicants($id)
+    public function tryCreateApplicantList(array $attributes)
     {
-        return ApplicantList::find($id);
-    }
-
-    /** @todo : add backend validation for available list places */
-    public function availablePlaces($id)
-    {
-
-    }
-
-    public function createApplicantList(array $attributes) : bool
-    {
+        $maxApplicants = $attributes['max_applicants'];
         $slotId = $attributes['slot_id'];
 
-        $slot = SlotRepository::find($slotId);
-        $listCount = ApplicantListRepository::getListCountBySlotId($slotId);
+        $slot = $this->slotRepository->find($slotId);
 
-        if ($listCount < $slot->total_lists) {
-            $list = ApplicantListRepository::create($attributes);
+        if (
+            !$this->isListSizeWithinMaximumSlotCapacity($slot, $maxApplicants) ||
+            !$this->isAvailability($slot, $maxApplicants)
+        )
+        {
+            return false;
         }
 
-        if (isset($list)) {
+        return $this->applicantListRepository->create($attributes);
+
+    }
+
+    private function isListSizeWithinMaximumSlotCapacity($slot, $maxApplicants) : bool
+    {
+        if ($slot->slot_capacity >= $maxApplicants) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function isAvailability($slot, $totalAllocatedPlaces) : bool
+    {
+        $placesAvalable = ($slot->slot_capacity - $totalAllocatedPlaces);
+
+        if ($placesAvalable > 0) {
             return true;
         }
 

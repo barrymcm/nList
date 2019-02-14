@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Repositories\SlotRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Services\EventService;
 use App\Services\ApplicantService;
@@ -30,7 +31,10 @@ class ServicesServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(ApplicantListService::class, function ($app) {
-            return new ApplicantListService(new ApplicantListRepository($app->make('App\ApplicantList')));
+            return new ApplicantListService(
+                new ApplicantListRepository($app->make('App\ApplicantList')),
+                new SlotRepository($app->make('App\Slot'))
+            );
         });
 
         $this->app->bind(ApplicantService::class, function ($app) {

@@ -6,6 +6,7 @@ namespace App\Repositories;
 use App\Models\Category;
 use App\Models\Event;
 use Illuminate\Support\Facades\DB;
+use Facades\App\Repositories\ApplicantListRepository;
 
 class EventRepository implements RepositoryInterface
 {
@@ -25,11 +26,16 @@ class EventRepository implements RepositoryInterface
     public function find($eventId)
     {
         $event = $this->eventModel::find($eventId);
+
+        foreach($event->slots as $key => $slot) {
+            $availability = ApplicantListRepository::getAvailableSlotPlaces($slot->id);
+            $slot->setAvailabilityAttribute($availability);
+        }
+
         $category = Category::find($event->category_id);
         $event->category_name = $category->name;
 
         return $event;
-
     }
 
     public function create(array $event)
@@ -63,14 +69,26 @@ class EventRepository implements RepositoryInterface
     {
         $event = $this->eventModel::find($id);
 
-        $event->total_slots = $attributes['total_slots'];
-        $event->category_id = $attributes['category_id'];
-        $event->name = $attributes['name'];
-        $event->description = $attributes['description'];
+        try {
+            if($attributes['total_slots'] > $event->total_slots) {
+                DB::beginTransaction();
+                $event->save();
+                DB::table('slots')->insert($this->createSlots($event));
+                DB::commit();
 
-        $event->save();
+                $event->total_slots = $attributes['total_slots'];
+                $event->category_id = $attributes['category_id'];
+                $event->name = $attributes['name'];
+                $event->description = $attributes['description'];
 
-        return $event;
+                return $event;
+            }
+
+        } catch (\PDOException $e) {
+            DB::rollBack();
+
+            return false;
+        }
     }
 
     public function softDelete(int $id)

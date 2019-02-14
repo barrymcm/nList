@@ -19,7 +19,6 @@
         <input type="date" name="start_date" value="{{ $slot->start_date? $slot->start_date->format('Y-m-d') : '' }}">
         <label for="">End Date</label>
         <input type="date" name="end_date" value="{{ $slot->end_date? $slot->end_date->format('Y-m-d'): '' }}">
-        <label for="">Lists</label>
         <br>
         <input type="submit" value="submit">
     </form>

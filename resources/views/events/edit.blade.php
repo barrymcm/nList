@@ -1,11 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Edit event')
+@section('title', 'Edit event details')
 
 @section('content')
+    <p>Current slots : {{ $event->total_slots  }}</p>
+
     <form class="form form-group" action="{{ route('events.update', $event) }}" method="post">
         @csrf
-        {{ method_field('PUT') }}
+        {{ method_field('PATCH') }}
         <input type="hidden" name="event_id" value="{{ $event->id }}">
         <label for="name">Name</label>
         <input type="text" name="name" value="{{ $event->name }}">

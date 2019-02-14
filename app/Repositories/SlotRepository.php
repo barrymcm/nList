@@ -4,6 +4,9 @@
 namespace App\Repositories;
 
 use App\Models\Slot;
+use Facades\App\Repositories\ApplicantListRepository;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 
 class SlotRepository implements RepositoryInterface
 {
@@ -16,21 +19,38 @@ class SlotRepository implements RepositoryInterface
 
     public function all()
     {
-
+        return $this->slotModel::all();
     }
 
     public function find($id)
     {
-        return $this->slotModel::find($id);
+        try {
+            $slot = $this->slotModel::find($id);
+            $slot->availability = ApplicantListRepository::getAvailableSlotPlaces($id);
+
+            return $slot;
+        } catch (ModelNotFoundException $e) {
+            return false;
+        }
     }
 
-    public function create(array $slot)
+    public function create(array $attributes)
+    {
+        try{
+
+            return DB::table('slots')->insert($attributes);
+        } catch (\PDOException $e) {
+            return false;
+        }
+    }
+
+    public function createSlotWithLists(array $slot)
     {
         try {
             DB::beginTransaction();
             $slot = $this->slotModel::create($slot);
             DB::table('applicant_lists')->insert($this->createLists($slot));
-            BD::commit();
+            DB::commit();
 
             return $slot;
 
@@ -53,17 +73,21 @@ class SlotRepository implements RepositoryInterface
 
     public function update(array $slot, $id)
     {
-        $slotModel = $this->slotModel::find($id);
+        try {
+            $slotModel = $this->slotModel::find($id);
 
-        $slotModel->name = $slot['name'];
-        $slotModel->slot_capacity = $slot['slot_capacity'];
-        $slotModel->total_lists = $slot['total_lists'];
-        $slotModel->start_date = $slot['start_date'];
-        $slotModel->end_date = $slot['end_date'];
+            $slotModel->name = $slot['name'];
+            $slotModel->slot_capacity = $slot['slot_capacity'];
+            $slotModel->total_lists = $slot['total_lists'];
+            $slotModel->start_date = $slot['start_date'];
+            $slotModel->end_date = $slot['end_date'];
 
-        $slotModel->save();
+            $slotModel->save();
 
-        return $slotModel;
+            return $slotModel;
+        } catch (\PDOException $e) {
+
+        }
     }
 
     public function softDelete(int $id)

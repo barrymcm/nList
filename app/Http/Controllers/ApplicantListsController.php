@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateApplicantList;
 use App\Http\Requests\StoreApplicantList;
 use Facades\App\Repositories\ApplicantListRepository;
 use App\Services\ApplicantListService;
@@ -31,12 +32,15 @@ class ApplicantListsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create(CreateApplicantList $request)
     {
-        $slot = $request->get('slot');
-        $event = $request->get('event');
+        $attributes = $request->validated();
 
-        return view('applicant_lists.create', ['slot' => $slot, 'event' => $event]);
+        return view('applicant_lists.create', [
+                'slot' => $attributes['slot'],
+                'event' => $attributes['event']
+            ]
+        );
     }
 
     /**
@@ -48,9 +52,14 @@ class ApplicantListsController extends Controller
     public function store(StoreApplicantList $request)
     {
         $attributes = $request->validated();
-        $this->applicantListService->createApplicantList($attributes);
+        $this->applicantListService->tryCreateApplicantList($attributes);
 
-        return redirect()->route('events.show', ['event' => $attributes['event_id']]);
+        return redirect()->route(
+            'events.show',
+            [
+                'event' => $attributes['event_id'],
+            ]
+        );
     }
 
     /**

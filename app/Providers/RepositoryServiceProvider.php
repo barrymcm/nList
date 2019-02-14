@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App\Models\Event;
 use App\Models\Applicant;
+use App\Models\EventOrganiser;
 use App\Models\Slot;
+use App\Repositories\EventOrganiserRepository;
 use App\Repositories\EventRepository;
 use App\Repositories\ApplicantRepository;
 use App\Repositories\RepositoryInterface;
@@ -33,5 +35,6 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(RepositoryInterface::class, new ApplicantRepository(new Applicant));
         $this->app->bind(RepositoryInterface::class, new EventRepository(new Event));
         $this->app->bind(RepositoryInterface::class, new SlotRepository(new Slot));
+        $this->app->bind(RepositoryInterface::class, new EventOrganiserRepository(new EventOrganiser()));
     }
 }
