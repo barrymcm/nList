@@ -14,28 +14,30 @@
             <ul>
                 <li>Name: {{ $slot->name }}</li>
                 <li>Capacity: {{ $slot->slot_capacity }}</li>
-                <li>Number of lists: {{ $slot->total_lists }}</li>
-                <li>Start Date: {{ $slot->start_date }}</li>
-                <li>End Date: {{ $slot->end_date }}</li>
+                <li>Allocated List Places: {{ $slot->availability }}</li>
                 <li>Lists:
-                @if(count($slot->applicantLists) < $slot->total_lists)
-                    <a href="{{ route('applicant_lists.create', ['slot' => $slot, 'event' => $event]) }}">Add a list</a>
-                @endif
+                    @if($slot->availability != 'full')
+                        <a href="{{ route('applicant_lists.create', ['slot' => $slot, 'event' => $event]) }}">Add a list
+                        </a>
+                    @endif
                 </li>
 
                 <ol>
                     @foreach($slot->applicantLists as $list)
                         <li>
                             <a href="{{ route('applicant_lists.show',
-                                ['list' => $list, 'event' => $event]) }}">{{ $list->name . ' ' . $list->id}}
+                                ['list' => $list, 'event' => $event]) }}">{{ $list->name }}
                             </a>
+                            &nbsp; : &nbsp; List Quantity : {{ $list->max_applicants }}
                         </li>
                     @endforeach
                 </ol>
+                <li>Start Date: {{ $slot->start_date }}</li>
+                <li>End Date: {{ $slot->end_date }}</li>
             </ul>
             @if(empty($slot->name))
                 <a href="{{ route('slots.edit', ['slot' => $slot->id, 'event' => $event->id])}}">Add slot details</a>
-                @else
+            @else
                 <a href="{{ route('slots.edit', ['slot' => $slot->id, 'event' => $event->id])}}">Edit slot details</a>
             @endif
             <br>
@@ -43,6 +45,9 @@
         @endforeach
     </ul>
     <div>
+        <a href="{{ route('slots.create', ['event' => $event]) }}">Add new Slot</a>
+        <br>
+        <br>
         <a href="{{ route('events.edit', $event->id) }}">Edit event</a>
         <br>
         <br>
