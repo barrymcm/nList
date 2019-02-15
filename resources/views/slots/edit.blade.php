@@ -13,8 +13,6 @@
         <input type="text" name="name" value="{{ $slot->name }}">
         <label for="">Capacity</label>
         <input type="number" name="slot_capacity" value="{{ $slot->slot_capacity }}">
-        <label for="">Add lists</label>
-        <input type="number" name="total_lists" value="{{ $slot->total_lists }}">
         <label for="">Start Date</label>
         <input type="date" name="start_date" value="{{ $slot->start_date? $slot->start_date->format('Y-m-d') : '' }}">
         <label for="">End Date</label>

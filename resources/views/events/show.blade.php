@@ -16,10 +16,9 @@
                 <li>Capacity: {{ $slot->slot_capacity }}</li>
                 <li>Allocated List Places: {{ $slot->availability }}</li>
                 <li>Lists:
-                    @if($slot->availability != 'full')
-                        <a href="{{ route('applicant_lists.create', ['slot' => $slot, 'event' => $event]) }}">Add a list
-                        </a>
-                    @endif
+                    @if($slot->availability != 'Full')
+                    <a href="{{ route('applicant_lists.create', ['slot' => $slot, 'event' => $event]) }}">Add a list</a>
+                @endif
                 </li>
 
                 <ol>
@@ -37,7 +36,7 @@
             </ul>
             @if(empty($slot->name))
                 <a href="{{ route('slots.edit', ['slot' => $slot->id, 'event' => $event->id])}}">Add slot details</a>
-            @else
+                @else
                 <a href="{{ route('slots.edit', ['slot' => $slot->id, 'event' => $event->id])}}">Edit slot details</a>
             @endif
             <br>

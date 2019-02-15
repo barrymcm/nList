@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Event;
-use App\Models\Category;
-use App\Http\Requests\StoreEvent;
-use App\Http\Requests\UpdateEvent;
-use Facades\App\Services\EventService;
-use Facades\App\Repositories\EventRepository;
+use App\Http\Requests\StoreEventOganiser;
+use Facades\App\Repositories\EventOrganiserRepository;
+use Illuminate\Http\Request;
 
-
-class EventsController extends Controller
+class EventOrganisersController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,9 +15,7 @@ class EventsController extends Controller
      */
     public function index()
     {
-        $events = EventRepository::all();
-
-        return view('events.index', ['events' => $events]);
+        return;
     }
 
     /**
@@ -31,9 +25,7 @@ class EventsController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
-
-        return view('events.create', ['categories' => $categories]);
+        return view('event_organisers.create');
     }
 
     /**
@@ -42,12 +34,12 @@ class EventsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreEvent $request)
+    public function store(StoreEventOganiser $request)
     {
         $attributes = $request->validated();
-        $event = EventRepository::create($attributes);
+        $eventOrganiser = EventOrganiserRepository::create($attributes);
 
-        return view('events.show', ['event' => $event]);
+        return view('event_orgainsers.show', ['eventOrgainser' => $eventOrganiser]);
     }
 
     /**
@@ -58,9 +50,9 @@ class EventsController extends Controller
      */
     public function show($id)
     {
-        $event = EventService::find($id);
+        $eventOrganiser = EventOrganiserRepository::find($id);
 
-        return view('events.show', ['event' => $event]);
+        return view('event_organisers.show', ['eventOrgainser' => $eventOrganiser]);
     }
 
     /**
@@ -69,26 +61,21 @@ class EventsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Event $event)
+    public function edit($id)
     {
-        $categories = Category::all();
 
-        return view('events.edit', ['event' => $event, 'categories' => $categories->all()]);
     }
 
     /**
-     * Update the specified resource in storage.s
+     * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateEvent $request, $id)
+    public function update(Request $request, $id)
     {
-        $attributes = $request->validated();
-        $event = EventRepository::update($attributes, $id);
-
-        return view('events.show', ['event' => $event]);
+        //
     }
 
     /**
