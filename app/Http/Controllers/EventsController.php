@@ -9,7 +9,6 @@ use App\Http\Requests\UpdateEvent;
 use Facades\App\Services\EventService;
 use Facades\App\Repositories\EventRepository;
 
-
 class EventsController extends Controller
 {
     /**

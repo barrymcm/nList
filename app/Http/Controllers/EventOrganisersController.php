@@ -15,7 +15,9 @@ class EventOrganisersController extends Controller
      */
     public function index()
     {
-        return;
+        $organisers = EventOrganiserRepository::all();
+
+        return view('event_organisers.index', ['organisers' => $organisers]);
     }
 
     /**
@@ -50,9 +52,9 @@ class EventOrganisersController extends Controller
      */
     public function show($id)
     {
-        $eventOrganiser = EventOrganiserRepository::find($id);
+        $organiser = EventOrganiserRepository::find($id);
 
-        return view('event_organisers.show', ['eventOrgainser' => $eventOrganiser]);
+        return view('event_organisers.show', ['organiser' => $organiser]);
     }
 
     /**

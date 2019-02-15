@@ -5,6 +5,8 @@ namespace App\Repositories;
 
 use App\Models\Category;
 use App\Models\Event;
+use App\Models\EventOrganiser;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Facades\App\Repositories\ApplicantListRepository;
 
@@ -20,7 +22,12 @@ class EventRepository implements RepositoryInterface
 
     public function all()
     {
-        return $this->eventModel::all();
+        try {
+            return $this->eventModel::all();
+
+        } catch (ModelNotFoundException $e) {
+            return $e->getMessage();
+        }
     }
 
     public function find($eventId)
@@ -31,6 +38,9 @@ class EventRepository implements RepositoryInterface
             $availability = ApplicantListRepository::getAvailableSlotPlaces($slot->id);
             $slot->setAvailabilityAttribute($availability);
         }
+
+        $organiser = EventOrganiser::find($event->event_organiser_id);
+        $event->organiser = $organiser->name;
 
         $category = Category::find($event->category_id);
         $event->category_name = $category->name;

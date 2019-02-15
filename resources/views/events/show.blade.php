@@ -3,6 +3,7 @@
 @section('title', 'Event')
 
 @section('content')
+    <h3>Organiser: {{ $event->organiser }}</h3>
     <ul>
         <li>Name: {{ $event->name }}</li>
         <li>Description: {{ $event->description }}</li>
@@ -44,13 +45,22 @@
         @endforeach
     </ul>
     <div>
+        <a href="{{ route('event_organisers.index') }}">Back</a>
+        <br>
+        <br>
+        <a href="{{ route('event_organisers.index') }}">All Organisers</a>
+        <br>
+        <br>
+        <a href="{{ route('event_organisers.show', ['organiser' => $event->event_organiser_id]) }}">View Organiser</a>
+        <br>
+        <br>
         <a href="{{ route('slots.create', ['event' => $event]) }}">Add new Slot</a>
         <br>
         <br>
         <a href="{{ route('events.edit', $event->id) }}">Edit event</a>
         <br>
         <br>
-        <a href="{{ route('events.index') }}">Back to events list</a>
+        <a href="{{ route('events.index') }}">View all events</a>
         <br>
         <br>
         <form action="{{ route('events.destroy', $event->id) }}" method="post">
