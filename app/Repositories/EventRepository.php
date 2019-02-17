@@ -23,7 +23,13 @@ class EventRepository implements RepositoryInterface
     public function all()
     {
         try {
-            return $this->eventModel::all();
+            $events = $this->eventModel::all();
+
+            $events->each(function ($event) {
+                return $event->organiser = EventOrganiser::find($event->event_organiser_id);
+            });
+
+            return $events;
 
         } catch (ModelNotFoundException $e) {
             return $e->getMessage();
@@ -77,22 +83,20 @@ class EventRepository implements RepositoryInterface
 
     public function update(array $attributes, $id)
     {
-        $event = $this->eventModel::find($id);
-
         try {
-            if($attributes['total_slots'] > $event->total_slots) {
-                DB::beginTransaction();
-                $event->save();
-                DB::table('slots')->insert($this->createSlots($event));
-                DB::commit();
+            $event = $this->eventModel::find($id);
 
-                $event->total_slots = $attributes['total_slots'];
-                $event->category_id = $attributes['category_id'];
-                $event->name = $attributes['name'];
-                $event->description = $attributes['description'];
+            DB::beginTransaction();
+            DB::table('slots')->insert($this->createSlots($event));
+            DB::commit();
 
-                return $event;
-            }
+            $event->total_slots = $attributes['total_slots'];
+            $event->category_id = $attributes['category_id'];
+            $event->name = $attributes['name'];
+            $event->description = $attributes['description'];
+
+            $event->save();
+            return $event;
 
         } catch (\PDOException $e) {
             DB::rollBack();

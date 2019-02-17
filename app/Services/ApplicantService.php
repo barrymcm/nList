@@ -3,6 +3,7 @@
 
 namespace App\Services;
 
+use Facades\App\Repositories\ApplicantContactDetailsRepository;
 use App\Repositories\ApplicantRepository;
 use Facades\App\Repositories\ApplicantListRepository;
 
@@ -17,25 +18,45 @@ class ApplicantService
 
     public function tryAddApplicantToList($attributes)
     {
-        $applicant = $this->assignAttributes($attributes);
-        $listId = $applicant['list_id'];
+        $applicantAttributes = $this->assignApplicantAttributes($attributes);
 
-        if (!$this->isListFull($listId)) {
-            return $this->applicantRepository->create($applicant);
+        if (!$this->isListFull($applicantAttributes['list_id'])) {
+
+            $applicant = $this->applicantRepository->create($applicantAttributes);
+            $contactDetails = $this->assignApplicantContactDetails($applicant->id, $attributes);
+            ApplicantContactDetailsRepository::create($contactDetails);
+
+            return $applicant;
         }
 
         return false;
 
     }
 
-    private function assignAttributes($attributes) : array
+    private function assignApplicantAttributes($attributes) : array
     {
         return [
-            'list_id' => (int) $attributes['list_id'],
-            'first_name' => (string) $attributes['first_name'],
-            'last_name' => (string) $attributes['last_name'],
-            'dob' => (string) $attributes['dob'],
-            'gender' => (string) $attributes['gender']
+            'list_id' => $attributes['list_id'],
+            'first_name' => $attributes['first_name'],
+            'last_name' => $attributes['last_name'],
+            'dob' => $attributes['dob'],
+            'gender' => $attributes['gender']
+        ];
+    }
+
+    private function assignApplicantContactDetails($id, $attributes) : array
+    {
+        return [
+            'applicant_id' => $id,
+            'email' => $attributes['email'],
+            'phone' => $attributes['phone'],
+            'address_1' => $attributes['address_1'],
+            'address_2' => $attributes['address_2'],
+            'address_3' => $attributes['address_3'],
+            'county' => $attributes['county'],
+            'city' => $attributes['city'],
+            'post_code' => $attributes['post_code'],
+            'country' => $attributes['country']
         ];
     }
 

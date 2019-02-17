@@ -7,8 +7,7 @@ use App\Repositories\EventRepository;
 class EventService
 {
     private $eventRepository;
-    private const AVAILABILITY_FULL = 'Full';
-    private const AVAILABILITY_EMPTY = 'Empty';
+    private const AVAILABILITY_STATUS = 'empty';
 
     public function __construct(EventRepository $eventRepository)
     {
@@ -19,10 +18,10 @@ class EventService
     {
         $event = $this->eventRepository->find($id);
 
-        return $this->getAvailability($event);
+        return $this->getSlotAvailability($event);
     }
 
-    private function getAvailability($event)
+    private function getSlotAvailability($event)
     {
         foreach ($event->slots as $slot) {
 
@@ -30,11 +29,11 @@ class EventService
             $lists = (int) $slot->applicantLists->count();
 
             if (!$availability && $lists > 0) {
-                $slot->availability = self::AVAILABILITY_FULL;
+                $slot->availability = self::AVAILABILITY_STATUS;
             }
 
             if (!$availability && !$lists) {
-                $slot->availability = self::AVAILABILITY_EMPTY;
+                $slot->availability = $slot->slot_capacity;
             }
         }
 

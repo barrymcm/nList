@@ -31,12 +31,13 @@
                 <td>{{ $applicant->first_name }} {{ $applicant->last_name }}</td>
                 <td>{{ $applicant->created_at->format('l jS \\of F Y') }}</td>
                 <td>{{ $applicant->created_at->format('h:i:s A') }}</td>
-                <td><a href="{{ route('applicants.show', $applicant) }}">Details</a></td>
+                <td><a href="{{ route('applicants.show', [$applicant, 'event' => $event]) }}">Details</a></td>
                 <td>
                     <form action="{{ route('applicants.destroy', $applicant) }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
+                        <input type="hidden" name="event" value="{{ $event }}">
                         <input type="hidden" name="list_id" value="{{ $list->id }}">
                         <input type="submit" value="Delete">
                     </form>
@@ -45,7 +46,22 @@
         @endforeach
         </tbody>
     </table>
-    <br>
+    <br><br>
+    @if(count($list->applicants) < $list->max_applicants)
+        <a href="{{ route('applicants.create', ['list' => $list, 'event' => $event]) }}">
+            Add new applicant
+        </a>
+        <br><br>
+        <a href="{{ route('applicants.create', ['list' => $list, 'event' => $event]) }}">
+            Add your name
+        </a>
+    @endif
+    <br><br>
+    <a href="{{ route('events.show', ['event' => $event]) }}">Back to Slot</a>
+    <br><br>
+    <a href="{{ route('applicant_lists.edit', ['list' => $list, 'event' => $event]) }}">
+        Edit List</a>
+    <br><br>
     @if(count($list->applicants) < 1)
         <form action="{{ route('applicant_lists.destroy', $list->id) }}" method="POST">
             @csrf
@@ -54,12 +70,5 @@
             <input type="submit" name="submit" value="Delete List">
         </form>
     @endif
-    <br><br>
-    <a href="{{ route('events.show', ['event' => $event]) }}">Back to events</a>
-    <br><br>
-    @if(count($list->applicants) < $list->max_applicants)
-        <a href="{{ route('applicants.create', ['list' => $list, 'event' => $event]) }}">
-            Add new applicant
-        </a>
-    @endif
+    <br>
 @endsection

@@ -12,7 +12,6 @@ class ApplicantRepository implements RepositoryInterface
     public function __construct(Applicant $applicantModel)
     {
         $this->applicantModel = $applicantModel;
-
     }
 
     public function all()
@@ -28,7 +27,6 @@ class ApplicantRepository implements RepositoryInterface
     {
         try {
             $applicant = $this->applicantModel::find($id);
-            $applicant->contactDetails;
 
             return $applicant;
         } catch (ModelNotFoundException $e) {
@@ -36,9 +34,9 @@ class ApplicantRepository implements RepositoryInterface
         }
     }
 
-    public function create(array $applicant)
+    public function create(array $attributes)
     {
-        return $this->applicantModel::create($applicant);
+        return $this->applicantModel::create($attributes);
     }
 
     public function update(array $attributes, $id)
@@ -55,7 +53,6 @@ class ApplicantRepository implements RepositoryInterface
             $applicant->save();
 
             return $applicant;
-
         } catch (ModelNotFoundException $e) {
             return false;
         }

@@ -25,14 +25,24 @@ class StoreApplicant extends FormRequest
     public function rules()
     {
         return [
+            'event_id' => 'required|integer',
             'list_id' => 'required|integer',
-            'first_name' => 'required|max:50',
-            'last_name' => 'required|max:100',
+            'first_name' => 'required|string|max:50',
+            'last_name' => 'required|string|max:100',
             'dob' => 'required|date',
             'gender' => [
                 'required',
                 Rule::in('male', 'female')
-            ]
+            ],
+            'email' => 'required|unique:applicant_contact_details,email',
+            'phone' => 'required|integer',
+            'address_1' => 'required|string',
+            'address_2' => 'required|string',
+            'address_3' => 'string|nullable',
+            'city' => 'required|string',
+            'county' => 'required|string',
+            'post_code' => 'required|string',
+            'country' => 'required|string'
         ];
     }
 }

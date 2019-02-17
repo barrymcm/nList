@@ -12,12 +12,13 @@
         <li>Slots Created: {{ count($event->slots) }}</li>
 
         @foreach($event->slots as $slot)
+{{--            {{dd($slot)}}--}}
             <ul>
                 <li>Name: {{ $slot->name }}</li>
                 <li>Capacity: {{ $slot->slot_capacity }}</li>
-                <li>Allocated List Places: {{ $slot->availability }}</li>
+                <li>Remaining List Allocation: {{ $slot->availability }}</li>
                 <li>Lists:
-                    @if($slot->availability != 'Full')
+                    @if($slot->availability != 'empty')
                     <a href="{{ route('applicant_lists.create', ['slot' => $slot, 'event' => $event]) }}">Add a list</a>
                 @endif
                 </li>
@@ -25,10 +26,11 @@
                 <ol>
                     @foreach($slot->applicantLists as $list)
                         <li>
-                            <a href="{{ route('applicant_lists.show',
-                                ['list' => $list, 'event' => $event]) }}">{{ $list->name }}
+                            <a href="{{ route('applicant_lists.show', ['list' => $list, 'event' => $event]) }}">
+                                {{ $list->name }}
                             </a>
-                            &nbsp; : &nbsp; List Quantity : {{ $list->max_applicants }}
+                            &nbsp; : &nbsp; List Quantity : {{ $list->max_applicants }} -
+                                  Remaining Places :  {{ $list->max_applicants - count($list->applicants) }}
                         </li>
                     @endforeach
                 </ol>

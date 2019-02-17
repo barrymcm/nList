@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Applicant;
 use App\Http\Requests\StoreApplicant;
+use App\Repositories\EventRepository;
+use Facades\App\Repositories\ApplicantContactDetailsRepository;
 use Facades\App\Repositories\ApplicantRepository;
 use App\Services\ApplicantService;
 use Illuminate\Http\Request;
@@ -68,26 +70,30 @@ class ApplicantsController extends Controller
      */
     public function store(StoreApplicant $request)
     {
-        $event = (int) request('event_id');
-        $list = (int) request('list_id');
-
         $attributes = $request->validated();
         $this->applicantService->tryAddApplicantToList($attributes);
 
-        return redirect(route('applicant_lists.show', ['list' => $list, 'event' => $event]));
+        return redirect()->action('ApplicantListsController@show',
+            [
+                'event' => $attributes['event_id'],
+                'list' => $attributes['list_id'],
+            ]
+        );
     }
 
     /**
      * Display the specified resource.
      *
+     *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
+        $event = (int) $request->get('event');
         $applicant = ApplicantRepository::find($id);
 
-        return view('applicants.show', ['applicant' => $applicant]);
+        return view('applicants.show', ['applicant' => $applicant, 'event' => $event]);
     }
 
     /**
@@ -132,8 +138,14 @@ class ApplicantsController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        ApplicantRepository::softDelete($id);
+        $list = $request->get('list_id');
+        $event = $request->get('event');
 
-        return redirect()->to(route('applicant_lists.show', $request->get('list_id')));
+        ApplicantRepository::softDelete($id);
+        ApplicantContactDetailsRepository::softDelete($id);
+
+        return redirect()
+            ->action('ApplicantListsController@show', ['list' => $list, 'event' => $event])
+            ->with('status', 'Applicant removed');
     }
 }

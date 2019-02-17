@@ -10,6 +10,7 @@
             <li>Description: {{ $organiser->description }}</li>
             <br/>
             <a href="{{ route('event_organisers.show', $organiser ) }}">View Events</a>
+            <br><br>
         @endforeach
     </ul>
 
