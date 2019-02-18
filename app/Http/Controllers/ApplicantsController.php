@@ -70,6 +70,9 @@ class ApplicantsController extends Controller
      */
     public function store(StoreApplicant $request)
     {
+        // todo : implement actual authentication : this is only sudo code
+        Check::isApplicantSignedIn();
+
         $attributes = $request->validated();
         $this->applicantService->tryAddApplicantToList($attributes);
 

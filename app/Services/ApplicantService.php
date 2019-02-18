@@ -16,6 +16,13 @@ class ApplicantService
         $this->applicantRepository = $applicantRepository;
     }
 
+    public function confirmApplicantsEmail()
+    {
+        // 2. Notification - Send a validate email confirmation to their inbox -> (add to a queue)
+
+        // 3. When we receive confirmation then add them to the list and add their details to the DB
+    }
+
     public function tryAddApplicantToList($attributes)
     {
         $applicantAttributes = $this->assignApplicantAttributes($attributes);
@@ -26,10 +33,21 @@ class ApplicantService
             $contactDetails = $this->assignApplicantContactDetails($applicant->id, $attributes);
             ApplicantContactDetailsRepository::create($contactDetails);
 
+            // 4. Send them a confirmation mail to say they have been added to the list :
+            // Scenarios :
+            //              -> Added to list confirmation
+            //              -> Pending status (Depends on event owners approval)
+            //              -> Payment Received (Confirmation)
+
             return $applicant;
         }
 
         return false;
+
+    }
+
+    public function sendAddedToListNotification()
+    {
 
     }
 
