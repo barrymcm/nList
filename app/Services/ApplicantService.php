@@ -27,7 +27,7 @@ class ApplicantService
     {
         $applicantAttributes = $this->assignApplicantAttributes($attributes);
 
-        if (!$this->isListFull($applicantAttributes['list_id'])) {
+        if (! $this->isListFull($applicantAttributes['list_id'])) {
 
             $applicant = $this->applicantRepository->create($applicantAttributes);
             $contactDetails = $this->assignApplicantContactDetails($applicant->id, $attributes);

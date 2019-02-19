@@ -34,3 +34,8 @@ Route::resources(['applicants' => 'ApplicantsController']);
 Route::resources(['applicant_lists' => 'ApplicantListsController']);
 Route::resources(['slots' => 'SlotsController']);
 Route::resources(['event_organisers' => 'EventOrganisersController']);
+
+Auth::routes(['verify' => true]);
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

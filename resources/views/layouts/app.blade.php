@@ -15,6 +15,9 @@
         <li><a href="{{ route('contact_us') }}">Contact</a></li>
         <li><a href="{{ route('events.index') }}">Events</a></li>
         <li><a href="{{ route('event_organisers.index') }}">Event Organisers</a></li>
+        <br><br>
+        <li><a href="{{ route('login') }}">Login</a></li>
+        <li><a href="{{ route('register') }}">Register</a></li>
     </ul>
 @show
 
