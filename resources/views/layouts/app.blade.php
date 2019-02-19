@@ -15,15 +15,9 @@
         <li><a href="{{ route('contact_us') }}">Contact</a></li>
         <li><a href="{{ route('events.index') }}">Events</a></li>
         <li><a href="{{ route('event_organisers.index') }}">Event Organisers</a></li>
-        <br><br>
-
-
-        {{--<li><a href="{{ route('login') }}">Login</a></li>--}}
-        {{--<li><a href="{{ route('register') }}">Register</a></li>--}}
     </ul>
 
     <ul class="navbar-nav ml-auto">
-        <!-- Authentication Links -->
         @guest
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -34,23 +28,12 @@
                 </li>
             @endif
         @else
-            <li class="nav-item dropdown">
-                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                    {{ Auth::user()->name }} <span class="caret"></span>
-                </a>
 
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{ route('logout') }}"
-                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                        {{ __('Logout') }}
-                    </a>
-
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
-                </div>
-            </li>
+            <div>{{ Auth::user()->name }} <span class="caret"></span></div>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                @csrf
+                <input type="submit" name="Logout" value="Logout">
+            </form>
         @endguest
     </ul>
 @show
