@@ -43,6 +43,8 @@ class ApplicantsController extends Controller
     {
         if (!$this->applicantService->isListFull(request('list'))) {
 
+
+
             return view(
                 'applicants.create', [
                     'list' => (int)request('list'),

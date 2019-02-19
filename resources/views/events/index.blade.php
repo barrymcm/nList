@@ -3,7 +3,6 @@
 @section('title', 'List of events')
 
 @section('content')
-
     @foreach($events as $event)
         <ul>
             <li>Organiser: {{ $event['organiser']['name'] }}</li>
