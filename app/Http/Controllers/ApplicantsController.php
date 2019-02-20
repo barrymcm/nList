@@ -9,6 +9,7 @@ use Facades\App\Repositories\ApplicantContactDetailsRepository;
 use Facades\App\Repositories\ApplicantRepository;
 use App\Services\ApplicantService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class ApplicantsController extends Controller
@@ -41,9 +42,15 @@ class ApplicantsController extends Controller
      */
     public function create()
     {
+        if (! auth()->check()) {
+            return redirect()->route('applicant_lists.show', [
+                        'list' => (int)request('list'),
+                        'event' => (int)request('event')
+                    ]
+            )->with('warning', 'Whoops looks like your not logged in!');
+        }
+
         if (!$this->applicantService->isListFull(request('list'))) {
-
-
 
             return view(
                 'applicants.create', [
@@ -53,14 +60,11 @@ class ApplicantsController extends Controller
             );
         }
 
-        return redirect(
-            route(
-                'applicant_lists.show', [
-                    'list' => (int)request('list'),
-                    'event' => (int)request('event')
-                ]
-            )
-        );
+        return redirect()->route('applicant_lists.show', [
+                'list' => (int)request('list'),
+                'event' => (int)request('event')
+            ]
+        )->with('warning', 'Uh oh... looks like this list is already full!');
     }
 
     /**

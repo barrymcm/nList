@@ -46,21 +46,21 @@
         @endforeach
         </tbody>
     </table>
+    @if( session('warning'))
+        {{ session('warning') }} <a href="{{ route('login', ['list' => $list, 'event' => $event]) }}">sign in?</a>
+        or if you dont have an account you can
+        <a href="{{ route('register') }}">register</a>
+    @endif
     <br><br>
     @if(count($list->applicants) < $list->max_applicants)
-        <a href="{{ route('applicants.create', ['list' => $list, 'event' => $event]) }}">
-            Add new applicant
-        </a>
+        <a href="{{ route('applicants.create', ['list' => $list, 'event' => $event]) }}">Add new applicant</a>
         <br><br>
-        <a href="{{ route('applicants.create', ['list' => $list, 'event' => $event]) }}">
-            Add your name
-        </a>
+        <a href="{{ route('applicants.create', ['list' => $list, 'event' => $event]) }}">Add your name</a>
     @endif
     <br><br>
     <a href="{{ route('events.show', ['event' => $event]) }}">Back to Slot</a>
     <br><br>
-    <a href="{{ route('applicant_lists.edit', ['list' => $list, 'event' => $event]) }}">
-        Edit List</a>
+    <a href="{{ route('applicant_lists.edit', ['list' => $list, 'event' => $event]) }}">Edit List</a>
     <br><br>
     @if(count($list->applicants) < 1)
         <form action="{{ route('applicant_lists.destroy', $list->id) }}" method="POST">
