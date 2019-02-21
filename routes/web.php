@@ -9,11 +9,11 @@
 */
 
 Route::get(
-    '/',
+    '/home',
     function () {
         return view('home');
     }
-)->name('home');
+)->name('home')->middleware('locale');
 
 Route::get(
     '/about',
@@ -38,4 +38,4 @@ Route::resources(['event_organisers' => 'EventOrganisersController']);
 Auth::routes(['verify' => true]);
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/home', 'HomeController@index')->name('home');
