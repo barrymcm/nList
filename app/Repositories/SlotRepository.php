@@ -7,6 +7,7 @@ use App\Models\Slot;
 use Facades\App\Repositories\ApplicantListRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
+use PDOException;
 
 class SlotRepository implements RepositoryInterface
 {
@@ -39,7 +40,7 @@ class SlotRepository implements RepositoryInterface
         try{
 
             return DB::table('slots')->insert($attributes);
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             return false;
         }
     }
@@ -54,7 +55,7 @@ class SlotRepository implements RepositoryInterface
 
             return $slot;
 
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             DB::rollback();
         }
     }
@@ -85,7 +86,7 @@ class SlotRepository implements RepositoryInterface
             $slotModel->save();
 
             return $slotModel;
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
 
         }
     }

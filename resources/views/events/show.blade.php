@@ -12,7 +12,6 @@
         <li>Slots Created: {{ count($event->slots) }}</li>
 
         @foreach($event->slots as $slot)
-{{--            {{dd($slot)}}--}}
             <ul>
                 <li>Name: {{ $slot->name }}</li>
                 <li>Capacity: {{ $slot->slot_capacity }}</li>

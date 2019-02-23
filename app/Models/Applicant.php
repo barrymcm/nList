@@ -9,7 +9,7 @@ class Applicant extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['list_id', 'first_name', 'last_name', 'dob', 'gender'];
+    protected $fillable = ['first_name', 'last_name', 'dob', 'gender'];
     protected $dates = ['deleted_at'];
 
     public function applicantList()
