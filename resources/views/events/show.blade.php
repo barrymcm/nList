@@ -28,8 +28,8 @@
                             <a href="{{ route('applicant_lists.show', ['list' => $list, 'event' => $event]) }}">
                                 {{ $list->name }}
                             </a>
-                            &nbsp; : &nbsp; List Quantity : {{ $list->max_applicants }} -
-                                  Remaining Places :  {{ $list->max_applicants - count($list->applicants) }}
+                            &nbsp; : &nbsp; List Quantity : {{ $list->max_applicants }}
+                                  {{--Remaining Places :  {{ $list->max_applicants - count($list->applicants) }}--}}
                         </li>
                     @endforeach
                 </ol>

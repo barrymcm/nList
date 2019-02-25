@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateApplicantListTable extends Migration
+class MakePrimaryKeyOnApplicantListTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,7 @@ class CreateApplicantListTable extends Migration
      */
     public function up()
     {
-        Schema::create('applicant_list', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('list_id');
-            $table->unsignedInteger('applicant_id');
-            $table->timestamps();
-
+        Schema::table('applicant_list', function(Blueprint $table) {
             $table->primary(['applicant_id', 'list_id']);
         });
     }
@@ -30,6 +25,6 @@ class CreateApplicantListTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('applicants_lists');
+        //
     }
 }

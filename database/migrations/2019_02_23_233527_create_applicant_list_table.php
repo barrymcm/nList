@@ -14,7 +14,6 @@ class CreateApplicantListTable extends Migration
     public function up()
     {
         Schema::create('applicant_list', function (Blueprint $table) {
-            $table->increments('id');
             $table->unsignedInteger('list_id');
             $table->unsignedInteger('applicant_id');
             $table->timestamps();
@@ -30,6 +29,6 @@ class CreateApplicantListTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('applicants_lists');
+        Schema::dropIfExists('applicant_list');
     }
 }

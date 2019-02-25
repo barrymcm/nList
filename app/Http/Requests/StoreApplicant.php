@@ -34,7 +34,6 @@ class StoreApplicant extends FormRequest
                 'required',
                 Rule::in('male', 'female')
             ],
-            'email' => 'required|unique:applicant_contact_details,email',
             'phone' => 'required|integer',
             'address_1' => 'required|string',
             'address_2' => 'required|string',

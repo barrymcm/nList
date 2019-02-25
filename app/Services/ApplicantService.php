@@ -66,7 +66,6 @@ class ApplicantService
     {
         return [
             'applicant_id' => $id,
-            'email' => $attributes['email'],
             'phone' => $attributes['phone'],
             'address_1' => $attributes['address_1'],
             'address_2' => $attributes['address_2'],

@@ -24,7 +24,7 @@ class ApplicantListRepository implements RepositoryInterface
     public function find($id)
     {
         try {
-            return $this->applicantListModel::find($id);
+             return $this->applicantListModel->find($id);
 
         } catch (ModelNotFoundException $e) {
             return false;

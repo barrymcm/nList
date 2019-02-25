@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateApplicantListTable extends Migration
+class CreateApplicantListJoinTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,7 @@ class CreateApplicantListTable extends Migration
      */
     public function up()
     {
-        Schema::create('applicant_list', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('applicant_list_join', function (Blueprint $table) {
             $table->unsignedInteger('list_id');
             $table->unsignedInteger('applicant_id');
             $table->timestamps();
@@ -30,6 +29,6 @@ class CreateApplicantListTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('applicants_lists');
+        Schema::dropIfExists('applicant_list_join');
     }
 }

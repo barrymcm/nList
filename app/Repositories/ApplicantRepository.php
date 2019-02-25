@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use App\Models\Applicant;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Facades\App\Repositories\ApplicantListRepository;
+use Illuminate\Support\Facades\DB;
 
 class ApplicantRepository implements RepositoryInterface
 {
@@ -36,7 +38,22 @@ class ApplicantRepository implements RepositoryInterface
 
     public function create(array $attributes)
     {
-        return $this->applicantModel::create($attributes);
+        try {
+            DB::beginTransaction();
+            dd($attributes);
+            $applicant = $this->applicantModel::create($attributes);
+            DB::table('applicant_applicant_list')
+                ->insert([
+                    'list_id' => $attributes['applicant_list_id'],
+                    'applicant_id' => $applicant->id
+                ]);
+            DB::commit();
+
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+            return $e->getMessage();
+        }
+
     }
 
     public function update(array $attributes, $id)
@@ -74,7 +91,7 @@ class ApplicantRepository implements RepositoryInterface
 
     public function getApplicantList($listId)
     {
-        return Applicant::where('list_id', $listId);
+        return ApplicantListRepository::find($listId);
     }
 
     public function getListCount($listId)

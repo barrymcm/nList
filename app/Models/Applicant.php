@@ -14,7 +14,7 @@ class Applicant extends Model
 
     public function applicantList()
     {
-        return $this->belongsTo(ApplicantList::class);
+        return $this->belongsToMany(ApplicantList::class);
     }
 
     public function contactDetails()

@@ -24,9 +24,6 @@
         <label for="gender">Female</label>
         <input type="radio" name="gender" value="female">
         <br>
-        <label for="email">Email</label>
-        <input type="email" name="email" value="">
-        <br>
         <label for="phone">Phone</label>
         <input type="number" name="phone" value="">
         <br>
