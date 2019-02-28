@@ -26,7 +26,7 @@ class ApplicantContactDetailsRepository implements RepositoryInterface
         return $this->contactDetailsModel::find($id);
     }
 
-    public function create(array $attributes)
+    public function create(array $attributes, $id = null)
     {
         try {
             $contactDetails = $this->contactDetailsModel;
@@ -57,7 +57,6 @@ class ApplicantContactDetailsRepository implements RepositoryInterface
             $contactDetails = $this->contactDetailsModel::find($id);
 
             $contactDetails->applicant_id = $attributes['applicant_id'];
-            $contactDetails->email = $attributes['email'];
             $contactDetails->phone = $attributes['phone'];
             $contactDetails->address_1 = $attributes['address_1'];
             $contactDetails->address_2 = $attributes['address_2'];

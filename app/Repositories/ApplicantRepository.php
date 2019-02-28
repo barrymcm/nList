@@ -36,18 +36,19 @@ class ApplicantRepository implements RepositoryInterface
         }
     }
 
-    public function create(array $attributes)
+    public function create(array $attributes, $listId)
     {
         try {
             DB::beginTransaction();
-            dd($attributes);
             $applicant = $this->applicantModel::create($attributes);
             DB::table('applicant_applicant_list')
                 ->insert([
-                    'list_id' => $attributes['applicant_list_id'],
+                    'applicant_list_id' => $listId,
                     'applicant_id' => $applicant->id
                 ]);
             DB::commit();
+
+            return $applicant;
 
         } catch (ModelNotFoundException $e) {
             DB::rollBack();
@@ -61,7 +62,6 @@ class ApplicantRepository implements RepositoryInterface
         try {
             $applicant = $this->applicantModel::find($id);
 
-            $applicant->list_id = $attributes['list_id'];
             $applicant->first_name = $attributes['first_name'];
             $applicant->last_name = $attributes['last_name'];
             $applicant->dob = $attributes['dob'];

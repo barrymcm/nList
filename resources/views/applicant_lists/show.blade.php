@@ -22,28 +22,28 @@
             <td>{{ $list->max_applicants }}</td>
             <td>{{ $list->max_applicants - count($list->applicants)}}</td>
         </tr>
-        {{--@foreach($list->applicants as $applicant)--}}
-            {{--<tr>--}}
-                {{--<td></td>--}}
-                {{--<td></td>--}}
-                {{--<td></td>--}}
-                {{--<td></td>--}}
-                {{--<td>{{ $applicant->first_name }} {{ $applicant->last_name }}</td>--}}
-                {{--<td>{{ $applicant->created_at->format('l jS \\of F Y') }}</td>--}}
-                {{--<td>{{ $applicant->created_at->format('h:i:s A') }}</td>--}}
-                {{--<td><a href="{{ route('applicants.show', [$applicant, 'event' => $event]) }}">Details</a></td>--}}
-                {{--<td>--}}
-                    {{--<form action="{{ route('applicants.destroy', $applicant) }}" method="POST">--}}
-                        {{--@csrf--}}
-                        {{--@method('DELETE')--}}
-                        {{--<input type="hidden" name="applicant_id" value="{{ $applicant->id }}">--}}
-                        {{--<input type="hidden" name="event" value="{{ $event }}">--}}
-                        {{--<input type="hidden" name="list_id" value="{{ $list->id }}">--}}
-                        {{--<input type="submit" value="Delete">--}}
-                    {{--</form>--}}
-                {{--</td>--}}
-            {{--</tr>--}}
-        {{--@endforeach--}}
+        @foreach($list->applicants as $applicant)
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{ $applicant->first_name }} {{ $applicant->last_name }}</td>
+                <td>{{ $applicant->created_at->format('l jS \\of F Y') }}</td>
+                <td>{{ $applicant->created_at->format('h:i:s A') }}</td>
+                <td><a href="{{ route('applicants.show', [$applicant, 'event' => $event, 'list' => $list]) }}">Details</a></td>
+                <td>
+                    <form action="{{ route('applicants.destroy', $applicant) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
+                        <input type="hidden" name="event" value="{{ $event }}">
+                        <input type="hidden" name="list_id" value="{{ $list->id }}">
+                        <input type="submit" value="Delete">
+                    </form>
+                </td>
+            </tr>
+        @endforeach
         </tbody>
     </table>
     @if( session('warning'))

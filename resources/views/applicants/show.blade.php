@@ -13,7 +13,7 @@
         @if($applicant->contactDetails)
             <ul>
                 <h3>ContactDetails</h3>
-                <li>Email: {{ $applicant->contactDetails->email }}</li>
+                <li>Email: {{ $applicant->email }}</li>
                 <li>Phone: {{ $applicant->contactDetails->phone }}</li>
                 <li>Address: {{ $applicant->contactDetails->address_1 }}</li>
                 <li>Address: {{ $applicant->contactDetails->address_2 }}</li>
@@ -28,14 +28,12 @@
     <form action="{{ route('applicants.destroy', $applicant) }}" method="POST">
         @csrf
         @method('DELETE')
-        <input type="hidden" name="list_id" value="{{ $applicant->list_id }}">
+        <input type="hidden" name="list" value="{{ $list }}">
         <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
         <input type="submit" name="submit" value="Delete" >
     </form>
     <br><br>
-    <a href="{{ route('applicants.edit', $applicant) }}">Edit details</a>
+    <a href="{{ route('applicants.edit', [$applicant, 'event' => $event, 'list' => $list]) }}">Edit</a>
     <br><br>
-    <a href="{{ route('applicants.edit', $applicant) }}">Add contact details</a>
-    <br><br>
-    <a href="{{ route('applicant_lists.show', ['list' => $applicant->list_id, 'event' => $event]) }}">Back to List</a>
+    <a href="{{ route('applicant_lists.show', ['list' => $list, 'event' => $event]) }}">Back to List</a>
 @endsection

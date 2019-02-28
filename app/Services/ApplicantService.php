@@ -6,6 +6,7 @@ namespace App\Services;
 use Facades\App\Repositories\ApplicantContactDetailsRepository;
 use App\Repositories\ApplicantRepository;
 use Facades\App\Repositories\ApplicantListRepository;
+use Illuminate\Foundation\Auth\User;
 
 class ApplicantService
 {
@@ -23,13 +24,13 @@ class ApplicantService
         // 3. When we receive confirmation then add them to the list and add their details to the DB
     }
 
-    public function tryAddApplicantToList($attributes)
+    public function tryAddApplicantToList($attributes, User $user)
     {
-        $applicantAttributes = $this->assignApplicantAttributes($attributes);
+        $applicantAttributes = $this->assignApplicantAttributes($attributes, $user);
+        $listId = $attributes['list_id'];
 
-        if (! $this->isListFull($applicantAttributes['list_id'])) {
-
-            $applicant = $this->applicantRepository->create($applicantAttributes);
+        if (! $this->isListFull($listId)) {
+            $applicant = $this->applicantRepository->create($applicantAttributes, $listId);
             $contactDetails = $this->assignApplicantContactDetails($applicant->id, $attributes);
             ApplicantContactDetailsRepository::create($contactDetails);
 
@@ -51,10 +52,10 @@ class ApplicantService
 
     }
 
-    private function assignApplicantAttributes($attributes) : array
+    private function assignApplicantAttributes($attributes, User $user) : array
     {
         return [
-            'list_id' => $attributes['list_id'],
+            'user_id' => $user->id,
             'first_name' => $attributes['first_name'],
             'last_name' => $attributes['last_name'],
             'dob' => $attributes['dob'],
