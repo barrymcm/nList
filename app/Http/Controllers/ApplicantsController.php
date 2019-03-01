@@ -97,6 +97,7 @@ class ApplicantsController extends Controller
      */
     public function show(Request $request, $id)
     {
+
         $event = (int) $request->get('event');
         $list = (int) $request->get('list');
         $applicant = ApplicantRepository::find($id);

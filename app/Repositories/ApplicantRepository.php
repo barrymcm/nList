@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Applicant;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Facades\App\Repositories\ApplicantListRepository;
 use Illuminate\Support\Facades\DB;
@@ -40,11 +41,14 @@ class ApplicantRepository implements RepositoryInterface
     {
         try {
             DB::beginTransaction();
+            dd($attributes);
             $applicant = $this->applicantModel::create($attributes);
             DB::table('applicant_applicant_list')
                 ->insert([
                     'applicant_list_id' => $listId,
-                    'applicant_id' => $applicant->id
+                    'applicant_id' => $applicant->id,
+                    'created_at' => Carbon::createFromFormat('Y-m-d H:i:s'),
+                    'updated_at' => Carbon::createFromFormat('Y-m-d H:i:s')
                 ]);
             DB::commit();
 
@@ -60,18 +64,34 @@ class ApplicantRepository implements RepositoryInterface
     public function update(array $attributes, $id)
     {
         try {
-            $applicant = $this->applicantModel::find($id);
+            DB::beginTransaction();
+            $applicant = $this->applicantModel::with('contactDetails')->find($id);
 
             $applicant->first_name = $attributes['first_name'];
             $applicant->last_name = $attributes['last_name'];
             $applicant->dob = $attributes['dob'];
+            $applicant->contactDetails->applicant_id = $applicant['id'];
             $applicant->gender = $attributes['gender'];
 
             $applicant->save();
 
+            $applicant->contactDetails->update([
+                'phone' => $attributes['phone'],
+                'address_1' => $attributes['address_1'],
+                'address_2' => $attributes['address_2'],
+                'address_3' => $attributes['address_3'],
+                'city' => $attributes['city'],
+                'post_code' => $attributes['post_code'],
+                'country' => $attributes['country']
+            ]);
+
+            DB::commit();
+
             return $applicant;
+
         } catch (ModelNotFoundException $e) {
-            return false;
+            DB::rollBack();
+            return $e->getMessage();
         }
     }
 

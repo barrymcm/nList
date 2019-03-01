@@ -12,14 +12,14 @@
 
         @if($applicant->contactDetails)
             <ul>
-                <h3>ContactDetails</h3>
-                <li>Email: {{ $applicant->email }}</li>
+                <h3>Contact details</h3>
+                <li>Email: {{ $applicant->user->email }}</li>
                 <li>Phone: {{ $applicant->contactDetails->phone }}</li>
                 <li>Address: {{ $applicant->contactDetails->address_1 }}</li>
                 <li>Address: {{ $applicant->contactDetails->address_2 }}</li>
                 <li>Address: {{ $applicant->contactDetails->address_3 }}</li>
                 <li>City: {{ $applicant->contactDetails->city }}</li>
-                <li>Email: {{ $applicant->contactDetails->post_code }}</li>
+                <li>Post code: {{ $applicant->contactDetails->post_code }}</li>
                 <li>Country: {{ $applicant->contactDetails->country }}</li>
             </ul>
         @endif

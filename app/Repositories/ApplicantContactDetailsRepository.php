@@ -32,7 +32,6 @@ class ApplicantContactDetailsRepository implements RepositoryInterface
             $contactDetails = $this->contactDetailsModel;
 
             $contactDetails->applicant_id = $attributes['applicant_id'];
-            $contactDetails->email = $attributes['email'];
             $contactDetails->phone = $attributes['phone'];
             $contactDetails->address_1 = $attributes['address_1'];
             $contactDetails->address_2 = $attributes['address_2'];
@@ -56,7 +55,7 @@ class ApplicantContactDetailsRepository implements RepositoryInterface
         try {
             $contactDetails = $this->contactDetailsModel::find($id);
 
-            $contactDetails->applicant_id = $attributes['applicant_id'];
+            $contactDetails->applicant_id = $id;
             $contactDetails->phone = $attributes['phone'];
             $contactDetails->address_1 = $attributes['address_1'];
             $contactDetails->address_2 = $attributes['address_2'];

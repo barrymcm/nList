@@ -27,9 +27,10 @@ class ApplicantService
     public function tryAddApplicantToList($attributes, User $user)
     {
         $applicantAttributes = $this->assignApplicantAttributes($attributes, $user);
-        $listId = $attributes['list_id'];
+        $listId = $attributes['list'];
 
         if (! $this->isListFull($listId)) {
+            dd($applicantAttributes);
             $applicant = $this->applicantRepository->create($applicantAttributes, $listId);
             $contactDetails = $this->assignApplicantContactDetails($applicant->id, $attributes);
             ApplicantContactDetailsRepository::create($contactDetails);

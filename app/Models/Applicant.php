@@ -10,17 +10,22 @@ class Applicant extends Model
     use SoftDeletes;
 
     protected $attributes = ['email'];
-    protected $fillable = ['user_id', 'first_name', 'last_name', 'dob', 'gender', 'email'];
+    protected $fillable = ['user_id', 'first_name', 'last_name', 'dob', 'gender'];
     protected $dates = ['deleted_at'];
 
-    public function applicantList()
+    public function user()
     {
-        return $this->belongsToMany(ApplicantList::class);
+        return $this->belongsTo(User::class);
     }
 
     public function contactDetails()
     {
         return $this->hasOne(ApplicantContactDetails::class);
+    }
+
+    public function applicantList()
+    {
+        return $this->belongsToMany(ApplicantList::class);
     }
 
     public function getEmailAttribute($value)

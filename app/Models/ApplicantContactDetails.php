@@ -9,7 +9,7 @@ class ApplicantContactDetails extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['applicant_id', 'email', 'phone', 'address_1',
+    protected $fillable = ['applicant_id', 'phone', 'address_1',
         'address_2', 'address_3', 'city', 'county', 'post_code', 'country'
     ];
 

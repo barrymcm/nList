@@ -25,8 +25,8 @@ class StoreApplicant extends FormRequest
     public function rules()
     {
         return [
-            'event' => 'required|integer',
-            'list' => 'required|integer',
+            'event' => 'required|string',
+            'list' => 'required|string',
             'first_name' => 'required|string|max:50',
             'last_name' => 'required|string|max:100',
             'dob' => 'required|date',
