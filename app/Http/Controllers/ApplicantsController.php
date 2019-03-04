@@ -80,10 +80,10 @@ class ApplicantsController extends Controller
         $attributes = $request->validated();
         $this->applicantService->tryAddApplicantToList($attributes, Auth::user());
 
-        return redirect()->action('ApplicantListsController@show',
+        return redirect()->route('applicant_lists.show',
             [
-                'event' => $attributes['event_id'],
-                'list' => $attributes['list_id'],
+                'list' => $attributes['list'],
+                'event' => $attributes['event']
             ]
         );
     }
@@ -97,7 +97,6 @@ class ApplicantsController extends Controller
      */
     public function show(Request $request, $id)
     {
-
         $event = (int) $request->get('event');
         $list = (int) $request->get('list');
         $applicant = ApplicantRepository::find($id);

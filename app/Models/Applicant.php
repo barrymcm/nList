@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Applicant extends Model
 {
     use SoftDeletes;
-
-    protected $attributes = ['email'];
+    
     protected $fillable = ['user_id', 'first_name', 'last_name', 'dob', 'gender'];
+    protected $guarded = ['email'];
     protected $dates = ['deleted_at'];
 
     public function user()
@@ -26,15 +26,5 @@ class Applicant extends Model
     public function applicantList()
     {
         return $this->belongsToMany(ApplicantList::class);
-    }
-
-    public function getEmailAttribute($value)
-    {
-        return $this->attributes['email'] = $value;
-    }
-
-    public function setEmailAttribute($value)
-    {
-        $this->attributes['email'] = $value;
     }
 }

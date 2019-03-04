@@ -6,8 +6,8 @@
 
     <form action="{{ route('applicants.store') }}" method="POST">
         @csrf
-        <input type="hidden" name="list" value="{{ $list }}">
         <input type="hidden" name="event" value="{{ $event }}">
+        <input type="hidden" name="list" value="{{ $list }}">
 
         <label for="first_name">First Name:</label>
         <input type="text" name="first_name" value="">

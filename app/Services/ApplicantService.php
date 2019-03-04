@@ -30,7 +30,6 @@ class ApplicantService
         $listId = $attributes['list'];
 
         if (! $this->isListFull($listId)) {
-            dd($applicantAttributes);
             $applicant = $this->applicantRepository->create($applicantAttributes, $listId);
             $contactDetails = $this->assignApplicantContactDetails($applicant->id, $attributes);
             ApplicantContactDetailsRepository::create($contactDetails);

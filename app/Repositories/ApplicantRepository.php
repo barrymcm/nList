@@ -41,14 +41,13 @@ class ApplicantRepository implements RepositoryInterface
     {
         try {
             DB::beginTransaction();
-            dd($attributes);
             $applicant = $this->applicantModel::create($attributes);
             DB::table('applicant_applicant_list')
                 ->insert([
                     'applicant_list_id' => $listId,
                     'applicant_id' => $applicant->id,
-                    'created_at' => Carbon::createFromFormat('Y-m-d H:i:s'),
-                    'updated_at' => Carbon::createFromFormat('Y-m-d H:i:s')
+                    'created_at' => Carbon::createFromFormat('Y-m-d H:i:s', now()),
+                    'updated_at' => Carbon::createFromFormat('Y-m-d H:i:s', now())
                 ]);
             DB::commit();
 
