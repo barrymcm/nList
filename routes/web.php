@@ -28,6 +28,10 @@ Route::get(
     }
 )->name('contact_us');
 
+Route::get('/registered', function () {
+    return view('registered');
+});
+
 Route::resources(['events' => 'EventsController']);
 Route::resources(['applicants' => 'ApplicantsController']);
 Route::resources(['applicant_lists' => 'ApplicantListsController']);
