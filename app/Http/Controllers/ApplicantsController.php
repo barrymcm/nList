@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ApplicantAddedToList;
 use App\Models\Applicant;
 use App\Http\Requests\StoreApplicant;
 use Facades\App\Repositories\ApplicantContactDetailsRepository;
@@ -78,10 +79,11 @@ class ApplicantsController extends Controller
         Auth::check();
 
         $attributes = $request->validated();
-        $this->applicantService->tryAddApplicantToList($attributes, Auth::user());
+        $applicant = $this->applicantService->tryAddApplicantToList($attributes, Auth::user());
 
-        return redirect()->route('applicant_lists.show',
-            [
+        event(new ApplicantAddedToList($applicant));
+
+        return redirect()->route('applicant_lists.show', [
                 'list' => $attributes['list'],
                 'event' => $attributes['event']
             ]

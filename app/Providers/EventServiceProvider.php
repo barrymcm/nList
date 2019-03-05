@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
-use Illuminate\Auth\Events\Verified;
-use Illuminate\Support\Facades\Event;
+use App\Events\ApplicantAddedToList;
 use Illuminate\Auth\Events\Registered;
+use App\Listeners\SendApplicantAddedToListNotification;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -20,9 +20,11 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
 
-        Verified::class => [
-
+        ApplicantAddedToList::class => [
+            SendApplicantAddedToListNotification::class
         ]
+
+
     ];
 
     /**
