@@ -28,6 +28,7 @@ class SendApplicantAddedToListNotification
      */
     public function handle(ApplicantAddedToList $event)
     {
-        Mail::to($event->applicant->user->email)->send(new AddedToList());
+        Mail::to($event->applicant->user->email)
+            ->queue(new AddedToList($event->applicant));
     }
 }
