@@ -35,6 +35,7 @@ class ApplicantService
             ApplicantContactDetailsRepository::create($contactDetails);
 
             // 4. Send them a confirmation mail to say they have been added to the list :
+
             // Scenarios :
             //              -> Added to list confirmation
             //              -> Pending status (Depends on event owners approval)
