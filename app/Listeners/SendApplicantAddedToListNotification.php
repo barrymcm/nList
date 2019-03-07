@@ -2,13 +2,12 @@
 
 namespace App\Listeners;
 
-use App\Events\ApplicantAddedToList;
 use App\Mail\AddedToList;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Mail;
+use App\Events\ApplicantAddedToList;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendApplicantAddedToListNotification
+class SendApplicantAddedToListNotification implements ShouldQueue
 {
     /**
      * Create the event listener.
