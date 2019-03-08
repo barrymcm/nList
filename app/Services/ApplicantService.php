@@ -48,9 +48,9 @@ class ApplicantService
 
     }
 
-    public function sendAddedToListNotification()
+    public function sendAddedToListNotification($applicant)
     {
-
+        event(new ApplicantAddedToList($applicant));
     }
 
     private function assignApplicantAttributes($attributes, User $user) : array
@@ -62,6 +62,20 @@ class ApplicantService
             'dob' => $attributes['dob'],
             'gender' => $attributes['gender']
         ];
+    }
+
+    /** @todo create a test */
+    public function isListFull(int $listId) : bool
+    {
+        $listCount = $this->applicantRepository->getListCount($listId);
+        $list = ApplicantListRepository::find($listId);
+
+        if ($listCount == $list->max_applicants) {
+
+            return true;
+        }
+
+        return false;
     }
 
     private function assignApplicantContactDetails($id, $attributes) : array
@@ -77,19 +91,5 @@ class ApplicantService
             'post_code' => $attributes['post_code'],
             'country' => $attributes['country']
         ];
-    }
-
-    /** @todo create a test */
-    public function isListFull(int $listId) : bool
-    {
-        $listCount = $this->applicantRepository->getListCount($listId);
-        $list = ApplicantListRepository::find($listId);
-
-        if ($listCount == $list->max_applicants) {
-
-           return true;
-        }
-
-        return false;
     }
 }
