@@ -3,9 +3,12 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('home');
-});
+Route::get(
+    '/', 
+    function () {
+        return view('home');
+    }
+);
 
 Route::get(
     '/home',
@@ -28,10 +31,14 @@ Route::get(
     }
 )->name('contact_us');
 
-Route::get('/registered', function () {
-    return view('registered');
-});
-
+Route::get(
+    '/registered', 
+    function () {
+        return view('registered');
+    }
+);
+Route::get('create_account_type', 'Auth\RegisterController@createAccountType')
+    ->name('register.create_account_type');
 Route::resources(['events' => 'EventsController']);
 Route::resources(['applicants' => 'ApplicantsController']);
 Route::resources(['applicant_lists' => 'ApplicantListsController']);
