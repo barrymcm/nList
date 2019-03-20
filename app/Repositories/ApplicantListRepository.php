@@ -31,7 +31,7 @@ class ApplicantListRepository implements RepositoryInterface
         }
     }
 
-    public function create(array $list)
+    public function create(array $list, $id = null)
     {
         try {
             return $this->applicantListModel::create($list);
@@ -41,9 +41,21 @@ class ApplicantListRepository implements RepositoryInterface
         }
     }
 
-    public function update(array $list, $id)
+    public function update(array $listAttributes, $id)
     {
+        try {
+            $list = $this->applicantListModel::find($id);
 
+            $list->name = $listAttributes['name'];
+            $list->max_applicants = $listAttributes['max_applicants'];
+            $list->save();
+
+            return $list;
+
+        } catch (ModelNotFoundException $e) {
+            return $e->getMessage();
+
+        }
     }
 
     public function softDelete(int $id)

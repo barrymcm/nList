@@ -54,9 +54,7 @@ class SlotsController extends Controller
      */
     public function show($id)
     {
-
         $slot = SlotRepository::find($id);
-        dd($slot);
     }
 
     /**

@@ -70,15 +70,10 @@ class ApplicantListsController extends Controller
      */
     public function show(Request $request, $id)
     {
+        $event = $request->validate(['event' => 'required|integer']);
         $list = ApplicantListRepository::find($id);
 
-        return view(
-            'applicant_lists.show',
-            [
-                'list' => $list,
-                'event' => $request->get('event')
-            ]
-        );
+        return view('applicant_lists.show', ['list' => $list, 'event' => $event['event']]);
     }
 
     /**
@@ -87,9 +82,12 @@ class ApplicantListsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        //
+        $event = $request->validate(['event' => 'required|integer']);
+        $list = ApplicantListRepository::find($id);
+
+        return view('applicant_lists.edit', ['list' => $list, 'event' => $event['event']]);
     }
 
     /**
@@ -101,7 +99,19 @@ class ApplicantListsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $attributes = $request->validate([
+            'event_id' => 'required|integer',
+            'name' => 'required|string|max:255',
+            'max_applicants' => 'required|integer|min:1'
+        ]);
+
+        $list = ApplicantListRepository::update($attributes, $id);
+
+        return view('applicant_lists.show', [
+                'event' => $attributes['event_id'],
+                'list' => $list
+            ]
+        );
     }
 
     /**
@@ -115,6 +125,8 @@ class ApplicantListsController extends Controller
         $event = $request->validate(['event' => 'required|integer']);
         ApplicantListRepository::softDelete($id);
 
-        return redirect()->route('events.show', $event);
+        return redirect()->route('events.show', $event)->with(
+            'status', 'Applicant list removed'
+        );
     }
 }

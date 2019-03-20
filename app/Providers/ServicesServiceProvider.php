@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Applicant;
+use App\Models\ApplicantList;
+use App\Models\Event;
+use App\Models\Slot;
 use App\Repositories\SlotRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Services\EventService;
@@ -32,17 +36,17 @@ class ServicesServiceProvider extends ServiceProvider
     {
         $this->app->bind(ApplicantListService::class, function ($app) {
             return new ApplicantListService(
-                new ApplicantListRepository($app->make('App\ApplicantList')),
-                new SlotRepository($app->make('App\Slot'))
+                new ApplicantListRepository($app->make(ApplicantList::class)),
+                new SlotRepository($app->make(Slot::class))
             );
         });
 
         $this->app->bind(ApplicantService::class, function ($app) {
-            return new ApplicantService(new ApplicantRepository($app->make('App\Applicant')));
+            return new ApplicantService(new ApplicantRepository($app->make(Applicant::class)));
         });
 
         $this->app->bind(EventService::class, function ($app) {
-            return new EventService(new EventRepository($app->make('App\Event')));
+            return new EventService(new EventRepository($app->make(Event::class)));
         });
     }
 }

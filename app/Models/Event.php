@@ -6,7 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {
-    protected $fillable = ['total_slots', 'category_id', 'name', 'description'];
+    protected $fillable = [
+        'total_slots',
+        'event_organiser_id',
+        'category_id',
+        'name',
+        'description'
+    ];
+
+    public function organiser()
+    {
+        return $this->belongsTo(EventOrganiser::class);
+    }
 
     public function category()
     {

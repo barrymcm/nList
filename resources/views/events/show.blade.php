@@ -3,6 +3,7 @@
 @section('title', 'Event')
 
 @section('content')
+    <h3>Organiser: {{ $event->organiser }}</h3>
     <ul>
         <li>Name: {{ $event->name }}</li>
         <li>Description: {{ $event->description }}</li>
@@ -14,21 +15,21 @@
             <ul>
                 <li>Name: {{ $slot->name }}</li>
                 <li>Capacity: {{ $slot->slot_capacity }}</li>
-                <li>Allocated List Places: {{ $slot->availability }}</li>
+                <li>Remaining List Allocation: {{ $slot->availability }}</li>
                 <li>Lists:
-                    @if($slot->availability != 'full')
-                        <a href="{{ route('applicant_lists.create', ['slot' => $slot, 'event' => $event]) }}">Add a list
-                        </a>
-                    @endif
+                    @if($slot->availability != 'empty')
+                    <a href="{{ route('applicant_lists.create', ['slot' => $slot, 'event' => $event]) }}">Add a list</a>
+                @endif
                 </li>
 
                 <ol>
                     @foreach($slot->applicantLists as $list)
                         <li>
-                            <a href="{{ route('applicant_lists.show',
-                                ['list' => $list, 'event' => $event]) }}">{{ $list->name }}
+                            <a href="{{ route('applicant_lists.show', ['list' => $list, 'event' => $event]) }}">
+                                {{ $list->name }}
                             </a>
                             &nbsp; : &nbsp; List Quantity : {{ $list->max_applicants }}
+                                  {{--Remaining Places :  {{ $list->max_applicants - count($list->applicants) }}--}}
                         </li>
                     @endforeach
                 </ol>
@@ -37,7 +38,7 @@
             </ul>
             @if(empty($slot->name))
                 <a href="{{ route('slots.edit', ['slot' => $slot->id, 'event' => $event->id])}}">Add slot details</a>
-            @else
+                @else
                 <a href="{{ route('slots.edit', ['slot' => $slot->id, 'event' => $event->id])}}">Edit slot details</a>
             @endif
             <br>
@@ -45,13 +46,22 @@
         @endforeach
     </ul>
     <div>
+        <a href="{{ route('event_organisers.index') }}">Back</a>
+        <br>
+        <br>
+        <a href="{{ route('event_organisers.index') }}">All Organisers</a>
+        <br>
+        <br>
+        <a href="{{ route('event_organisers.show', ['organiser' => $event->event_organiser_id]) }}">View Organiser</a>
+        <br>
+        <br>
         <a href="{{ route('slots.create', ['event' => $event]) }}">Add new Slot</a>
         <br>
         <br>
         <a href="{{ route('events.edit', $event->id) }}">Edit event</a>
         <br>
         <br>
-        <a href="{{ route('events.index') }}">Back to events list</a>
+        <a href="{{ route('events.index') }}">View all events</a>
         <br>
         <br>
         <form action="{{ route('events.destroy', $event->id) }}" method="post">
