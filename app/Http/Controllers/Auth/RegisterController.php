@@ -39,6 +39,11 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+    public function createAccountType()
+    {
+        return view('auth/create_account_type');
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *
