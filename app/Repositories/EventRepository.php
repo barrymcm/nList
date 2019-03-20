@@ -54,7 +54,7 @@ class EventRepository implements RepositoryInterface
         return $event;
     }
 
-    public function create(array $event)
+    public function create(array $event, $id = null)
     {
         try {
             DB::beginTransaction();

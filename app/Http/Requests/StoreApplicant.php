@@ -25,8 +25,8 @@ class StoreApplicant extends FormRequest
     public function rules()
     {
         return [
-            'event_id' => 'required|integer',
-            'list_id' => 'required|integer',
+            'event' => 'required|string',
+            'list' => 'required|string',
             'first_name' => 'required|string|max:50',
             'last_name' => 'required|string|max:100',
             'dob' => 'required|date',
@@ -34,7 +34,7 @@ class StoreApplicant extends FormRequest
                 'required',
                 Rule::in('male', 'female')
             ],
-            'phone' => 'required|integer',
+            'phone' => 'required|string',
             'address_1' => 'required|string',
             'address_2' => 'required|string',
             'address_3' => 'string|nullable',

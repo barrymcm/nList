@@ -25,7 +25,7 @@ class UserRepository implements RepositoryInterface
 
     }
 
-    public function create(array $attributes)
+    public function create(array $attributes, $id = null)
     {
         try {
             DB::beginTransaction();

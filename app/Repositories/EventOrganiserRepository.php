@@ -36,7 +36,7 @@ class EventOrganiserRepository implements RepositoryInterface
         }
     }
 
-    public function create(array $eventOrganiser)
+    public function create(array $eventOrganiser, $id = null)
     {
         try {
             return $this->eventOrganiserModel::create($eventOrganiser);

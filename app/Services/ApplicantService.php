@@ -6,6 +6,7 @@ namespace App\Services;
 use Facades\App\Repositories\ApplicantContactDetailsRepository;
 use App\Repositories\ApplicantRepository;
 use Facades\App\Repositories\ApplicantListRepository;
+use Illuminate\Foundation\Auth\User;
 
 class ApplicantService
 {
@@ -23,17 +24,18 @@ class ApplicantService
         // 3. When we receive confirmation then add them to the list and add their details to the DB
     }
 
-    public function tryAddApplicantToList($attributes)
+    public function tryAddApplicantToList($attributes, User $user)
     {
-        $applicantAttributes = $this->assignApplicantAttributes($attributes);
+        $applicantAttributes = $this->assignApplicantAttributes($attributes, $user);
+        $listId = $attributes['list'];
 
-        if (! $this->isListFull($applicantAttributes['list_id'])) {
-
-            $applicant = $this->applicantRepository->create($applicantAttributes);
+        if (! $this->isListFull($listId)) {
+            $applicant = $this->applicantRepository->create($applicantAttributes, $listId);
             $contactDetails = $this->assignApplicantContactDetails($applicant->id, $attributes);
             ApplicantContactDetailsRepository::create($contactDetails);
 
             // 4. Send them a confirmation mail to say they have been added to the list :
+
             // Scenarios :
             //              -> Added to list confirmation
             //              -> Pending status (Depends on event owners approval)
@@ -46,20 +48,34 @@ class ApplicantService
 
     }
 
-    public function sendAddedToListNotification()
+    public function sendAddedToListNotification($applicant)
     {
-
+        event(new ApplicantAddedToList($applicant));
     }
 
-    private function assignApplicantAttributes($attributes) : array
+    private function assignApplicantAttributes($attributes, User $user) : array
     {
         return [
-            'list_id' => $attributes['list_id'],
+            'user_id' => $user->id,
             'first_name' => $attributes['first_name'],
             'last_name' => $attributes['last_name'],
             'dob' => $attributes['dob'],
             'gender' => $attributes['gender']
         ];
+    }
+
+    /** @todo create a test */
+    public function isListFull(int $listId) : bool
+    {
+        $listCount = $this->applicantRepository->getListCount($listId);
+        $list = ApplicantListRepository::find($listId);
+
+        if ($listCount == $list->max_applicants) {
+
+            return true;
+        }
+
+        return false;
     }
 
     private function assignApplicantContactDetails($id, $attributes) : array
@@ -75,19 +91,5 @@ class ApplicantService
             'post_code' => $attributes['post_code'],
             'country' => $attributes['country']
         ];
-    }
-
-    /** @todo create a test */
-    public function isListFull(int $listId) : bool
-    {
-        $listCount = $this->applicantRepository->getListCount($listId);
-        $list = ApplicantListRepository::find($listId);
-
-        if ($listCount == $list->max_applicants) {
-
-           return true;
-        }
-
-        return false;
     }
 }

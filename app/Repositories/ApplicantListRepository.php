@@ -24,14 +24,14 @@ class ApplicantListRepository implements RepositoryInterface
     public function find($id)
     {
         try {
-             return $this->applicantListModel->find($id);
+            return $this->applicantListModel::find($id);
 
         } catch (ModelNotFoundException $e) {
             return false;
         }
     }
 
-    public function create(array $list)
+    public function create(array $list, $id = null)
     {
         try {
             return $this->applicantListModel::create($list);

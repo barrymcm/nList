@@ -27,7 +27,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = 'email/verify';
 
     /**
      * Create a new controller instance.
@@ -39,11 +39,16 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+    public function createAccountType()
+    {
+        return view('auth/create_account_type');
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *
      * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
+     * @return \Illuminate\Contracts\Validation\Val[idator
      */
     protected function validator(array $data)
     {

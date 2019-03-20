@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ApplicantAddedToList;
 use App\Models\Applicant;
 use App\Http\Requests\StoreApplicant;
-use App\Repositories\EventRepository;
 use Facades\App\Repositories\ApplicantContactDetailsRepository;
 use Facades\App\Repositories\ApplicantRepository;
 use App\Services\ApplicantService;
@@ -79,12 +79,13 @@ class ApplicantsController extends Controller
         Auth::check();
 
         $attributes = $request->validated();
-        $this->applicantService->tryAddApplicantToList($attributes);
+        $applicant = $this->applicantService->tryAddApplicantToList($attributes, Auth::user());
 
-        return redirect()->action('ApplicantListsController@show',
-            [
-                'event' => $attributes['event_id'],
-                'list' => $attributes['list_id'],
+        event(new ApplicantAddedToList($applicant));
+
+        return redirect()->route('applicant_lists.show', [
+                'list' => $attributes['list'],
+                'event' => $attributes['event']
             ]
         );
     }
@@ -99,9 +100,14 @@ class ApplicantsController extends Controller
     public function show(Request $request, $id)
     {
         $event = (int) $request->get('event');
+        $list = (int) $request->get('list');
         $applicant = ApplicantRepository::find($id);
 
-        return view('applicants.show', ['applicant' => $applicant, 'event' => $event]);
+        return view('applicants.show', [
+            'applicant' => $applicant,
+            'event' => $event,
+            'list' => $list
+        ]);
     }
 
     /**
@@ -110,14 +116,17 @@ class ApplicantsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         $applicant = Applicant::find($id);
+        $event = (int) $request->get('event');
+        $list = (int) $request->get('list');
 
         return view(
             'applicants.edit', [
                 'applicant' => $applicant,
-                'list_id' => (int) request('list')
+                'event' => $event,
+                'list' => $list
             ]
         );
     }
@@ -135,7 +144,11 @@ class ApplicantsController extends Controller
         $attributes = $request->validated();
         $applicant = ApplicantRepository::update($attributes, $id);
 
-        return view('applicants.show', ['applicant' => $applicant]);
+        return view('applicants.show', [
+            'applicant' => $applicant,
+            'list' => $attributes['list'],
+            'event' => $attributes['event']
+        ]);
     }
 
     /**
