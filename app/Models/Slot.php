@@ -6,9 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Slot extends Model
 {
-    protected $guarded = ['created_at'];
-
+    public $attributes = ['availability'];
     protected $dates = ['start_date', 'end_date', 'created_at'];
+    protected $fillable = [
+        'event_id', 'name',
+        'slot_capacity', 'total_lists',
+        'start_date', 'end_date', 'availability'
+    ];
 
     public function event()
     {
@@ -18,5 +22,15 @@ class Slot extends Model
     public function applicantLists()
     {
         return $this->hasMany(ApplicantList::class);
+    }
+
+    public function getAvailabilityAttribute($value)
+    {
+        return $this->attributes['availability'] = $value;
+    }
+
+    public function setAvailabilityAttribute($value)
+    {
+        return $this->attributes['availability'] = $value;
     }
 }

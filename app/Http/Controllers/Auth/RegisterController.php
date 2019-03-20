@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Facades\App\Repositories\UserRepository;
 
 class RegisterController extends Controller
 {
@@ -28,7 +27,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = 'email/verify';
 
     /**
      * Create a new controller instance.
@@ -40,11 +39,16 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+    public function createAccountType()
+    {
+        return view('auth/create_account_type');
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *
      * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
+     * @return \Illuminate\Contracts\Validation\Val[idator
      */
     protected function validator(array $data)
     {
@@ -63,10 +67,6 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        return UserRepository::create($data);
     }
 }

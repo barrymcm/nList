@@ -3,7 +3,10 @@
 namespace App\Repositories;
 
 use App\Models\Applicant;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Facades\App\Repositories\ApplicantListRepository;
+use Illuminate\Support\Facades\DB;
 
 class ApplicantRepository implements RepositoryInterface
 {
@@ -12,7 +15,6 @@ class ApplicantRepository implements RepositoryInterface
     public function __construct(Applicant $applicantModel)
     {
         $this->applicantModel = $applicantModel;
-
     }
 
     public function all()
@@ -28,7 +30,6 @@ class ApplicantRepository implements RepositoryInterface
     {
         try {
             $applicant = $this->applicantModel::find($id);
-            $applicant->contactDetails;
 
             return $applicant;
         } catch (ModelNotFoundException $e) {
@@ -36,28 +37,60 @@ class ApplicantRepository implements RepositoryInterface
         }
     }
 
-    public function create(array $applicant)
+    public function create(array $attributes, $listId)
     {
-        return $this->applicantModel::create($applicant);
+        try {
+            DB::beginTransaction();
+            $applicant = $this->applicantModel::create($attributes);
+            DB::table('applicant_applicant_list')
+                ->insert([
+                    'applicant_list_id' => $listId,
+                    'applicant_id' => $applicant->id,
+                    'created_at' => Carbon::createFromFormat('Y-m-d H:i:s', now()),
+                    'updated_at' => Carbon::createFromFormat('Y-m-d H:i:s', now())
+                ]);
+            DB::commit();
+
+            return $applicant;
+
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+            return $e->getMessage();
+        }
+
     }
 
     public function update(array $attributes, $id)
     {
         try {
-            $applicant = $this->applicantModel::find($id);
+            DB::beginTransaction();
+            $applicant = $this->applicantModel::with('contactDetails')->find($id);
 
-            $applicant->list_id = $attributes['list_id'];
             $applicant->first_name = $attributes['first_name'];
             $applicant->last_name = $attributes['last_name'];
             $applicant->dob = $attributes['dob'];
+            $applicant->contactDetails->applicant_id = $applicant['id'];
             $applicant->gender = $attributes['gender'];
 
             $applicant->save();
 
+            $applicant->contactDetails->update([
+                'phone' => $attributes['phone'],
+                'address_1' => $attributes['address_1'],
+                'address_2' => $attributes['address_2'],
+                'address_3' => $attributes['address_3'],
+                'city' => $attributes['city'],
+                'post_code' => $attributes['post_code'],
+                'country' => $attributes['country']
+            ]);
+
+            DB::commit();
+
             return $applicant;
 
         } catch (ModelNotFoundException $e) {
-            return false;
+            DB::rollBack();
+            return $e->getMessage();
         }
     }
 
@@ -77,7 +110,7 @@ class ApplicantRepository implements RepositoryInterface
 
     public function getApplicantList($listId)
     {
-        return Applicant::where('list_id', $listId);
+        return ApplicantListRepository::find($listId);
     }
 
     public function getListCount($listId)

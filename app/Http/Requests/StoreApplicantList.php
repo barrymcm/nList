@@ -27,7 +27,7 @@ class StoreApplicantList extends FormRequest
             'event_id' => 'required|integer',
             'slot_id' => 'required|integer',
             'name' => 'required|string|max:255',
-            'max_applicants' => 'required|integer'
+            'max_applicants' => 'required|integer|min:1'
         ];
     }
 }

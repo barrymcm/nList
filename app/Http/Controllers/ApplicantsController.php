@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ApplicantAddedToList;
 use App\Models\Applicant;
 use App\Http\Requests\StoreApplicant;
+use Facades\App\Repositories\ApplicantContactDetailsRepository;
 use Facades\App\Repositories\ApplicantRepository;
 use App\Services\ApplicantService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class ApplicantsController extends Controller
@@ -39,6 +42,14 @@ class ApplicantsController extends Controller
      */
     public function create()
     {
+        if (! auth()->check()) {
+            return redirect()->route('applicant_lists.show', [
+                        'list' => (int)request('list'),
+                        'event' => (int)request('event')
+                    ]
+            )->with('warning', 'Whoops looks like your not logged in!');
+        }
+
         if (!$this->applicantService->isListFull(request('list'))) {
 
             return view(
@@ -49,14 +60,11 @@ class ApplicantsController extends Controller
             );
         }
 
-        return redirect(
-            route(
-                'applicant_lists.show', [
-                    'list' => (int)request('list'),
-                    'event' => (int)request('event')
-                ]
-            )
-        );
+        return redirect()->route('applicant_lists.show', [
+                'list' => (int)request('list'),
+                'event' => (int)request('event')
+            ]
+        )->with('warning', 'Uh oh... looks like this list is already full!');
     }
 
     /**
@@ -68,26 +76,38 @@ class ApplicantsController extends Controller
      */
     public function store(StoreApplicant $request)
     {
-        $event = (int) request('event_id');
-        $list = (int) request('list_id');
+        Auth::check();
 
         $attributes = $request->validated();
-        $this->applicantService->tryAddApplicantToList($attributes);
+        $applicant = $this->applicantService->tryAddApplicantToList($attributes, Auth::user());
 
-        return redirect(route('applicant_lists.show', ['list' => $list, 'event' => $event]));
+        event(new ApplicantAddedToList($applicant));
+
+        return redirect()->route('applicant_lists.show', [
+                'list' => $attributes['list'],
+                'event' => $attributes['event']
+            ]
+        );
     }
 
     /**
      * Display the specified resource.
      *
+     *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
+        $event = (int) $request->get('event');
+        $list = (int) $request->get('list');
         $applicant = ApplicantRepository::find($id);
 
-        return view('applicants.show', ['applicant' => $applicant]);
+        return view('applicants.show', [
+            'applicant' => $applicant,
+            'event' => $event,
+            'list' => $list
+        ]);
     }
 
     /**
@@ -96,14 +116,17 @@ class ApplicantsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         $applicant = Applicant::find($id);
+        $event = (int) $request->get('event');
+        $list = (int) $request->get('list');
 
         return view(
             'applicants.edit', [
                 'applicant' => $applicant,
-                'list_id' => (int) request('list')
+                'event' => $event,
+                'list' => $list
             ]
         );
     }
@@ -121,7 +144,11 @@ class ApplicantsController extends Controller
         $attributes = $request->validated();
         $applicant = ApplicantRepository::update($attributes, $id);
 
-        return view('applicants.show', ['applicant' => $applicant]);
+        return view('applicants.show', [
+            'applicant' => $applicant,
+            'list' => $attributes['list'],
+            'event' => $attributes['event']
+        ]);
     }
 
     /**
@@ -132,8 +159,14 @@ class ApplicantsController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        ApplicantRepository::softDelete($id);
+        $list = $request->get('list_id');
+        $event = $request->get('event');
 
-        return redirect()->to(route('applicant_lists.show', $request->get('list_id')));
+        ApplicantRepository::softDelete($id);
+        ApplicantContactDetailsRepository::softDelete($id);
+
+        return redirect()
+            ->action('ApplicantListsController@show', ['list' => $list, 'event' => $event])
+            ->with('status', 'Applicant removed');
     }
 }

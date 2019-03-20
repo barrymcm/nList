@@ -14,6 +14,27 @@
         <li><a href="{{ route('about') }}">About</a></li>
         <li><a href="{{ route('contact_us') }}">Contact</a></li>
         <li><a href="{{ route('events.index') }}">Events</a></li>
+        <li><a href="{{ route('event_organisers.index') }}">Event Organisers</a></li>
+    </ul>
+
+    <ul class="navbar-nav ml-auto">
+        @guest
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+            </li>
+            @if (Route::has('register'))
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                </li>
+            @endif
+        @else
+
+            <div>{{ Auth::user()->name }} <span class="caret"></span></div>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                @csrf
+                <input type="submit" name="Logout" value="Logout">
+            </form>
+        @endguest
     </ul>
 @show
 

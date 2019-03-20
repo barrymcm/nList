@@ -6,8 +6,8 @@ use App\Models\Event;
 use App\Models\Category;
 use App\Http\Requests\StoreEvent;
 use App\Http\Requests\UpdateEvent;
+use Facades\App\Services\EventService;
 use Facades\App\Repositories\EventRepository;
-
 
 class EventsController extends Controller
 {
@@ -57,7 +57,7 @@ class EventsController extends Controller
      */
     public function show($id)
     {
-        $event = EventRepository::find($id);
+        $event = EventService::find($id);
 
         return view('events.show', ['event' => $event]);
     }
@@ -76,7 +76,7 @@ class EventsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in storage.s
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id

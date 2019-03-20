@@ -12,7 +12,7 @@
         <label for="name">List name:</label>
         <input type="text" name="name" value="">
         <label for="max_applicants">Max applicants</label>
-        <input type="number" name="max_applicants" value="">
+        <input type="number" name="max_applicants" min="1">
 
         <input type="submit" value="submit">
     </form>

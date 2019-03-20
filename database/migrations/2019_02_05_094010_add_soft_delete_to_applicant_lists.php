@@ -26,7 +26,7 @@ class AddSoftDeleteToApplicantLists extends Migration
     public function down()
     {
         Schema::table('applicant_lists', function (Blueprint $table) {
-            $table->softDeletes()->after('max_applicants');
+            $table->dropSoftDeletes();
         });
     }
 }

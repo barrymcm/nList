@@ -1,19 +1,21 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-| Routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-*/
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 Route::get(
-    '/',
+    '/', 
     function () {
         return view('home');
     }
-)->name('home');
+);
+
+Route::get(
+    '/home',
+    function () {
+        return view('home');
+    }
+)->name('home')->middleware('locale');
 
 Route::get(
     '/about',
@@ -29,7 +31,21 @@ Route::get(
     }
 )->name('contact_us');
 
+Route::get(
+    '/registered', 
+    function () {
+        return view('registered');
+    }
+);
+Route::get('create_account_type', 'Auth\RegisterController@createAccountType')
+    ->name('register.create_account_type');
 Route::resources(['events' => 'EventsController']);
 Route::resources(['applicants' => 'ApplicantsController']);
 Route::resources(['applicant_lists' => 'ApplicantListsController']);
 Route::resources(['slots' => 'SlotsController']);
+Route::resources(['event_organisers' => 'EventOrganisersController']);
+Route::resources(['users_profile' => 'UsersProfileController']);
+
+Auth::routes(['verify' => true]);
+
+//Route::get('/home', 'HomeController@index')->name('home');
