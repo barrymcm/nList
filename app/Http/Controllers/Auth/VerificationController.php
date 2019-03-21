@@ -41,6 +41,6 @@ class VerificationController extends Controller
 
     public function redirectPath()
     {
-
+        return route('users_profile.create');
     }
 }

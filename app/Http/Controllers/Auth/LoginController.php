@@ -31,12 +31,23 @@ class LoginController extends Controller
      */
     protected $redirectTo = '/about';
 
+    /**
+     * @todo:: Refactor
+     * @param Request $request
+     * @param $user
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     protected function authenticated(Request $request, $user)
     {
         $list = $request->get('list');
         $event = $request->get('event');
 
         if ( Auth::check() ) {
+
+            // Get the users role
+            // If they are an organiser have they got a profile ?
+            // If not redirect them to the create organiser profile page
+
             $contactDetails = ApplicantContactDetails::where('applicant_id', $user->applicant->id)->first();
 
             if (empty($contactDetails->id)) {
@@ -68,6 +79,6 @@ class LoginController extends Controller
 
     public function redirectTo(Request $request)
     {
-        return '/events';
+
     }
 }
