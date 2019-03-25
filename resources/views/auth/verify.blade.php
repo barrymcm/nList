@@ -2,6 +2,12 @@
 
 @section('content')
 <div class="container">
+    <div>
+        @if( session('warning'))
+            {{ session('warning') }}
+        @endif
+    </div>
+    <br>
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">

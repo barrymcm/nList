@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,10 +25,6 @@ class UsersProfileController extends Controller
      */
     public function create()
     {
-        Auth::check();
-
-
-
         return view('users_profile.create');
     }
 
@@ -37,9 +34,9 @@ class UsersProfileController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUserProfile $request)
     {
-        //
+
     }
 
     /**

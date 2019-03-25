@@ -41,12 +41,13 @@ Route::get(
 Route::get('create_account_type', 'Auth\RegisterController@createAccountType')
     ->name('register.create_account_type');
 
+Route::resources(['events' => 'EventsController']);
+Route::resources(['event_organisers' => 'EventOrganisersController']);
+Route::resources(['applicant_lists' => 'ApplicantListsController']);
+
 Route::middleware(['verified'])->group( function () {
-    Route::resources(['events' => 'EventsController']);
     Route::resources(['applicants' => 'ApplicantsController']);
-    Route::resources(['applicant_lists' => 'ApplicantListsController']);
     Route::resources(['slots' => 'SlotsController']);
-    Route::resources(['event_organisers' => 'EventOrganisersController']);
     Route::resources(['users_profile' => 'UsersProfileController']);
 });
 

@@ -52,6 +52,12 @@ class ApplicantsController extends Controller
 
         if (!$this->applicantService->isListFull(request('list'))) {
 
+            if (! auth()->user()->email_verified_at) {
+                return redirect()->route('verification.notice')
+                    ->with('warning', 'Oh! It looks like you still need to verify your account');
+            }
+
+//            $this->store(auth()->user);
             return view(
                 'applicants.create', [
                     'list' => (int)request('list'),
@@ -67,8 +73,10 @@ class ApplicantsController extends Controller
         )->with('warning', 'Uh oh... looks like this list is already full!');
     }
 
+
+
     /**
-     * Store a newly cre\ated resource in storage.
+     * Store a newly created resource in storage.
      *
      * @param StoreApplicant $request
      * @param Applicant $applicant

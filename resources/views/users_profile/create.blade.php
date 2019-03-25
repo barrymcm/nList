@@ -4,6 +4,10 @@
 
 @section('content')
 
+<div>
+    <p>You'll need to create your profile before you can add yourself to a list</p>
+</div>
+
     <form action="{{ route('applicants.store') }}" method="POST">
         @csrf
         {{--<input type="hidden" name="event" value="{{ $event }}">--}}
