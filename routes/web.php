@@ -38,15 +38,16 @@ Route::get(
     }
 );
 
-Route::get('create_account_type', 'Auth\RegisterController@createAccountType')
-    ->name('register.create_account_type');
+Route::get('select_account_type', 'Auth\RegisterController@selectAccountType')
+    ->name('register.select_account_type');
+
 
 Route::resources(['events' => 'EventsController']);
 Route::resources(['event_organisers' => 'EventOrganisersController']);
 Route::resources(['applicant_lists' => 'ApplicantListsController']);
+Route::resources(['applicants' => 'ApplicantsController']);
 
 Route::middleware(['verified'])->group( function () {
-    Route::resources(['applicants' => 'ApplicantsController']);
     Route::resources(['slots' => 'SlotsController']);
     Route::resources(['users_profile' => 'UsersProfileController']);
 });

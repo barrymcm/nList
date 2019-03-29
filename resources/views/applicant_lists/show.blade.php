@@ -47,9 +47,10 @@
         </tbody>
     </table>
     @if( session('warning'))
+        <br>
         {{ session('warning') }} <a href="{{ route('login', ['list' => $list, 'event' => $event]) }}">sign in?</a>
         or if you dont have an account you can
-        <a href="{{ route('register') }}">register</a>
+        <a href="{{ route('register.select_account_type', ['list' => $list, 'event' => $event]) }}">register</a>
     @endif
     <br><br>
     @if(count($list->applicants) < $list->max_applicants)

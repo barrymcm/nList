@@ -5,10 +5,12 @@
 @section('content')
 
 <div>
-    <p>You'll need to create your profile before you can add yourself to a list</p>
+    @if(session('verified'))
+        <p>You'll need to create your profile before you can add yourself to a list</p>
+    @endif
 </div>
 
-    <form action="{{ route('applicants.store') }}" method="POST">
+    <form action="{{ route('users_profile.store') }}" method="POST">
         @csrf
         {{--<input type="hidden" name="event" value="{{ $event }}">--}}
         {{--<input type="hidden" name="list" value="{{ $list }}">--}}

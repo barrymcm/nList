@@ -3,10 +3,11 @@
 
 namespace App\Services;
 
-use Facades\App\Repositories\ApplicantContactDetailsRepository;
+use App\Events\ApplicantAddedToList;
+use Illuminate\Foundation\Auth\User;
 use App\Repositories\ApplicantRepository;
 use Facades\App\Repositories\ApplicantListRepository;
-use Illuminate\Foundation\Auth\User;
+use Facades\App\Repositories\ApplicantContactDetailsRepository;
 
 class ApplicantService
 {
@@ -15,13 +16,6 @@ class ApplicantService
     public function __construct(ApplicantRepository $applicantRepository)
     {
         $this->applicantRepository = $applicantRepository;
-    }
-
-    public function confirmApplicantsEmail()
-    {
-        // 2. Notification - Send a validate email confirmation to their inbox -> (add to a queue)
-
-        // 3. When we receive confirmation then add them to the list and add their details to the DB
     }
 
     public function tryAddApplicantToList($attributes, User $user)
@@ -33,13 +27,6 @@ class ApplicantService
             $applicant = $this->applicantRepository->create($applicantAttributes, $listId);
             $contactDetails = $this->assignApplicantContactDetails($applicant->id, $attributes);
             ApplicantContactDetailsRepository::create($contactDetails);
-
-            // 4. Send them a confirmation mail to say they have been added to the list :
-
-            // Scenarios :
-            //              -> Added to list confirmation
-            //              -> Pending status (Depends on event owners approval)
-            //              -> Payment Received (Confirmation)
 
             return $applicant;
         }
@@ -53,7 +40,7 @@ class ApplicantService
         event(new ApplicantAddedToList($applicant));
     }
 
-    private function assignApplicantAttributes($attributes, User $user) : array
+    public function assignApplicantAttributes($attributes, User $user) : array
     {
         return [
             'user_id' => $user->id,
@@ -78,7 +65,7 @@ class ApplicantService
         return false;
     }
 
-    private function assignApplicantContactDetails($id, $attributes) : array
+    public function assignApplicantContactDetails($id, $attributes) : array
     {
         return [
             'applicant_id' => $id,

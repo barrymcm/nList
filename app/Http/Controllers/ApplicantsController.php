@@ -47,30 +47,29 @@ class ApplicantsController extends Controller
                         'list' => (int)request('list'),
                         'event' => (int)request('event')
                     ]
-            )->with('warning', 'Whoops looks like your not logged in!');
+            )->with('warning', 'Whoops .. looks like your not logged in!');
         }
 
-        if (!$this->applicantService->isListFull(request('list'))) {
+        if (! auth()->user()->email_verified_at) {
+            return redirect()->route('verification.notice')
+                ->with('warning', 'Oh! It looks like you still need to verify your account');
+        }
 
-            if (! auth()->user()->email_verified_at) {
-                return redirect()->route('verification.notice')
-                    ->with('warning', 'Oh! It looks like you still need to verify your account');
-            }
+        if ($this->applicantService->isListFull(request('list'))) {
 
-//            $this->store(auth()->user);
-            return view(
-                'applicants.create', [
+            return redirect()->route('applicant_lists.show', [
                     'list' => (int)request('list'),
                     'event' => (int)request('event')
                 ]
-            );
+            )->with('warning', 'Uh oh... This list is already full!');
         }
 
-        return redirect()->route('applicant_lists.show', [
+        return view(
+            'applicants.create', [
                 'list' => (int)request('list'),
                 'event' => (int)request('event')
             ]
-        )->with('warning', 'Uh oh... looks like this list is already full!');
+        );
     }
 
 

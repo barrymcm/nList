@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Validation\Rule;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Facades\App\Repositories\UserRepository;
-use Illuminate\Validation\Rule;
 
 class RegisterController extends Controller
 {
@@ -40,9 +41,12 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
-    public function createAccountType()
+    public function selectAccountType(Request $request)
     {
-        return view('auth/create_account_type');
+        $list = $request->get('list');
+        $event = $request->get('event');
+
+        return view('auth/select_account_type', ['list' => $list, 'event' => $event]);
     }
 
     /**
@@ -55,6 +59,8 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'type' => ['required', 'string', Rule::in(['applicant', 'organiser'])],
+            'list' => 'nullable|integer',
+            'event' => 'nullable|integer',
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],

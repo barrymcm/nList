@@ -24,7 +24,7 @@
             </li>
             @if (Route::has('register'))
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('register.create_account_type') }}">{{ __('Register') }}</a>
+                    <a class="nav-link" href="{{ route('register.select_account_type') }}">{{ __('Register') }}</a>
                 </li>
             @endif
         @else
