@@ -39,7 +39,9 @@ class UsersProfileController extends Controller
      */
     public function create(Request $request)
     {
-        return view('users_profile.create');
+        if ($request->session()->has('verified')) {
+            return view('users_profile.create');
+        }
     }
 
     /**

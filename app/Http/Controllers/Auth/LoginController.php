@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\ApplicantContactDetails;
-use App\Repositories\ApplicantContactDetailsRepository;
+use App\Models\Applicant;
+use Facades\App\Repositories\ApplicantRepository;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -44,11 +44,7 @@ class LoginController extends Controller
 
         if ( Auth::check() ) {
 
-            // Get the users role
-            // If they are an organiser have they got a profile ?
-            // If not redirect them to the create organiser profile page
-
-            $contactDetails = ApplicantContactDetails::where('applicant_id', $user->applicant->id)->first();
+            $contactDetails = ApplicantRepository::findByUserId($user->id);
 
             if (empty($contactDetails->id)) {
                 return redirect()->route('users_profile.create');
@@ -60,6 +56,8 @@ class LoginController extends Controller
                     'event' => $event
                 ]);
             }
+
+            $request->session()->put('userId', $user->id);
 
             return redirect('/home');
         }

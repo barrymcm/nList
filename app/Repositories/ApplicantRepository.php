@@ -37,6 +37,17 @@ class ApplicantRepository implements RepositoryInterface
         }
     }
 
+    public function findByUserId($userId)
+    {
+        try {
+            $applicant = $this->applicantModel::where('user_id', $userId)->first();
+
+            return $applicant;
+        } catch (ModelNotFoundException $e) {
+            return false;
+        }
+    }
+
     public function create(array $attributes, $listId)
     {
         try {

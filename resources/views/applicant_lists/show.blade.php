@@ -55,6 +55,8 @@
     <br><br>
     @if(count($list->applicants) < $list->max_applicants)
         <a href="{{ route('applicants.create', ['list' => $list, 'event' => $event]) }}">Add me!</a>
+        <br><br>
+        <a href="{{ route('applicants.create', ['list' => $list, 'event' => $event]) }}">Add applicant!</a>
     @endif
     <br><br>
     <a href="{{ route('events.show', ['event' => $event]) }}">Back to Slot</a>

@@ -64,6 +64,12 @@ class ApplicantsController extends Controller
             )->with('warning', 'Uh oh... This list is already full!');
         }
 
+        // if the applicant is logged in and has a profile then just add their details to the list.
+        if (auth()->check() && session()->has('userId')) {
+            $this->storeExisingUser(session()->get('userId'));
+        }
+
+
         return view(
             'applicants.create', [
                 'list' => (int)request('list'),
@@ -72,6 +78,15 @@ class ApplicantsController extends Controller
         );
     }
 
+    public function storeExisingUser($userId)
+    {
+        // need to get the users profile
+        $applicant = ApplicantRepository::find($userId);
+        // need to add them to the list
+        // trigger an event
+        // redirect them back to the list
+        // show them that they are added to the list
+    }
 
 
     /**
