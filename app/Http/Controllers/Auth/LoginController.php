@@ -31,6 +31,14 @@ class LoginController extends Controller
      */
     protected $redirectTo = '/about';
 
+    public function showLoginForm(Request $request)
+    {
+        $list = $request->get('list')?: '';
+        $event = $request->get('event')?: '';
+
+        return view('auth.login', ['list' => $list, 'event' => $event]);
+    }
+
     /**
      * @todo:: Refactor
      * @param Request $request

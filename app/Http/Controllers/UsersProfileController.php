@@ -29,7 +29,7 @@ class UsersProfileController extends Controller
      */
     public function index()
     {
-        dd('users profile index');
+
     }
 
     /**
@@ -39,9 +39,7 @@ class UsersProfileController extends Controller
      */
     public function create(Request $request)
     {
-        if ($request->session()->has('verified')) {
-            return view('users_profile.create');
-        }
+        return view('users_profile.create');
     }
 
     /**
