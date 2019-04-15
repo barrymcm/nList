@@ -58,7 +58,7 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'type' => ['required', 'string', Rule::in(['applicant', 'organiser'])],
+            'type' => ['required', 'string', Rule::in(['customer', 'organiser'])],
             'list' => 'nullable|integer',
             'event' => 'nullable|integer',
             'name' => ['required', 'string', 'max:255'],

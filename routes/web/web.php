@@ -46,6 +46,7 @@ Route::resources(['events' => 'EventsController']);
 Route::resources(['event_organisers' => 'EventOrganisersController']);
 Route::resources(['applicant_lists' => 'ApplicantListsController']);
 Route::resources(['applicants' => 'ApplicantsController']);
+Route::resources(['customers' => 'CustomersController']);
 
 Route::middleware(['verified'])->group( function () {
     Route::resources(['slots' => 'SlotsController']);
