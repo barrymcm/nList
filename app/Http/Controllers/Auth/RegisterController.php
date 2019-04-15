@@ -32,6 +32,22 @@ class RegisterController extends Controller
     protected $redirectTo = 'email/verify';
 
     /**
+     * Show the application registration form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showRegistrationForm(Request $request)
+    {
+        $type = $request->get('type')?: '';
+        $list = $request->get('list')?: '';
+        $event = $request->get('event')?: '';
+        
+        return view('auth.register', [
+            'type' => $type, 'list' => $list, 'event' => $event
+        ]);
+    }
+
+    /**
      * Create a new controller instance.
      *
      * @return void
