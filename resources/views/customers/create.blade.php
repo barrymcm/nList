@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Create user profile')
+@section('title', 'Create customer profile')
 
 @section('content')
 
@@ -10,7 +10,7 @@
     @endif
 </div>
 
-    <form action="{{ route('users_profile.store') }}" method="POST">
+    <form action="{{ route('customers.store') }}" method="POST">
         @csrf
 
         <label for="first_name">First Name:</label>
@@ -55,6 +55,5 @@
         <input type="submit" value="submit">
     </form>
     <br>
-    {{--<a href="{{ route('applicant_lists.show', ['list' => $list, 'event' => $event]) }}">Back to List</a>--}}
 
 @endsection

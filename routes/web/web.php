@@ -50,7 +50,7 @@ Route::resources(['customers' => 'CustomersController']);
 
 Route::middleware(['verified'])->group( function () {
     Route::resources(['slots' => 'SlotsController']);
-    Route::resources(['users_profile' => 'UsersProfileController']);
+    Route::resources(['customers' => 'CustomersController']);
 });
 
 Auth::routes(['verify' => true]);

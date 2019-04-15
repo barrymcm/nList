@@ -2,10 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\RepositoryInterface;
+use Facades\App\Repositories\CustomerRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CustomersController extends Controller
 {
+    private $customerRepository;
+
+    public function __construct(RepositoryInterface $customerRepository)
+    {
+        $this->customerRepository = $customerRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -23,7 +33,7 @@ class CustomersController extends Controller
      */
     public function create()
     {
-        //
+        return view('customers.create');
     }
 
     /**
@@ -34,7 +44,19 @@ class CustomersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = Auth::user();
+
+        $attributes = $request->validated();
+        dd($user);
+
+        /**
+         * @todo - use CustomerRepository & CustomerContactDetailsRepository as a Facade.
+         */
+
+        $customer = CustomerRepository::create($attributes);
+        $contactDetails = CustomerContactDetailsRepository::create($attributes);
+
+        return redirect()->route('customers.show', ['id' => $contactDetails->id]);
     }
 
     /**

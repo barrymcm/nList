@@ -55,7 +55,7 @@ class LoginController extends Controller
             $contactDetails = ApplicantRepository::findByUserId($user->id);
 
             if (empty($contactDetails->id)) {
-                return redirect()->route('users_profile.create');
+                return redirect()->route('customers.create');
             }
 
             if (! empty($list) && ! empty($event)) {
