@@ -5,7 +5,7 @@
 @section('content')
 
 <div>
-    @if(session('verified'))
+    @if (session('verified'))
         <p>You'll need to create your profile before you can add yourself to a list</p>
     @endif
 </div>

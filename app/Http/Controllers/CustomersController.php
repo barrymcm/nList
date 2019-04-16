@@ -33,6 +33,9 @@ class CustomersController extends Controller
      */
     public function create()
     {
+
+        Auth::check();
+
         return view('customers.create');
     }
 
@@ -45,9 +48,7 @@ class CustomersController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-
         $attributes = $request->validated();
-        dd($user);
 
         /**
          * @todo - use CustomerRepository & CustomerContactDetailsRepository as a Facade.

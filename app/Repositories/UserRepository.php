@@ -4,16 +4,17 @@ namespace App\Repositories;
 
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserRepository implements RepositoryInterface
 {
-    private $user;
+    private $userModel;
 
     public function __construct(User $user)
     {
-       $this->user = $user;
+       $this->userModel = $user;
     }
 
     public function all()
@@ -21,16 +22,27 @@ class UserRepository implements RepositoryInterface
 
     }
 
-    public function find($userId)
+    public function find($id)
     {
 
+    }
+
+    public function findById($userId)
+    {
+        try {
+            $user = $this->userModel::where('id', $userId)->first();
+
+            return $user;
+        } catch (ModelNotFoundException $e) {
+            return false;
+        }
     }
 
     public function create(array $attributes, $id = null)
     {
         try {
             DB::beginTransaction();
-            $user = $this->user::create([
+            $user = $this->userModel::create([
                 'name' => $attributes['name'],
                 'email' => $attributes['email'],
                 'password' => Hash::make($attributes['password']),
@@ -38,8 +50,8 @@ class UserRepository implements RepositoryInterface
 
             $roleId = $this->getRoleId($attributes['type']);
 
-            if ($attributes['type'] == 'applicant') {
-                DB::table('applicants')->insert(['user_id' => $user->id]);
+            if ($attributes['type'] == 'customer') {
+                DB::table('customers')->insert(['user_id' => $user->id]);
                 DB::table('user_role')->insert([
                         'user_id' => $user->id,
                         'role_id' => $roleId,
@@ -49,9 +61,11 @@ class UserRepository implements RepositoryInterface
             }
 
             if ($attributes['type'] == 'organiser') {
+                /** @todo add user_id as a FK to event_organisers */
                 DB::table('user_role')->insert(['user_id' => $user->id, 'role_id' => $roleId]);
             }
-                DB::commit();
+
+            DB::commit();
 
             return $user;
         } catch (\PDOException $e) {

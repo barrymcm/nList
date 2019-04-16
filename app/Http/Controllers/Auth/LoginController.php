@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Applicant;
-use Facades\App\Repositories\ApplicantRepository;
+use Facades\App\Repositories\UserRepository;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -51,10 +50,7 @@ class LoginController extends Controller
         $event = $request->get('event');
 
         if ( Auth::check() ) {
-
-            $contactDetails = ApplicantRepository::findByUserId($user->id);
-
-            if (empty($contactDetails->id)) {
+            if ($this->hasUserRole($user)) {
                 return redirect()->route('customers.create');
             }
 
@@ -71,6 +67,11 @@ class LoginController extends Controller
         }
 
         return redirect('/login');
+    }
+
+    private function hasUserRole($user)
+    {
+        return UserRepository::findById($user->id);
     }
 
     /**
