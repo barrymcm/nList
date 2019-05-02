@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CustomerRepository implements RepositoryInterface
 {
-    private $customer;
+    private $customerModel;
 
     public function __construct(Customer $customer)
     {
-       $this->customer = $customer;
+       $this->customerModel = $customer;
     }
 
     public function all()
@@ -26,7 +26,19 @@ class CustomerRepository implements RepositoryInterface
 
     public function create(array $customer, $id)
     {
+        try {
+            DB::beginTransaction();
+            $customer = $this->customerModel::create($customer);
 
+            DB::table('customers')
+                ->insert([
+                    ''
+                ]);
+
+
+        } catch (ModelNotFoundException $e) {
+
+        }
     }
 
     public function update(array $customer, $id)

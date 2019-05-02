@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Facades\App\Repositories\UserRepository;
+use App\Role;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -50,8 +50,12 @@ class LoginController extends Controller
         $event = $request->get('event');
 
         if ( Auth::check() ) {
-            if ($this->hasUserRole($user)) {
-                return redirect()->route('customers.create');
+
+            if ($user->role->role_id) {
+                $role = Role::find($user->role->role_id)->name;
+                $request->session()->put('id', $user->id);
+
+                return redirect()->route("{$role}s.create");
             }
 
             if (! empty($list) && ! empty($event)) {
@@ -67,11 +71,6 @@ class LoginController extends Controller
         }
 
         return redirect('/login');
-    }
-
-    private function hasUserRole($user)
-    {
-        return UserRepository::findById($user->id);
     }
 
     /**
