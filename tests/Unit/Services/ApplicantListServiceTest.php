@@ -32,9 +32,9 @@ class ApplicantListServiceTest extends TestCase
         );
     }
 
-//     * @dataProvider provideDataForTestCreateApplicantList
     /**
      * @covers ::tryCreateApplicantList
+     * @dataProvider provideDataForTestCreateApplicantList
      */
     public function testTryCreateApplicantList($attributes, $slot, $listCount)
     {

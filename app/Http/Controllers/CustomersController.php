@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\CustomerRepository;
@@ -43,16 +44,15 @@ class CustomersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUserProfile $request)
     {
-        $userId = session()->get('id');
-
+        $attributes = $request->validate();
         /**
          * @todo - use CustomerRepository & CustomerContactDetailsRepository as a Facade.
          */
 
         $customer = $this->customerRepository->create($attributes);
-//        $contactDetails = CustomerContactDetailsRepository::create($attributes);
+        $contactDetails = CustomerContactDetailsRepository::create($attributes);
 
         return redirect()->route('customers.show', ['id' => $contactDetails->id]);
     }

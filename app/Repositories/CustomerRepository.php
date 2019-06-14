@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Customer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 
 class CustomerRepository implements RepositoryInterface
 {
