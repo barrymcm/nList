@@ -12,7 +12,7 @@
 
     <form action="{{ route('customers.store') }}" method="POST">
         @csrf
-
+        <input type="hidden" name="user_id" value="{{ $userId }}">
         <label for="first_name">First Name:</label>
         <input type="text" name="first_name" value="">
         <br>

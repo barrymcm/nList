@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreUserProfile;
+use App\Http\Requests\StoreCustomer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\CustomerRepository;
@@ -34,8 +34,9 @@ class CustomersController extends Controller
     public function create()
     {
         Auth::check();
+        $userId = session()->get('id');
 
-        return view('customers.create');
+        return view('customers.create', ['userId' => $userId]);
     }
 
     /**
@@ -44,17 +45,12 @@ class CustomersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreUserProfile $request)
+    public function store(StoreCustomer $request)
     {
-        $attributes = $request->validate();
-        /**
-         * @todo - use CustomerRepository & CustomerContactDetailsRepository as a Facade.
-         */
-
+        $attributes = $request->validated();
         $customer = $this->customerRepository->create($attributes);
-        $contactDetails = CustomerContactDetailsRepository::create($attributes);
 
-        return redirect()->route('customers.show', ['id' => $contactDetails->id]);
+        return redirect()->route('customers.show', ['customer' => $customer]);
     }
 
     /**
@@ -65,7 +61,9 @@ class CustomersController extends Controller
      */
     public function show($id)
     {
-        //
+        $customer = $this->customerRepository->find($id);
+
+        return view('customers.show', ['customer' => $customer]);
     }
 
     /**

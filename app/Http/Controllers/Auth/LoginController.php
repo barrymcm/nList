@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
+use App\Models\Organiser;
 use App\Role;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -55,7 +57,19 @@ class LoginController extends Controller
                 $role = Role::find($user->role->role_id)->name;
                 $request->session()->put('id', $user->id);
 
-                return redirect()->route("{$role}s.create");
+                if($role == 'customer') {
+                    $customer = Customer::find($user->customer->id);
+                    return redirect()->route("customers.show",
+                        ['customer' => $customer]
+                    );
+                }
+
+                if($role == 'organiser') {
+                    $organiser = Organiser::find($user->organiser->id);
+                    return redirect()->route("organisers.create",
+                        ['organiser' => $organiser]
+                    );
+                }
             }
 
             if (! empty($list) && ! empty($event)) {

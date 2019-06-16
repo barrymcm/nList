@@ -22,25 +22,42 @@ class CustomerRepository implements RepositoryInterface
 
     public function find($id)
     {
-
+        return $this->customerModel::find($id);
     }
 
-    public function create(array $customer, $id)
+    public function create(array $customer, $id = null)
     {
+
         try {
             DB::beginTransaction();
-            $customer = $this->customerModel::create($customer);
+            $customerModel = $this->customerModel::create($customer);
 
-            DB::table('customers')
-                ->insert([
-                    ''
-                ]);
+            $customerContactDetails = [
+                'customer_id' => $customerModel->id,
+                'phone' => $customer['phone'],
+                'address_1' => $customer['address_1'],
+                'address_2' => $customer['address_2'],
+                'address_3' => $customer['address_3'],
+                'city' => $customer['city'],
+                'county' => $customer['county'],
+                'post_code' => $customer['post_code'],
+                'country' => $customer['country']
+            ];
 
+            DB::table('customer_contact_details')
+                ->insert($customerContactDetails);
+
+            DB::commit();
+
+            return $customerModel;
 
         } catch (ModelNotFoundException $e) {
-
+            DB::rollBack();
+            return $e->getMessage();
         }
     }
+
+
 
     public function update(array $customer, $id)
     {

@@ -30,6 +30,9 @@
         @else
 
             <div>{{ Auth::user()->name }} <span class="caret"></span></div>
+            <div>
+                <a href="{{ route('customers.show', ['id' => Auth::user()->customer->id]) }}">My Account</a>
+            </div>
             <form id="logout-form" action="{{ route('logout') }}" method="POST">
                 @csrf
                 <input type="submit" name="Logout" value="Logout">
