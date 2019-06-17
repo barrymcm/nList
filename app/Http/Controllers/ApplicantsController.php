@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ApplicantAddedToList;
+use App\Models\Customer;
+use App\Models\Role;
 use App\Models\Applicant;
-use App\Http\Requests\StoreApplicant;
-use Facades\App\Repositories\ApplicantContactDetailsRepository;
-use Facades\App\Repositories\ApplicantRepository;
-use App\Services\ApplicantService;
 use Illuminate\Http\Request;
+use App\Services\ApplicantService;
 use Illuminate\Support\Facades\Auth;
-
+use App\Events\ApplicantAddedToList;
+use App\Http\Requests\StoreApplicant;
+use Facades\App\Repositories\ApplicantRepository;
+use Facades\App\Repositories\ApplicantContactDetailsRepository;
 
 class ApplicantsController extends Controller
 {
@@ -42,15 +43,19 @@ class ApplicantsController extends Controller
      */
     public function create()
     {
+        $user = auth()->user();
+        $list = (int) request('list');
+        $event = (int) request('event');
+
         if (! auth()->check()) {
             return redirect()->route('applicant_lists.show', [
-                        'list' => (int)request('list'),
-                        'event' => (int)request('event')
+                    'list' => $list,
+                    'event' => $event
                     ]
             )->with('warning', 'Whoops .. looks like your not logged in!');
         }
 
-        if (! auth()->user()->email_verified_at) {
+        if (! $user->email_verified_at) {
             return redirect()->route('verification.notice')
                 ->with('warning', 'Oh! It looks like you still need to verify your account');
         }
@@ -58,36 +63,51 @@ class ApplicantsController extends Controller
         if ($this->applicantService->isListFull(request('list'))) {
 
             return redirect()->route('applicant_lists.show', [
-                    'list' => (int)request('list'),
-                    'event' => (int)request('event')
+                    'list' => $list,
+                    'event' => $event
                 ]
             )->with('warning', 'Uh oh... This list is already full!');
         }
 
-        // if the applicant is logged in and has a profile then just add their details to the list.
-        if (auth()->check() && session()->has('userId')) {
-            $this->storeExisingUser(session()->get('userId'));
+        $isCustomer = $this->isUserCustomer($user);
+
+        if (auth()->check() && $isCustomer) {
+
+            $attributes = [
+                'user_id' =>  $user->customer->user_id,
+                'first_name' => $user->customer->first_name,
+                'last_name' => $user->customer->last_name,
+                'dob' => $user->customer->dob,
+                'gender' => $user->customer->gender
+            ];
+
+            if (ApplicantRepository::findByUserId($user->customer->user_id)) {
+                return redirect()->route('applicant_lists.show', [
+                    'list' => $list,
+                    'event' => $event
+                ])->with('warning', 'It looks like your already on the list!' );
+            }
+
+            $applicant = ApplicantRepository::create($attributes, $list);
+
+            if ($applicant->id) {
+                return redirect()->route('applicant_lists.show', [
+                    'list' => $list,
+                    'event' => $event
+                ]);
+            }
         }
 
-
-        return view(
-            'applicants.create', [
-                'list' => (int)request('list'),
-                'event' => (int)request('event')
-            ]
-        );
+        return view('applicants.create', ['list' => $list, 'event' => $event]);
     }
 
-    public function storeExisingUser($userId)
+    public function isUserCustomer($user) : bool
     {
-        // need to get the users profile
-        $applicant = ApplicantRepository::find($userId);
-        // need to add them to the list
-        // trigger an event
-        // redirect them back to the list
-        // show them that they are added to the list
-    }
+        $userRoleId = $user->role->role_id;
+        $role = Role::find($userRoleId);
 
+        return ($role->name == 'customer')? true : false;
+    }
 
     /**
      * Store a newly created resource in storage.

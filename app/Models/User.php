@@ -43,4 +43,23 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne( UserRole::class);
     }
+
+
+
+
+
+    /**
+     * select `roles`.*, `user_role`.`user_id` as `laravel_through_key`
+     *  from `roles`
+     *  inner join `user_role` on `user_role`.`user_id` = `roles`.`user_role_id`
+     * where `user_role`.`user_id` = 88
+     * limit 1
+     *
+     * select `roles`.*, `user_role`.`user_id` as `laravel_through_key`
+     *  from `roles` inner
+     *  join `user_role` on `user_role`.`id` = `roles`.`user_role_id`
+     * where `user_role`.`user_id` = 88
+     * limit 1
+     *
+     */
 }
