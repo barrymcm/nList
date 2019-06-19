@@ -26,10 +26,10 @@ class ApplicantRepository implements RepositoryInterface
         }
     }
 
-    public function find($id)
+    public function find($applicantId)
     {
         try {
-            $applicant = $this->applicantModel::find($id);
+            $applicant = $this->applicantModel::find($applicantId);
 
             return $applicant;
         } catch (ModelNotFoundException $e) {
@@ -40,9 +40,8 @@ class ApplicantRepository implements RepositoryInterface
     public function findByUserId($userId)
     {
         try {
-            $applicant = $this->applicantModel::where('user_id', $userId)->first();
+            return $this->applicantModel::where('user_id', $userId)->get();
 
-            return $applicant;
         } catch (ModelNotFoundException $e) {
             return false;
         }

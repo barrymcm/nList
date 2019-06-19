@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
-use App\Models\Role;
 use App\Models\Applicant;
 use Illuminate\Http\Request;
 use App\Services\ApplicantService;
@@ -69,9 +67,24 @@ class ApplicantsController extends Controller
             )->with('warning', 'Uh oh... This list is already full!');
         }
 
-        $isCustomer = $this->isUserCustomer($user);
+        $isCustomer = $this->applicantService->isUserCustomer($user);
 
         if (auth()->check() && $isCustomer) {
+
+            $isOnList = $this->applicantService->isUserOnList($user->customer->user_id, $list);
+
+            if ($isOnList) {
+                return redirect()->route('applicant_lists.show', [
+                    'list' => $list,
+                    'event' => $event
+                ])->with('warning', 'It looks like your already on the list!' );
+            }
+
+            /**
+             * @todo - should a user be able to add additional applicants to a list  ( GDPR )?
+             * eg -  user may want to add 3 different people to a list.
+             *
+             */
 
             $attributes = [
                 'user_id' =>  $user->customer->user_id,
@@ -80,13 +93,6 @@ class ApplicantsController extends Controller
                 'dob' => $user->customer->dob,
                 'gender' => $user->customer->gender
             ];
-
-            if (ApplicantRepository::findByUserId($user->customer->user_id)) {
-                return redirect()->route('applicant_lists.show', [
-                    'list' => $list,
-                    'event' => $event
-                ])->with('warning', 'It looks like your already on the list!' );
-            }
 
             $applicant = ApplicantRepository::create($attributes, $list);
 
@@ -99,14 +105,6 @@ class ApplicantsController extends Controller
         }
 
         return view('applicants.create', ['list' => $list, 'event' => $event]);
-    }
-
-    public function isUserCustomer($user) : bool
-    {
-        $userRoleId = $user->role->role_id;
-        $role = Role::find($userRoleId);
-
-        return ($role->name == 'customer')? true : false;
     }
 
     /**

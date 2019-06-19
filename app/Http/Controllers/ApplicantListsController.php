@@ -70,8 +70,6 @@ class ApplicantListsController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $userId = $request->session()->get('userId');
-
         $event = $request->validate(['event' => 'required|integer']);
         $list = ApplicantListRepository::find($id);
 

@@ -4,11 +4,17 @@
 namespace App\Services;
 
 use App\Events\ApplicantAddedToList;
+use App\Models\Role;
+use Facades\App\Repositories\ApplicantApplicantListRepository;
 use Illuminate\Foundation\Auth\User;
 use App\Repositories\ApplicantRepository;
 use Facades\App\Repositories\ApplicantListRepository;
 use Facades\App\Repositories\ApplicantContactDetailsRepository;
 
+/**
+ * Class ApplicantService
+ * @package App\Services
+ */
 class ApplicantService
 {
     private $applicantRepository;
@@ -35,6 +41,9 @@ class ApplicantService
 
     }
 
+    /**
+     * @param $applicant
+     */
     public function sendAddedToListNotification($applicant)
     {
         event(new ApplicantAddedToList($applicant));
@@ -51,7 +60,13 @@ class ApplicantService
         ];
     }
 
-    /** @todo create a test */
+
+    /**
+     * @todo Test - create a test
+     *
+     * @param int $listId
+     * @return bool
+     */
     public function isListFull(int $listId) : bool
     {
         $listCount = $this->applicantRepository->getListCount($listId);
@@ -63,6 +78,27 @@ class ApplicantService
         }
 
         return false;
+    }
+
+    /**
+     * @param $user
+     * @return bool
+     */
+    public function isUserCustomer($user) : bool
+    {
+        $userRoleId = $user->role->role_id;
+        $role = Role::find($userRoleId);
+
+        return ($role->name == 'customer')? true : false;
+    }
+
+    public function isUserOnList($userId, $listId) : bool
+    {
+        $applicant = $this->applicantRepository->findByUserId($userId);
+        $applicantIds = $applicant->pluck('id');
+        $applicantList = ApplicantApplicantListRepository::findBy($listId, $applicantIds);
+
+        return ($applicantList)? true : false;
     }
 
     public function assignApplicantContactDetails($id, $attributes) : array
