@@ -95,6 +95,7 @@ class ApplicantsController extends Controller
             ];
 
             $applicant = ApplicantRepository::create($attributes, $list);
+            $this->applicantService->userAddedToListEvent($applicant);
 
             if ($applicant->id) {
                 return redirect()->route('applicant_lists.show', [
@@ -121,7 +122,7 @@ class ApplicantsController extends Controller
         $attributes = $request->validated();
         $applicant = $this->applicantService->tryAddApplicantToList($attributes, Auth::user());
 
-        event(new ApplicantAddedToList($applicant));
+        $this->applicantService->userAddedToListEvent($applicant);
 
         return redirect()->route('applicant_lists.show', [
                 'list' => $attributes['list'],

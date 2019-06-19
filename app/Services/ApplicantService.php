@@ -44,7 +44,7 @@ class ApplicantService
     /**
      * @param $applicant
      */
-    public function sendAddedToListNotification($applicant)
+    public function userAddedToListEvent($applicant)
     {
         event(new ApplicantAddedToList($applicant));
     }
