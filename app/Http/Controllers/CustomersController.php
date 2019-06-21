@@ -4,16 +4,31 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCustomer;
 use App\Http\Requests\UpdateCustomer;
+use App\Services\CustomerService;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\CustomerRepository;
 
 class CustomersController extends Controller
 {
+    /**
+     * @var CustomerRepository
+     */
     private $customerRepository;
 
-    public function __construct(CustomerRepository $customerRepository)
+    /**]
+     * @var CustomerService
+     */
+    private $customerService;
+
+    /**
+     * CustomersController constructor.
+     * @param CustomerRepository $customerRepository
+     * @param CustomerService $customerService
+     */
+    public function __construct(CustomerRepository $customerRepository, CustomerService $customerService)
     {
         $this->customerRepository = $customerRepository;
+        $this->customerService = $customerService;
     }
 
     /**
@@ -33,8 +48,11 @@ class CustomersController extends Controller
      */
     public function create()
     {
+        /**
+         * @todo : refactor this into middleware - but make sure authentication check is done before removing it.
+         */
         Auth::check();
-        $userId = session()->get('id');
+        $userId = auth()->user()->id;
 
         return view('customers.create', ['userId' => $userId]);
     }
@@ -63,7 +81,14 @@ class CustomersController extends Controller
     {
         $customer = $this->customerRepository->find($id);
 
-        return view('customers.show', ['customer' => $customer]);
+        if ($this->customerService->hasCustomerProfile($customer)) {
+            return view('customers.show', ['customer' => $customer]);
+
+        }
+
+        return redirect()->route('customers.edit', ['customer' => $id])
+            ->with('status', 'It looks like you need to add your details!');
+
     }
 
     /**

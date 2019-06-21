@@ -4,9 +4,12 @@ namespace App\Providers;
 
 use App\Models\Applicant;
 use App\Models\ApplicantList;
+use App\Models\Customer;
 use App\Models\Event;
 use App\Models\Slot;
+use App\Repositories\CustomerRepository;
 use App\Repositories\SlotRepository;
+use App\Services\CustomerService;
 use Illuminate\Support\ServiceProvider;
 use App\Services\EventService;
 use App\Services\ApplicantService;
@@ -47,6 +50,10 @@ class ServicesServiceProvider extends ServiceProvider
 
         $this->app->bind(EventService::class, function ($app) {
             return new EventService(new EventRepository($app->make(Event::class)));
+        });
+
+        $this->app->bind(CustomerService::class, function ($app) {
+            return new CustomerService(new CustomerRepository($app->make(Customer::class)));
         });
     }
 }

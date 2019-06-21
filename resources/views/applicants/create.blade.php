@@ -4,6 +4,8 @@
 
 @section('content')
 
+
+
     <form action="{{ route('applicants.store') }}" method="POST">
         @csrf
         <input type="hidden" name="event" value="{{ $event }}">

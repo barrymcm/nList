@@ -30,30 +30,29 @@ class CustomerRepository implements RepositoryInterface
      * @param null $id
      * @return string
      */
-    public function create(array $customer, $userId)
+    public function create(array $attributes, $userId = null)
     {
-
         try {
             DB::beginTransaction();
-            $customerModel = $this->customerModel::create($customer);
+            $customer = $this->customerModel::create($attributes);
 
             $contactDetails = [
-                'customer_id' => (int)$customerModel->id,
-                'phone' => $customer['phone'],
-                'address_1' => $customer['address_1'],
-                'address_2' => $customer['address_2'],
-                'address_3' => $customer['address_3'],
-                'city' => $customer['city'],
-                'county' => $customer['county'],
-                'post_code' => $customer['post_code'],
-                'country' => $customer['country']
+                'customer_id' => (int) $customer->id,
+                'phone' => $attributes['phone'],
+                'address_1' => $attributes['address_1'],
+                'address_2' => $attributes['address_2'],
+                'address_3' => $attributes['address_3'],
+                'city' => $attributes['city'],
+                'county' => $attributes['county'],
+                'post_code' => $attributes['post_code'],
+                'country' => $attributes['country']
             ];
 
             DB::table('customer_contact_details')->insert($contactDetails);
 
             DB::commit();
 
-            return $customerModel;
+            return $customer;
 
         } catch (ModelNotFoundException $e) {
             DB::rollBack();
@@ -66,35 +65,35 @@ class CustomerRepository implements RepositoryInterface
      * @param $customerId
      * @return string
      */
-    public function update(array $customer, $customerId)
+    public function update(array $attributes, $customerId)
     {
         try {
             DB::beginTransaction();
 
-            $customerModel = $this->find($customerId);
-            $customerModel->fill($customer);
+            $customer = $this->customerModel::find($customerId);;
+            $customer->fill($customer);
 
-            $customerModel->save();
+            $customer->save();
 
             $contactDetails = [
-                'customer_id' => (int)$customerId,
-                'phone' => $customer['phone'],
-                'address_1' => $customer['address_1'],
-                'address_2' => $customer['address_2'],
-                'address_3' => $customer['address_3'],
-                'city' => $customer['city'],
-                'county' => $customer['county'],
-                'post_code' => $customer['post_code'],
-                'country' => $customer['country']
+                'customer_id' => (int) $customer->id,
+                'phone' => $attributes['phone'],
+                'address_1' => $attributes['address_1'],
+                'address_2' => $attributes['address_2'],
+                'address_3' => $attributes['address_3'],
+                'city' => $attributes['city'],
+                'county' => $attributes['county'],
+                'post_code' => $attributes['post_code'],
+                'country' => $attributes['country']
             ];
 
             DB::table('customer_contact_details')
-                ->where('customer_id', $customerModel->id)
+                ->where('customer_id', $customer->id)
                 ->update($contactDetails);
 
             DB::commit();
 
-            return $customerModel;
+            return $customer;
 
         } catch (ModelNotFoundException $e) {
             DB::rollBack();
