@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCustomer;
-use Illuminate\Http\Request;
+use App\Http\Requests\UpdateCustomer;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\CustomerRepository;
 
@@ -74,7 +74,9 @@ class CustomersController extends Controller
      */
     public function edit($id)
     {
-        //
+        $customer = $this->customerRepository->find($id);
+
+        return view('customers.edit', ['customer' => $customer]);
     }
 
     /**
@@ -84,9 +86,12 @@ class CustomersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCustomer $request, $customerId)
     {
-        //
+        $attributes = $request->validated();
+        $customer = $this->customerRepository->update($attributes, $customerId);
+
+        return redirect()->route('customers.show', ['customer' => $customer]);
     }
 
     /**

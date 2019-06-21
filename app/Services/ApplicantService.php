@@ -60,9 +60,7 @@ class ApplicantService
         ];
     }
 
-
     /**
-     * @todo Test - create a test
      *
      * @param int $listId
      * @return bool
@@ -81,6 +79,7 @@ class ApplicantService
     }
 
     /**
+     *
      * @param $user
      * @return bool
      */
@@ -101,10 +100,10 @@ class ApplicantService
         return ($applicantList)? true : false;
     }
 
-    public function assignApplicantContactDetails($id, $attributes) : array
+    public function assignApplicantContactDetails($applicantId, $attributes): array
     {
         return [
-            'applicant_id' => $id,
+            'applicant_id' => $applicantId,
             'phone' => $attributes['phone'],
             'address_1' => $attributes['address_1'],
             'address_2' => $attributes['address_2'],
