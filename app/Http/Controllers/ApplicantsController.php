@@ -33,7 +33,7 @@ class ApplicantsController extends Controller
     }
 
     /**
-     * @todo Refactor to remove the need for the if statment
+     * @todo Refactor to remove the need for all the if statments
      *
      * Show the form for creating a new resource.
      *
@@ -67,9 +67,16 @@ class ApplicantsController extends Controller
             )->with('warning', 'Uh oh... This list is already full!');
         }
 
-        $isCustomer = $this->applicantService->isUserCustomer($user);
+        $isCustomer = $this->applicantService->hasCustomerAccount($user);
 
-        if (auth()->check() && $isCustomer) {
+        if (auth()->check() && $isCustomer ) {
+
+            if (! $user->contactDetails) {
+                return redirect()->route('applicant_lists.show', [
+                    'list' => $list,
+                    'event' => $event
+                ])->with('notice', 'hmmm .. there\'s no contact details .. You\'ll need to complete your profile first!');
+            }
 
             $isOnList = $this->applicantService->isUserOnList($user->customer->user_id, $list);
 

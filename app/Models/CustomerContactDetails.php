@@ -10,7 +10,7 @@ class CustomerContactDetails extends Model
     use SoftDeletes;
 
     protected $fillable = ['customer_id','phone', 'address_1',
-        'address_2', 'address_3', 'city', 'county', 'post_code', 'country'
+        'address_2', 'address_3', 'city', 'county', 'post_code', 'country', 'created_at'
     ];
 
     protected $dates = ['deleted_at'];

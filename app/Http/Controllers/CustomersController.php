@@ -66,7 +66,8 @@ class CustomersController extends Controller
     public function store(StoreCustomer $request)
     {
         $attributes = $request->validated();
-        $customer = $this->customerRepository->create($attributes);
+        $userId = $attributes['user_id'];
+        $customer = $this->customerRepository->create($attributes, $userId);
 
         return redirect()->route('customers.show', ['customer' => $customer]);
     }

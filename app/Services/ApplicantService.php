@@ -17,13 +17,25 @@ use Facades\App\Repositories\ApplicantContactDetailsRepository;
  */
 class ApplicantService
 {
+    /**
+     * @var ApplicantRepository
+     */
     private $applicantRepository;
 
+    /**
+     * ApplicantService constructor.
+     * @param ApplicantRepository $applicantRepository
+     */
     public function __construct(ApplicantRepository $applicantRepository)
     {
         $this->applicantRepository = $applicantRepository;
     }
 
+    /**
+     * @param $attributes
+     * @param User $user
+     * @return bool|string
+     */
     public function tryAddApplicantToList($attributes, User $user)
     {
         $applicantAttributes = $this->assignApplicantAttributes($attributes, $user);
@@ -42,14 +54,11 @@ class ApplicantService
     }
 
     /**
-     * @param $applicant
+     * @param $attributes
+     * @param User $user
+     * @return array
      */
-    public function userAddedToListEvent($applicant)
-    {
-        event(new ApplicantAddedToList($applicant));
-    }
-
-    public function assignApplicantAttributes($attributes, User $user) : array
+    private function assignApplicantAttributes($attributes, User $user) : array
     {
         return [
             'user_id' => $user->id,
@@ -61,7 +70,6 @@ class ApplicantService
     }
 
     /**
-     *
      * @param int $listId
      * @return bool
      */
@@ -79,11 +87,18 @@ class ApplicantService
     }
 
     /**
-     *
+     * @param $applicant
+     */
+    public function userAddedToListEvent($applicant)
+    {
+        event(new ApplicantAddedToList($applicant));
+    }
+
+    /**
      * @param $user
      * @return bool
      */
-    public function isUserCustomer($user) : bool
+    public function hasCustomerAccount($user) : bool
     {
         $userRoleId = $user->role->role_id;
         $role = Role::find($userRoleId);
@@ -91,6 +106,11 @@ class ApplicantService
         return ($role->name == 'customer')? true : false;
     }
 
+    /**
+     * @param $userId
+     * @param $listId
+     * @return bool
+     */
     public function isUserOnList($userId, $listId) : bool
     {
         $applicant = $this->applicantRepository->findByUserId($userId);
@@ -100,6 +120,11 @@ class ApplicantService
         return ($applicantList)? true : false;
     }
 
+    /**
+     * @param $applicantId
+     * @param $attributes
+     * @return array
+     */
     public function assignApplicantContactDetails($applicantId, $attributes): array
     {
         return [

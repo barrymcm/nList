@@ -52,6 +52,12 @@
         or if you dont have an account you can
         <a href="{{ route('register.select_account_type', ['list' => $list, 'event' => $event]) }}">register</a>
     @endif
+
+    @if( session('notice'))
+        <p class="alert-info">
+            {{ session('notice') }}
+        </p>
+    @endif
     <br><br>
     @if(count($list->applicants) < $list->max_applicants)
         <a href="{{ route('applicants.create', ['list' => $list, 'event' => $event]) }}">Add me!</a>

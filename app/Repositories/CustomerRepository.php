@@ -30,11 +30,18 @@ class CustomerRepository implements RepositoryInterface
      * @param null $id
      * @return string
      */
-    public function create(array $attributes, $userId = null)
+    public function create(array $attributes, $userId)
     {
         try {
             DB::beginTransaction();
-            $customer = $this->customerModel::create($attributes);
+            $customer = $this->customerModel::where('user_id', $userId)->first();
+
+            $customer->update([
+                'first_name' => $attributes['first_name'],
+                'last_name' => $attributes['last_name'],
+                'dob' => $attributes['dob'],
+                'gender' => $attributes['gender']
+            ]);
 
             $contactDetails = [
                 'customer_id' => (int) $customer->id,
@@ -69,11 +76,14 @@ class CustomerRepository implements RepositoryInterface
     {
         try {
             DB::beginTransaction();
+            $customer = $this->customerModel::find($customerId);
 
-            $customer = $this->customerModel::find($customerId);;
-            $customer->fill($customer);
-
-            $customer->save();
+            $customer->update([
+                'first_name' => $attributes['first_name'],
+                'last_name' => $attributes['last_name'],
+                'dob' => $attributes['dob'],
+                'gender' => $attributes['gender']
+            ]);
 
             $contactDetails = [
                 'customer_id' => (int) $customer->id,
@@ -88,8 +98,10 @@ class CustomerRepository implements RepositoryInterface
             ];
 
             DB::table('customer_contact_details')
-                ->where('customer_id', $customer->id)
-                ->update($contactDetails);
+                ->updateOrInsert(
+                    ['customer_id' => $customer->id],
+                    $contactDetails
+                );
 
             DB::commit();
 

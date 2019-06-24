@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class UserRepository implements RepositoryInterface
+class
+UserRepository implements RepositoryInterface
 {
     private $userModel;
 
