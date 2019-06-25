@@ -48,14 +48,14 @@
     </table>
     @if( session('warning'))
         <br>
-        {{ session('warning') }} <a href="{{ route('login', ['list' => $list, 'event' => $event]) }}">sign in?</a>
+        {{ session('warning') }} <br><br><a href="{{ route('login', ['list' => $list, 'event' => $event]) }}">sign in?</a>
         or if you dont have an account you can
         <a href="{{ route('register.select_account_type', ['list' => $list, 'event' => $event]) }}">register</a>
     @endif
 
     @if( session('notice'))
         <p class="alert-info">
-            {{ session('notice') }}
+            {{ session('notice') }} <a href="{{ route('customers.create', ['id' => auth()->user()->customer]) }}">Click here!</a>
         </p>
     @endif
     <br><br>

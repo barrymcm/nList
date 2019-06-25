@@ -71,11 +71,11 @@ class ApplicantsController extends Controller
 
         if (auth()->check() && $isCustomer ) {
 
-            if (! $user->contactDetails) {
+            if (! $user->customer->first_name) {
                 return redirect()->route('applicant_lists.show', [
                     'list' => $list,
                     'event' => $event
-                ])->with('notice', 'hmmm .. there\'s no contact details .. You\'ll need to complete your profile first!');
+                ])->with('notice', 'hmmmm .. there\'s no contact details .. You\'ll need to complete your profile first!');
             }
 
             $isOnList = $this->applicantService->isUserOnList($user->customer->user_id, $list);
@@ -90,7 +90,6 @@ class ApplicantsController extends Controller
             /**
              * @todo - should a user be able to add additional applicants to a list  ( GDPR )?
              * eg -  user may want to add 3 different people to a list.
-             *
              */
 
             $attributes = [
