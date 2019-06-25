@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Edit customer profile')
+@if ($customer->first_name)
+    @section('title', 'Update Customer profile')
+@else
+    @section('title', 'Add Customer profile')
+@endif
 
 @section('content')
 
@@ -54,6 +58,8 @@
             <label for="country">Country</label>
             <input type="text" name="country" value="{{ $customer->contactDetails->country }}">
             <br>
+            <br>
+            <input type="submit" value="update">
         @else
             <input type="text" name="first_name" value="">
             <br>
@@ -92,11 +98,13 @@
             <br>
             <label for="country">Country</label>
             <input type="text" name="country" value="">
-            <br>
+            <br><br>
+            <input type="submit" value="Add">
         @endif
 
-        <input type="submit" value="update">
     </form>
+    <br>
+    <a href="{{ route('customers.show', ['customer' => $customer]) }}">Cancel</a>
     <br>
 
 @endsection
