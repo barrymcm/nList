@@ -24,13 +24,13 @@ class Slot extends Model
         return $this->hasMany(ApplicantList::class);
     }
 
-    public function getAvailabilityAttribute($value)
+    public function setAvailabilityAttribute($value)
     {
         return $this->attributes['availability'] = $value;
     }
 
-    public function setAvailabilityAttribute($value)
+    public function getAvailabilityAttribute()
     {
-        return $this->attributes['availability'] = $value;
+        return $this->attributes['availability'];
     }
 }
