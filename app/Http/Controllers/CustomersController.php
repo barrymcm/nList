@@ -82,6 +82,8 @@ class CustomersController extends Controller
     {
         $customer = $this->customerRepository->find($id);
 
+        $this->authorize('view', $customer);
+
         if ($this->customerService->hasCustomerProfile($customer)) {
             return view('customers.show', ['customer' => $customer]);
 
@@ -102,6 +104,8 @@ class CustomersController extends Controller
     {
         $customer = $this->customerRepository->find($id);
 
+        $this->authorize('update', $customer);
+
         return view('customers.edit', ['customer' => $customer]);
     }
 
@@ -116,6 +120,7 @@ class CustomersController extends Controller
     {
         $attributes = $request->validated();
         $customer = $this->customerRepository->update($attributes, $customerId);
+        $this->authorize('update', $customer);
 
         return redirect()->route('customers.show', ['customer' => $customer]);
     }
