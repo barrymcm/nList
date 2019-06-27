@@ -3,16 +3,19 @@
 namespace App\Repositories;
 
 use App\Models\Customer;
+use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 
 class CustomerRepository implements RepositoryInterface
 {
     private $customerModel;
+    private $userModel;
 
-    public function __construct(Customer $customer)
+    public function __construct(Customer $customer, User $user)
     {
        $this->customerModel = $customer;
+       $this->userModel = $user;
     }
 
     public function all()
@@ -115,7 +118,21 @@ class CustomerRepository implements RepositoryInterface
 
     public function softDelete(int $id)
     {
+        $userId = $this->customerModel::find($id)->user_id;
 
+        try {
+            DB::beginTransaction();
+            $this->customerModel::destroy($id) && $this->userModel::destroy($userId);
+            DB::commit();
+
+            return true;
+        } catch (\PDOException $e) {
+            DB::rollBack();
+            logger($e->getMessage());
+            /**
+             * @todo what is the best way to notify a user if they failed to delete their account.
+             */
+        }
     }
 
     public function hardDelete()

@@ -81,12 +81,11 @@ class CustomersController extends Controller
     public function show($id)
     {
         $customer = $this->customerRepository->find($id);
-
         $this->authorize('view', $customer);
 
         if ($this->customerService->hasCustomerProfile($customer)) {
-            return view('customers.show', ['customer' => $customer]);
 
+            return view('customers.show', ['customer' => $customer]);
         }
 
         return redirect()->route('customers.edit', ['customer' => $id])
@@ -103,7 +102,6 @@ class CustomersController extends Controller
     public function edit($id)
     {
         $customer = $this->customerRepository->find($id);
-
         $this->authorize('update', $customer);
 
         return view('customers.edit', ['customer' => $customer]);
@@ -120,19 +118,23 @@ class CustomersController extends Controller
     {
         $attributes = $request->validated();
         $customer = $this->customerRepository->update($attributes, $customerId);
-        $this->authorize('update', $customer);
 
         return redirect()->route('customers.show', ['customer' => $customer]);
     }
 
     /**
      * Remove the specified resource from storage.
-     *
+     * @todo the customer/user has to be logged out and all sessions destroyed.
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        $customer = $this->customerRepository->find($id);
+        $this->authorize('delete', $customer);
+        $this->customerRepository->softDelete($customer->id);
+        auth()->logout();
+
+        return redirect()->route('home')->with('status', 'Your account has been deleted!');
     }
 }

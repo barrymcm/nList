@@ -43,10 +43,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(RepositoryInterface::class, new ApplicantRepository(new Applicant));
         $this->app->bind(RepositoryInterface::class, new EventRepository(new Event));
         $this->app->bind(RepositoryInterface::class, new SlotRepository(new Slot));
-        $this->app->bind(RepositoryInterface::class, new EventOrganiserRepository(new EventOrganiser()));
-        $this->app->bind(RepositoryInterface::class, new ApplicantContactDetailsRepository(new ApplicantContactDetails()));
+        $this->app->bind(RepositoryInterface::class, new EventOrganiserRepository(new EventOrganiser));
+        $this->app->bind(RepositoryInterface::class, new ApplicantContactDetailsRepository(new ApplicantContactDetails));
         $this->app->bind(RepositoryInterface::class, new UserRepository(new User));
-        $this->app->bind(RepositoryInterface::class, new CustomerRepository(new Customer()));
-        $this->app->bind(RepositoryInterface::class, new ApplicantApplicantListRepository(new ApplicantApplicantList()));
+        $this->app->bind(RepositoryInterface::class, new CustomerRepository(new Customer, new User));
+        $this->app->bind(RepositoryInterface::class, new ApplicantApplicantListRepository(new ApplicantApplicantList));
     }
 }

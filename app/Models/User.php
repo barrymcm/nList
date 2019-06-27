@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -9,7 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, Notifiable;
+    use HasApiTokens, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -21,6 +22,11 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
+
+    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
@@ -28,7 +34,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $hidden = [
         'password', 'remember_token',
     ];
-
+    
     public function customer()
     {
         return $this->hasOne(Customer::class);
@@ -43,9 +49,6 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne( UserRole::class);
     }
-
-
-
 
 
     /**

@@ -7,6 +7,7 @@ use App\Models\ApplicantList;
 use App\Models\Customer;
 use App\Models\Event;
 use App\Models\Slot;
+use App\Models\User;
 use App\Repositories\CustomerRepository;
 use App\Repositories\SlotRepository;
 use App\Services\CustomerService;
@@ -53,7 +54,9 @@ class ServicesServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(CustomerService::class, function ($app) {
-            return new CustomerService(new CustomerRepository($app->make(Customer::class)));
+            return new CustomerService(
+                new CustomerRepository($app->make(Customer::class), $app->make(User::class))
+            );
         });
     }
 }
