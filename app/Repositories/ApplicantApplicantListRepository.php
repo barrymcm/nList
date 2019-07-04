@@ -19,7 +19,7 @@ class ApplicantApplicantListRepository implements RepositoryInterface
 
     }
 
-    public function find($id)
+    public function find($ids)
     {
 
     }
@@ -34,6 +34,21 @@ class ApplicantApplicantListRepository implements RepositoryInterface
         try {
             return ApplicantApplicantList::where('applicant_list_id', $applicantListId)
                 ->whereIn('applicant_id', $applicantIds)->value('applicant_id');
+
+        } catch (ModelNotFoundException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * @param $applicantListId
+     * @param $applicantIds
+     * @return bool
+     */
+    public function findListsBy($applicantId)
+    {
+        try {
+            return ApplicantApplicantList::whereIn('applicant_id', $applicantId)->get();
 
         } catch (ModelNotFoundException $e) {
             return false;

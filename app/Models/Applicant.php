@@ -26,4 +26,9 @@ class Applicant extends Model
     {
         return $this->belongsToMany(ApplicantList::class);
     }
+    
+    public function lists()
+    {
+        return $this->hasManyThrough(ApplicantList::class, ApplicantApplicantList::class);
+    }
 }

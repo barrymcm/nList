@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCustomer;
 use App\Http\Requests\UpdateCustomer;
+use App\Services\ApplicantListService;
 use App\Services\CustomerService;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\CustomerRepository;
@@ -21,14 +22,23 @@ class CustomersController extends Controller
     private $customerService;
 
     /**
+     * @var ApplicantListService
+     */
+    private $applicantListService;
+
+    /**
      * CustomersController constructor.
      * @param CustomerRepository $customerRepository
      * @param CustomerService $customerService
      */
-    public function __construct(CustomerRepository $customerRepository, CustomerService $customerService)
-    {
+    public function __construct(
+        CustomerRepository $customerRepository,
+        CustomerService $customerService,
+        ApplicantListService $applicantListService
+    ){
         $this->customerRepository = $customerRepository;
         $this->customerService = $customerService;
+        $this->applicantListService = $applicantListService;
     }
 
     /**
@@ -81,16 +91,16 @@ class CustomersController extends Controller
     public function show($id)
     {
         $customer = $this->customerRepository->find($id);
+        $lists = $this->applicantListService->getLists($customer);
         $this->authorize('view', $customer);
 
         if ($this->customerService->hasCustomerProfile($customer)) {
 
-            return view('customers.show', ['customer' => $customer]);
+            return view('customers.show', ['customer' => $customer, 'lists' => $lists]);
         }
 
         return redirect()->route('customers.edit', ['customer' => $id])
             ->with('status', 'It looks like you need to add your details!');
-
     }
 
     /**

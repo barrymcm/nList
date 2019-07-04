@@ -25,7 +25,14 @@ class CustomerRepository implements RepositoryInterface
 
     public function find($id)
     {
-        return $this->customerModel::find($id);
+        try {
+            return $this->customerModel::find($id);
+
+        } catch (ModelNotFoundException $e) {
+            logger($e->getMessage());
+
+            return false;
+        }
     }
 
     /**

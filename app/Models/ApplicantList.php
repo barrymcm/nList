@@ -30,4 +30,9 @@ class ApplicantList extends Model
     {
         return $this->belongsToMany(Applicant::class);
     }
+
+    public function slot()
+    {
+        return $this->belongsTo(Slot::class);
+    }
 }

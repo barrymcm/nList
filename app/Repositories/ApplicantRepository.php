@@ -37,6 +37,10 @@ class ApplicantRepository implements RepositoryInterface
         }
     }
 
+    /**
+     * @param $userId
+     * @return bool
+     */
     public function findByUserId($userId)
     {
         try {

@@ -27,15 +27,47 @@
         @endif
 
     </ul>
+
     <form action="{{ route('customers.destroy', $customer) }}" method="POST">
         @csrf
         @method('DELETE')
         {{--<input type="hidden" name="list" value="{{ $list }}">--}}
         <input type="hidden" name="customer_id" value="{{ $customer->id }}">
-        <input type="submit" name="submit" value="Delete" >
+        <input id="delete" type="submit" onclick="return confirm('Are you sure?')" name="submit" value="Delete" >
     </form>
-    <br><br>
+    <br>
     <a href="{{ route('customers.edit', [$customer]) }}">Edit</a>
     <br><br>
     {{--<a href="{{ route('customer_lists.show', ['list' => $list, 'event' => $event]) }}">Back to List</a>--}}
+    @isset($lists)
+    <div>
+        <h3>Customers Lists</h3>
+    </div>
+    <table>
+        <tr>
+            <th>Event</th>
+            <th>Slot</th>
+            <th>List Name</th>
+            <th>Start Date</th>
+            <th>Status</th>
+        </tr>
+        @foreach($lists as $list)
+            <tr>
+                <td>{{ $list['listName'] }} </td>
+                <td>{{ $list['slotName'] }}</td>
+                <td>{{ $list['eventName'] }}</td>
+                <td>{{ $list['startDate'] }}</td>
+                <td>{{ $list['status'] }}</td>
+            </tr>
+        @endforeach
+    </table>
+    @endisset
+
+    @empty($lists)
+        <div>
+            <h3>Customer list applications</h3>
+        </div>
+    @endempty
+
+    <br>
 @endsection
