@@ -9,11 +9,16 @@ class EventOrganiser extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['name', 'description'];
+    protected $fillable = ['user_id', 'name', 'description'];
     protected $dates = ['deleted_at'];
 
     public function events()
     {
         return $this->hasMany(Event::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

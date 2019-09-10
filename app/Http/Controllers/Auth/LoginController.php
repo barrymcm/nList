@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Models\EventOrganiser;
 use App\Models\Organiser;
 use App\Models\Role;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -64,8 +65,11 @@ class LoginController extends Controller
                     );
                 }
 
+                /**
+                 * @todo : Organiser model is not currently used.
+                 */
                 if($role == 'organiser') {
-                    $organiser = Organiser::find($user->organiser->id);
+                    $organiser = EventOrganiser::find($user->organiser->id);
                     return redirect()->route("organisers.create",
                         ['organiser' => $organiser]
                     );

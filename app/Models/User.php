@@ -45,6 +45,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(Applicant::class);
     }
 
+    public function eventOrganiser()
+    {
+        return $this->hasOne(EventOrganiser::class);
+    }
+
     public function role()
     {
         return $this->hasOne( UserRole::class);

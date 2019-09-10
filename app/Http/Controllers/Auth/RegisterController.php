@@ -57,6 +57,10 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function selectAccountType(Request $request)
     {
         $list = $request->get('list');
