@@ -5,9 +5,9 @@ RUN apk add --update nginx && \
         rm -rf /var/cache/apk/* && \
         mkdir -p /tmp/nginx/
 
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY default.conf /etc/nginx/conf.d/default.conf
-ADD html.tar.gz /usr/share/nginx/
+COPY docker/nginx.conf /etc/nginx/nginx.conf
+COPY docker/default.conf /etc/nginx/conf.d/default.conf
+ADD docker/html.tar.gz /usr/share/nginx/
 
 EXPOSE 80/tcp
 
