@@ -27,7 +27,7 @@ class EventOrganisersController extends Controller
      */
     public function create()
     {
-        return view('event_organisers.create');
+        return view('event_organisers.create', ['userId' => 109]);
     }
 
     /**
