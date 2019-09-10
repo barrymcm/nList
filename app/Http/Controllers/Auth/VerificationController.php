@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\VerifiesEmails;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class VerificationController extends Controller
 {
+    private const ROLE = [ 3 => 'customer', 2 => 'event.organisers' ];
+
     /*
     |--------------------------------------------------------------------------
     | Email Verification Controller
@@ -43,6 +46,8 @@ class VerificationController extends Controller
 
     public function redirectPath()
     {
-        return route('customers.create');
+        $roleId = request()->user()->role->role_id;
+
+        return route(self::ROLE[$roleId] . '.create');
     }
 }

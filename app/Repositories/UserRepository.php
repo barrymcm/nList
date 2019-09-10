@@ -4,12 +4,12 @@ namespace App\Repositories;
 
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class
-UserRepository implements RepositoryInterface
+class UserRepository implements RepositoryInterface
 {
     private $userModel;
 
@@ -62,8 +62,12 @@ UserRepository implements RepositoryInterface
             }
 
             if ($attributes['type'] == 'organiser') {
-                /** @todo add user_id as a FK to event_organisers */
-                DB::table('user_role')->insert(['user_id' => $user->id, 'role_id' => $roleId]);
+                DB::table('event_organisers')->insert(['user_id' => $user->id, 'name' => $user->name]);
+                DB::table('user_role')->insert([
+                    'user_id' => $user->id,
+                    'role_id' => $roleId,
+                    'created_at' => Carbon::createFromFormat('Y-m-d H:i:s', now())
+                ]);
             }
 
             DB::commit();
