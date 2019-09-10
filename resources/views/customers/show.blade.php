@@ -12,7 +12,7 @@
         <li>Created: {{ $customer->created_at }}</li>
 
         @if($customer->contactDetails)
-                <h3>Contact details</h3>
+            <h3>Contact details</h3>
             <ul>
                 <li>Email: {{ $customer->user->email }}</li>
                 <li>Phone: {{ $customer->contactDetails->phone }}</li>
@@ -33,13 +33,12 @@
         @method('DELETE')
         {{--<input type="hidden" name="list" value="{{ $list }}">--}}
         <input type="hidden" name="customer_id" value="{{ $customer->id }}">
-        <input id="delete" type="submit" onclick="return confirm('Are you sure?')" name="submit" value="Delete" >
+        <input id="delete" type="submit" onclick="return confirm('Are you sure?')" name="submit" value="Delete">
     </form>
     <br>
     <a href="{{ route('customers.edit', [$customer]) }}">Edit</a>
     <br><br>
     {{--<a href="{{ route('customer_lists.show', ['list' => $list, 'event' => $event]) }}">Back to List</a>--}}
-    @isset($lists)
     <div>
         <h3>Customers Lists</h3>
     </div>
@@ -51,23 +50,21 @@
             <th>Start Date</th>
             <th>Status</th>
         </tr>
-        @foreach($lists as $list)
-            <tr>
-                <td>{{ $list['listName'] }} </td>
-                <td>{{ $list['slotName'] }}</td>
-                <td>{{ $list['eventName'] }}</td>
-                <td>{{ $list['startDate'] }}</td>
-                <td>{{ $list['status'] }}</td>
-            </tr>
-        @endforeach
-    </table>
-    @endisset
+    @forelse($lists as $list)
+        <tr>
+            <td>{{ $list['listName'] }} </td>
+            <td>{{ $list['slotName'] }}</td>
+            <td>{{ $list['eventName'] }}</td>
+            <td>{{ $list['startDate'] }}</td>
+            <td>{{ $list['status'] }}</td>
+        </tr>
+    @empty
 
-    @empty($lists)
+    </table>
         <div>
             <h3>Customer list applications</h3>
         </div>
-    @endempty
+    @endforelse
 
     <br>
 @endsection

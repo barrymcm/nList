@@ -24,6 +24,7 @@ class StoreEventOganiser extends FormRequest
     public function rules()
     {
         return [
+            'user_id' => 'required|integer',
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:500'
         ];

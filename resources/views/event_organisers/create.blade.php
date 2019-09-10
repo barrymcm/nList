@@ -6,6 +6,7 @@
 
     <form action="{{ route('event_organisers.store') }}" method="POST">
         @csrf
+        <input type="hidden" name="user_id" value="{{ $userId }}">
         <label for="name">Organisers Name</label>
         <input name="name" type="text">
         <label for="description">Description</label>
