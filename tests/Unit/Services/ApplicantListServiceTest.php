@@ -19,7 +19,7 @@ class ApplicantListServiceTest extends TestCase
     private $applicantListService;
     private $mockedSlotRepository;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
