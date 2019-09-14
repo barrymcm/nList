@@ -2,23 +2,22 @@
 
 namespace App\Repositories;
 
-use App\Models\ ApplicantContactDetails;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Models\ ApplicantContactDetails;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ApplicantContactDetailsRepository implements RepositoryInterface
 {
     private $contactDetailsModel;
 
-        public function __construct(ApplicantContactDetails $contactDetails)
-        {
-           $this->contactDetailsModel = $contactDetails;
-        }
+    public function __construct(ApplicantContactDetails $contactDetails)
+    {
+        $this->contactDetailsModel = $contactDetails;
+    }
 
     public function all()
     {
-
     }
 
     public function find($id)
@@ -44,7 +43,6 @@ class ApplicantContactDetailsRepository implements RepositoryInterface
             $contactDetails->save();
 
             return $contactDetails;
-
         } catch (ModelNotFoundException $e) {
             return $e->getMessage();
         }
@@ -66,7 +64,6 @@ class ApplicantContactDetailsRepository implements RepositoryInterface
             $this->contactDetailsModel->save();
 
             return $this->contactDetailsModel;
-
         } catch (ModelNotFoundException $e) {
             return $e->getMessage();
         }
@@ -81,6 +78,5 @@ class ApplicantContactDetailsRepository implements RepositoryInterface
 
     public function hardDelete()
     {
-
     }
 }

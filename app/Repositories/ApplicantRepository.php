@@ -2,11 +2,11 @@
 
 namespace App\Repositories;
 
-use App\Models\Applicant;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Facades\App\Repositories\ApplicantListRepository;
+use App\Models\Applicant;
 use Illuminate\Support\Facades\DB;
+use Facades\App\Repositories\ApplicantListRepository;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ApplicantRepository implements RepositoryInterface
 {
@@ -45,7 +45,6 @@ class ApplicantRepository implements RepositoryInterface
     {
         try {
             return $this->applicantModel::where('user_id', $userId)->get();
-
         } catch (ModelNotFoundException $e) {
             return false;
         }
@@ -61,17 +60,16 @@ class ApplicantRepository implements RepositoryInterface
                     'applicant_list_id' => $listId,
                     'applicant_id' => $applicant->id,
                     'created_at' => Carbon::createFromFormat('Y-m-d H:i:s', now()),
-                    'updated_at' => Carbon::createFromFormat('Y-m-d H:i:s', now())
+                    'updated_at' => Carbon::createFromFormat('Y-m-d H:i:s', now()),
                 ]);
             DB::commit();
 
             return $applicant;
-
         } catch (ModelNotFoundException $e) {
             DB::rollBack();
+
             return $e->getMessage();
         }
-
     }
 
     public function update(array $attributes, $id)
@@ -95,15 +93,15 @@ class ApplicantRepository implements RepositoryInterface
                 'address_3' => $attributes['address_3'],
                 'city' => $attributes['city'],
                 'post_code' => $attributes['post_code'],
-                'country' => $attributes['country']
+                'country' => $attributes['country'],
             ]);
 
             DB::commit();
 
             return $applicant;
-
         } catch (ModelNotFoundException $e) {
             DB::rollBack();
+
             return $e->getMessage();
         }
     }
@@ -119,7 +117,6 @@ class ApplicantRepository implements RepositoryInterface
 
     public function hardDelete()
     {
-
     }
 
     public function getApplicantList($listId)

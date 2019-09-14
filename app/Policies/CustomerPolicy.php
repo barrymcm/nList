@@ -42,7 +42,6 @@ class CustomerPolicy
      */
     public function update(User $user, Customer $customer)
     {
-
         return $user->customer->id == $customer->id;
     }
 

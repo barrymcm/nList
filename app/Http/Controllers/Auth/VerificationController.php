@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\VerifiesEmails;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class VerificationController extends Controller
 {
-    private const ROLE = [ 3 => 'customer', 2 => 'event.organisers' ];
+    private const ROLE = [3 => 'customer', 2 => 'event.organisers'];
 
     /*
     |--------------------------------------------------------------------------

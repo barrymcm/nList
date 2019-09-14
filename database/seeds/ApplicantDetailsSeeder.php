@@ -24,7 +24,7 @@ class ApplicantDetailsSeeder extends Seeder
                 'address_3' => $faker->secondaryAddress,
                 'city' => $faker->city,
                 'post_code' => $faker->postcode,
-                'country' => $faker->countryCode
+                'country' => $faker->countryCode,
             ]);
         }
     }

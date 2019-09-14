@@ -2,12 +2,10 @@
 
 namespace Tests\Unit\Repositories;
 
-use App\Models\User;
-use App\Repositories\UserRepository;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use PHPUnit\Framework\TestCase;
+use Illuminate\Support\Facades\DB;
+use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Hash;
 
 class UserRepositoryTest extends TestCase
 {
@@ -16,7 +14,7 @@ class UserRepositoryTest extends TestCase
 
     public function setUp()
     {
-        $this->mockedUser = app()->instance('App\Models\User', $this->createMockedUser());
+        $this->mockedUser = \Mockery::mock('App\Models\User');
         $this->userRepository = new UserRepository($this->mockedUser);
     }
 
@@ -30,7 +28,7 @@ class UserRepositoryTest extends TestCase
         $attributes = [
             'name' => 'mocked_name',
             'email' => 'mocked_email',
-            'password' => 'mocked_password'
+            'password' => 'mocked_password',
         ];
 
         DB::shouldReceive('beginTransaction')
@@ -47,7 +45,6 @@ class UserRepositoryTest extends TestCase
             ->with($attributes, null)
             ->andReturn(false);
 
-        $this->expectException(\PDOException::class);
         $this->userRepository->create($attributes);
     }
 

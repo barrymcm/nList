@@ -14,11 +14,11 @@ class CategorySeeder extends Seeder
         $categories = ['sport', 'news', 'music', 'business', 'motoring'];
         $faker = Faker\Factory::create();
 
-        for($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             DB::table('categories')->insert([
                 'name' => $categories[$i],
                 'description' => $faker->sentence(15),
-                'created_at' => $faker->dateTimeInInterval('1 day', 'now')
+                'created_at' => $faker->dateTimeInInterval('1 day', 'now'),
             ]);
         }
     }

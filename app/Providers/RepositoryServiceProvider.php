@@ -2,24 +2,24 @@
 
 namespace App\Providers;
 
-use App\Models\ApplicantApplicantList;
-use App\Models\ApplicantContactDetails;
-use App\Models\Applicant;
-use App\Models\Customer;
-use App\Models\Event;
-use App\Models\EventOrganiser;
 use App\Models\Slot;
 use App\Models\User;
-use App\Repositories\ApplicantApplicantListRepository;
-use App\Repositories\ApplicantContactDetailsRepository;
-use App\Repositories\ApplicantRepository;
-use App\Repositories\CustomerRepository;
-use App\Repositories\EventOrganiserRepository;
-use App\Repositories\EventRepository;
-use App\Repositories\RepositoryInterface;
+use App\Models\Event;
+use App\Models\Customer;
+use App\Models\Applicant;
+use App\Models\EventOrganiser;
 use App\Repositories\SlotRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\EventRepository;
+use App\Models\ApplicantApplicantList;
+use App\Models\ApplicantContactDetails;
 use Illuminate\Support\ServiceProvider;
+use App\Repositories\CustomerRepository;
+use App\Repositories\ApplicantRepository;
+use App\Repositories\RepositoryInterface;
+use App\Repositories\EventOrganiserRepository;
+use App\Repositories\ApplicantApplicantListRepository;
+use App\Repositories\ApplicantContactDetailsRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {

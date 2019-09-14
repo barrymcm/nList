@@ -13,7 +13,7 @@ class MakePrimaryKeyOnApplicantListTable extends Migration
      */
     public function up()
     {
-        Schema::table('applicant_list', function(Blueprint $table) {
+        Schema::table('applicant_list', function (Blueprint $table) {
             $table->primary(['applicant_id', 'list_id']);
         });
     }

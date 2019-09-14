@@ -2,12 +2,12 @@
 
 namespace App\Services;
 
-use App\Repositories\ApplicantApplicantListRepository;
-use App\Repositories\ApplicantListRepository;
-use App\Repositories\ApplicantRepository;
-use App\Repositories\SlotRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use App\Repositories\SlotRepository;
+use App\Repositories\ApplicantRepository;
+use App\Repositories\ApplicantListRepository;
+use App\Repositories\ApplicantApplicantListRepository;
 
 class ApplicantListService
 {
@@ -25,8 +25,7 @@ class ApplicantListService
         ApplicantApplicantListRepository $applicantApplicantListRepository,
         SlotRepository $slotRepository,
         ApplicantRepository $applicantRepository
-    )
-    {
+    ) {
         $this->applicantListRepository = $applicantListRepository;
         $this->applicantApplicantListRepository = $applicantApplicantListRepository;
         $this->slotRepository = $slotRepository;
@@ -41,15 +40,13 @@ class ApplicantListService
         $slot = $this->slotRepository->find($slotId);
 
         if (
-            !$this->isListSizeWithinMaximumSlotCapacity($slot, $maxApplicants) ||
-            !$this->isAvailability($slot, $maxApplicants)
-        )
-        {
+            ! $this->isListSizeWithinMaximumSlotCapacity($slot, $maxApplicants) ||
+            ! $this->isAvailability($slot, $maxApplicants)
+        ) {
             return false;
         }
 
         return $this->applicantListRepository->create($attributes);
-
     }
 
     private function isListSizeWithinMaximumSlotCapacity($slot, $maxApplicants) : bool
@@ -98,7 +95,7 @@ class ApplicantListService
             'slotName' => $list->slot->name,
             'eventName' => $list->slot->event->name,
             'startDate' => $list->slot->start_date->format('Y-m-d H:i:s'),
-            'status' => $this->getListStatus($list->slot->start_date->format('Y-m-d'))
+            'status' => $this->getListStatus($list->slot->start_date->format('Y-m-d')),
         ];
     }
 

@@ -21,9 +21,8 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         ApplicantAddedToList::class => [
-            SendApplicantAddedToListNotification::class
-        ]
-
+            SendApplicantAddedToListNotification::class,
+        ],
 
     ];
 

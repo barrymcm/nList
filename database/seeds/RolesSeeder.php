@@ -13,18 +13,17 @@ class RolesSeeder extends Seeder
      */
     public function run()
     {
-
         $roles = [
             'applicant' => [
                 'name' => 'applicant',
                 'display_name' => 'applicant user',
-                'description' => 'applies to be added to events and lists'
+                'description' => 'applies to be added to events and lists',
             ],
             'organiser' => [
                 'name' => 'organiser',
                 'display_name' => 'event organiser',
-                'description' => 'organises and administers events and lists'
-            ]
+                'description' => 'organises and administers events and lists',
+            ],
         ];
 
         foreach ($roles as $role) {
@@ -32,7 +31,7 @@ class RolesSeeder extends Seeder
                 'name' => $role['name'],
                 'display_name' => $role['display_name'],
                 'description' => $role['description'],
-                'created_at' => Carbon::createFromFormat('Y-m-d H:i:s', now())
+                'created_at' => Carbon::createFromFormat('Y-m-d H:i:s', now()),
             ]);
         }
     }

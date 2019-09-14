@@ -26,7 +26,7 @@ class StoreEventOganiser extends FormRequest
         return [
             'user_id' => 'required|integer',
             'name' => 'required|string|max:255',
-            'description' => 'required|string|max:500'
+            'description' => 'required|string|max:500',
         ];
     }
 }

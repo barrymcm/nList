@@ -3,8 +3,6 @@
 namespace Tests\Unit\Services;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ApplicantServiceTest extends TestCase
 {

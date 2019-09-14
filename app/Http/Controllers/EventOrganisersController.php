@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreEventOganiser;
 use Facades\App\Repositories\EventOrganiserRepository;
-use Illuminate\Http\Request;
 
 class EventOrganisersController extends Controller
 {
@@ -65,7 +65,6 @@ class EventOrganisersController extends Controller
      */
     public function edit($id)
     {
-
     }
 
     /**

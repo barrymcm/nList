@@ -11,7 +11,7 @@ class Slot extends Model
     protected $fillable = [
         'event_id', 'name',
         'slot_capacity', 'total_lists',
-        'start_date', 'end_date', 'availability'
+        'start_date', 'end_date', 'availability',
     ];
 
     public function event()

@@ -25,10 +25,10 @@ class StoreSlot extends FormRequest
     {
         return [
             'event_id' => 'required|integer',
-            "name" => 'string',
-            "slot_capacity" => 'integer|required',
-            "start_date" => 'date|after_or_equal:today',
-            "end_date" => 'date|after_or_equal:today'
+            'name' => 'string',
+            'slot_capacity' => 'integer|required',
+            'start_date' => 'date|after_or_equal:today',
+            'end_date' => 'date|after_or_equal:today',
         ];
     }
 }

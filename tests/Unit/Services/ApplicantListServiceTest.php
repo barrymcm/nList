@@ -2,11 +2,10 @@
 
 namespace Tests\Unit\Services;
 
-use App\Repositories\ApplicantListRepository;
-use App\Repositories\SlotRepository;
 use Tests\TestCase;
+use App\Repositories\SlotRepository;
 use App\Services\ApplicantListService;
-
+use App\Repositories\ApplicantListRepository;
 
 /**
  * Class ApplicantListServiceTest
@@ -46,8 +45,6 @@ class ApplicantListServiceTest extends TestCase
         $this->mockedApplicantListRepository->expects($this->once())
             ->method('countListsInSlot')
             ->willReturn($listCount);
-
-
     }
 
     public function provideDataForTestCreateApplicantList()
@@ -56,11 +53,11 @@ class ApplicantListServiceTest extends TestCase
             'creates_applicant_list' => [
                 'attributes' => [
                     'max_applicants' => 100,
-                    'slot_id' => 1
+                    'slot_id' => 1,
                 ],
                 'slot' => $this->createSlotObject(),
-                'listCount' => 2
-            ]
+                'listCount' => 2,
+            ],
         ];
     }
 

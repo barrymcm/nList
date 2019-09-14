@@ -15,7 +15,6 @@ class ApplicantSeeds extends Seeder
         $faker = Faker\Factory::create();
 
         for ($a = 28; $a < 59; $a++) {
-
             for ($i = 1; $i < 15; $i++) {
                 DB::table('applicants')->insert([
                     'list_id' => $a,
@@ -23,10 +22,9 @@ class ApplicantSeeds extends Seeder
                     'last_name' => $faker->lastName,
                     'dob' => $faker->date(),
                     'gender' => $faker->randomElement(['male', 'female']),
-                    'created_at' => $faker->dateTimeThisMonth('now')
+                    'created_at' => $faker->dateTimeThisMonth('now'),
                 ]);
             }
-
         }
     }
 }

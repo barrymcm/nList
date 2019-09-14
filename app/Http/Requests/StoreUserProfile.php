@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Foundation\Http\FormRequest;
 
 class StoreUserProfile extends FormRequest
 {
@@ -30,7 +30,7 @@ class StoreUserProfile extends FormRequest
             'dob' => 'required|date',
             'gender' => [
                 'required',
-                Rule::in('male', 'female')
+                Rule::in('male', 'female'),
             ],
             'phone' => 'required|string',
             'address_1' => 'required|string',
@@ -39,7 +39,7 @@ class StoreUserProfile extends FormRequest
             'city' => 'required|string',
             'county' => 'required|string',
             'post_code' => 'required|string',
-            'country' => 'required|string'
+            'country' => 'required|string',
         ];
     }
 }

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\CustomerService;
 use App\Http\Requests\StoreCustomer;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UpdateCustomer;
 use App\Services\ApplicantListService;
-use App\Services\CustomerService;
-use Illuminate\Support\Facades\Auth;
 use App\Repositories\CustomerRepository;
 
 class CustomersController extends Controller
@@ -35,7 +35,7 @@ class CustomersController extends Controller
         CustomerRepository $customerRepository,
         CustomerService $customerService,
         ApplicantListService $applicantListService
-    ){
+    ) {
         $this->customerRepository = $customerRepository;
         $this->customerService = $customerService;
         $this->applicantListService = $applicantListService;
@@ -95,7 +95,6 @@ class CustomersController extends Controller
         $this->authorize('view', $customer);
 
         if ($this->customerService->hasCustomerProfile($customer)) {
-
             return view('customers.show', ['customer' => $customer, 'lists' => $lists]);
         }
 

@@ -6,7 +6,6 @@ use App\Models\Applicant;
 use Illuminate\Http\Request;
 use App\Services\ApplicantService;
 use Illuminate\Support\Facades\Auth;
-use App\Events\ApplicantAddedToList;
 use App\Http\Requests\StoreApplicant;
 use Facades\App\Repositories\ApplicantRepository;
 use Facades\App\Repositories\ApplicantContactDetailsRepository;
@@ -46,10 +45,12 @@ class ApplicantsController extends Controller
         $event = (int) request('event');
 
         if (! auth()->check()) {
-            return redirect()->route('applicant_lists.show', [
+            return redirect()->route(
+                'applicant_lists.show',
+                [
                     'list' => $list,
-                    'event' => $event
-                    ]
+                    'event' => $event,
+                ]
             )->with('warning', 'Whoops .. looks like your not logged in!');
         }
 
@@ -59,22 +60,22 @@ class ApplicantsController extends Controller
         }
 
         if ($this->applicantService->isListFull(request('list'))) {
-
-            return redirect()->route('applicant_lists.show', [
+            return redirect()->route(
+                'applicant_lists.show',
+                [
                     'list' => $list,
-                    'event' => $event
+                    'event' => $event,
                 ]
             )->with('warning', 'Uh oh... This list is already full!');
         }
 
         $isCustomer = $this->applicantService->hasCustomerAccount($user);
 
-        if (auth()->check() && $isCustomer ) {
-
+        if (auth()->check() && $isCustomer) {
             if (! $user->customer->first_name) {
                 return redirect()->route('applicant_lists.show', [
                     'list' => $list,
-                    'event' => $event
+                    'event' => $event,
                 ])->with('notice', 'hmmmm .. there\'s no contact details .. You\'ll need to complete your profile first!');
             }
 
@@ -83,8 +84,8 @@ class ApplicantsController extends Controller
             if ($isOnList) {
                 return redirect()->route('applicant_lists.show', [
                     'list' => $list,
-                    'event' => $event
-                ])->with('warning', 'It looks like your already on the list!' );
+                    'event' => $event,
+                ])->with('warning', 'It looks like your already on the list!');
             }
 
             /**
@@ -93,11 +94,11 @@ class ApplicantsController extends Controller
              */
 
             $attributes = [
-                'user_id' =>  $user->customer->user_id,
+                'user_id' => $user->customer->user_id,
                 'first_name' => $user->customer->first_name,
                 'last_name' => $user->customer->last_name,
                 'dob' => $user->customer->dob,
-                'gender' => $user->customer->gender
+                'gender' => $user->customer->gender,
             ];
 
             $applicant = ApplicantRepository::create($attributes, $list);
@@ -106,7 +107,7 @@ class ApplicantsController extends Controller
             if ($applicant->id) {
                 return redirect()->route('applicant_lists.show', [
                     'list' => $list,
-                    'event' => $event
+                    'event' => $event,
                 ]);
             }
         }
@@ -130,9 +131,11 @@ class ApplicantsController extends Controller
 
         $this->applicantService->userAddedToListEvent($applicant);
 
-        return redirect()->route('applicant_lists.show', [
+        return redirect()->route(
+            'applicant_lists.show',
+            [
                 'list' => $attributes['list'],
-                'event' => $attributes['event']
+                'event' => $attributes['event'],
             ]
         );
     }
@@ -153,7 +156,7 @@ class ApplicantsController extends Controller
         return view('applicants.show', [
             'applicant' => $applicant,
             'event' => $event,
-            'list' => $list
+            'list' => $list,
         ]);
     }
 
@@ -170,10 +173,11 @@ class ApplicantsController extends Controller
         $list = (int) $request->get('list');
 
         return view(
-            'applicants.edit', [
+            'applicants.edit',
+            [
                 'applicant' => $applicant,
                 'event' => $event,
-                'list' => $list
+                'list' => $list,
             ]
         );
     }
@@ -194,7 +198,7 @@ class ApplicantsController extends Controller
         return view('applicants.show', [
             'applicant' => $applicant,
             'list' => $attributes['list'],
-            'event' => $attributes['event']
+            'event' => $attributes['event'],
         ]);
     }
 

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateApplicantList;
-use App\Http\Requests\StoreApplicantList;
-use Facades\App\Repositories\ApplicantListRepository;
-use App\Services\ApplicantListService;
 use Illuminate\Http\Request;
+use App\Services\ApplicantListService;
+use App\Http\Requests\StoreApplicantList;
+use App\Http\Requests\CreateApplicantList;
+use Facades\App\Repositories\ApplicantListRepository;
 
 class ApplicantListsController extends Controller
 {
@@ -36,9 +36,11 @@ class ApplicantListsController extends Controller
     {
         $attributes = $request->validated();
 
-        return view('applicant_lists.create', [
+        return view(
+            'applicant_lists.create',
+            [
                 'slot' => $attributes['slot'],
-                'event' => $attributes['event']
+                'event' => $attributes['event'],
             ]
         );
     }
@@ -102,14 +104,16 @@ class ApplicantListsController extends Controller
         $attributes = $request->validate([
             'event_id' => 'required|integer',
             'name' => 'required|string|max:255',
-            'max_applicants' => 'required|integer|min:1'
+            'max_applicants' => 'required|integer|min:1',
         ]);
 
         $list = ApplicantListRepository::update($attributes, $id);
 
-        return view('applicant_lists.show', [
+        return view(
+            'applicant_lists.show',
+            [
                 'event' => $attributes['event_id'],
-                'list' => $list
+                'list' => $list,
             ]
         );
     }
@@ -126,7 +130,8 @@ class ApplicantListsController extends Controller
         ApplicantListRepository::softDelete($id);
 
         return redirect()->route('events.show', $event)->with(
-            'status', 'Applicant list removed'
+            'status',
+            'Applicant list removed'
         );
     }
 }

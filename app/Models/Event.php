@@ -11,7 +11,7 @@ class Event extends Model
         'event_organiser_id',
         'category_id',
         'name',
-        'description'
+        'description',
     ];
 
     public function organiser()

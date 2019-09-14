@@ -13,7 +13,7 @@ class RenameSlotsColumnOnEvents extends Migration
      */
     public function up()
     {
-        Schema::table('events', function(Blueprint $table) {
+        Schema::table('events', function (Blueprint $table) {
             $table->renameColumn('slots', 'total_slots');
         });
     }
@@ -25,7 +25,7 @@ class RenameSlotsColumnOnEvents extends Migration
      */
     public function down()
     {
-        Schema::table('events', function(Blueprint $table) {
+        Schema::table('events', function (Blueprint $table) {
             $table->renameColumn('slots', 'total_slots');
         });
     }

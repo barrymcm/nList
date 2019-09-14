@@ -24,15 +24,14 @@ class EventService
     private function getSlotAvailability($event)
     {
         foreach ($event->slots as $slot) {
-
             $availability = (int) $slot->availability;
             $lists = (int) $slot->applicantLists->count();
 
-            if (!$availability && $lists > 0) {
+            if (! $availability && $lists > 0) {
                 $slot->availability = self::AVAILABILITY_STATUS;
             }
 
-            if (!$availability && !$lists) {
+            if (! $availability && ! $lists) {
                 $slot->availability = $slot->slot_capacity;
             }
         }

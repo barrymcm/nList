@@ -1,12 +1,11 @@
 <?php
 
-
 namespace App\Repositories;
 
 use App\Models\Slot;
+use Illuminate\Support\Facades\DB;
 use Facades\App\Repositories\ApplicantListRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\DB;
 
 class SlotRepository implements RepositoryInterface
 {
@@ -36,8 +35,7 @@ class SlotRepository implements RepositoryInterface
 
     public function create(array $attributes, $id = null)
     {
-        try{
-
+        try {
             return DB::table('slots')->insert($attributes);
         } catch (\PDOException $e) {
             return false;
@@ -53,7 +51,6 @@ class SlotRepository implements RepositoryInterface
             DB::commit();
 
             return $slot;
-
         } catch (\PDOException $e) {
             DB::rollback();
         }
@@ -86,17 +83,14 @@ class SlotRepository implements RepositoryInterface
 
             return $slotModel;
         } catch (\PDOException $e) {
-
         }
     }
 
     public function softDelete(int $id)
     {
-
     }
 
     public function hardDelete()
     {
-
     }
 }

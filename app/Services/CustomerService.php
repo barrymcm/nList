@@ -26,7 +26,7 @@ class CustomerService
      */
     public function hasCustomerProfile($customer) : bool
     {
-        if ( is_object($customer)
+        if (is_object($customer)
             && isset($customer->first_name)
             && isset($customer->last_name)
             && isset($customer->dob)
@@ -36,6 +36,5 @@ class CustomerService
         }
 
         return false;
-
     }
 }

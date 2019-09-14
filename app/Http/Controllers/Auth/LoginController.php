@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Models\Customer;
-use App\Models\EventOrganiser;
-use App\Models\Organiser;
 use App\Models\Role;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\Models\Customer;
+use App\Models\Organiser;
 use Illuminate\Http\Request;
+use App\Models\EventOrganiser;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
 {
@@ -52,15 +52,16 @@ class LoginController extends Controller
         $list = $request->get('list');
         $event = $request->get('event');
 
-        if ( Auth::check() ) {
-
+        if (Auth::check()) {
             if ($user->role->role_id) {
                 $role = Role::find($user->role->role_id)->name;
                 $request->session()->put('id', $user->id);
 
-                if($role == 'customer') {
+                if ($role == 'customer') {
                     $customer = Customer::find($user->customer->id);
-                    return redirect()->route("customers.show",
+
+                    return redirect()->route(
+                        'customers.show',
                         ['customer' => $customer]
                     );
                 }
@@ -68,18 +69,20 @@ class LoginController extends Controller
                 /**
                  * @todo : Organiser model is not currently used.
                  */
-                if($role == 'organiser') {
+                if ($role == 'organiser') {
                     $organiser = EventOrganiser::find($user->organiser->id);
-                    return redirect()->route("organisers.create",
+
+                    return redirect()->route(
+                        'organisers.create',
                         ['organiser' => $organiser]
                     );
                 }
             }
 
             if (! empty($list) && ! empty($event)) {
-                return redirect()->route("applicant_lists.show", [
+                return redirect()->route('applicant_lists.show', [
                     'list' => $list,
-                    'event' => $event
+                    'event' => $event,
                 ]);
             }
 
@@ -103,6 +106,5 @@ class LoginController extends Controller
 
     public function redirectTo(Request $request)
     {
-
     }
 }

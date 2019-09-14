@@ -31,7 +31,7 @@ class StoreCustomer extends FormRequest
             'dob' => 'required|date',
             'gender' => [
                 'required',
-                Rule::in('male', 'female')
+                Rule::in('male', 'female'),
             ],
             'phone' => 'required|string',
             'address_1' => 'required|string',
@@ -40,7 +40,7 @@ class StoreCustomer extends FormRequest
             'city' => 'required|string',
             'county' => 'required|string',
             'post_code' => 'required|string',
-            'country' => 'required|string'
+            'country' => 'required|string',
         ];
     }
 }

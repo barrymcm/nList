@@ -18,7 +18,7 @@ class ApplicantListSeeder extends Seeder
                 'slot_id' => $faker->numberBetween(1, 10),
                 'name' => $faker->word(),
                 'max_applicants' => $faker->numberBetween(15, 25),
-                'created_at' => $faker->dateTimeInInterval('1 day', 'now')
+                'created_at' => $faker->dateTimeInInterval('1 day', 'now'),
             ]);
         }
     }

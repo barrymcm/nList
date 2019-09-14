@@ -19,7 +19,7 @@ class EventSeeder extends Seeder
                 'category_id' => $faker->numberBetween(1, 6),
                 'name' => $faker->word,
                 'description' => $faker->sentence(10),
-                'created_at' => $faker->dateTimeInInterval('1 day', 'now')
+                'created_at' => $faker->dateTimeInInterval('1 day', 'now'),
             ]);
         }
     }

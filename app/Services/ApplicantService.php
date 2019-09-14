@@ -1,14 +1,13 @@
 <?php
 
-
 namespace App\Services;
 
-use App\Events\ApplicantAddedToList;
 use App\Models\Role;
-use Facades\App\Repositories\ApplicantApplicantListRepository;
+use App\Events\ApplicantAddedToList;
 use Illuminate\Foundation\Auth\User;
 use App\Repositories\ApplicantRepository;
 use Facades\App\Repositories\ApplicantListRepository;
+use Facades\App\Repositories\ApplicantApplicantListRepository;
 use Facades\App\Repositories\ApplicantContactDetailsRepository;
 
 /**
@@ -50,7 +49,6 @@ class ApplicantService
         }
 
         return false;
-
     }
 
     /**
@@ -65,7 +63,7 @@ class ApplicantService
             'first_name' => $attributes['first_name'],
             'last_name' => $attributes['last_name'],
             'dob' => $attributes['dob'],
-            'gender' => $attributes['gender']
+            'gender' => $attributes['gender'],
         ];
     }
 
@@ -79,7 +77,6 @@ class ApplicantService
         $list = ApplicantListRepository::find($listId);
 
         if ($listCount == $list->max_applicants) {
-
             return true;
         }
 
@@ -136,7 +133,7 @@ class ApplicantService
             'county' => $attributes['county'],
             'city' => $attributes['city'],
             'post_code' => $attributes['post_code'],
-            'country' => $attributes['country']
+            'country' => $attributes['country'],
         ];
     }
 }

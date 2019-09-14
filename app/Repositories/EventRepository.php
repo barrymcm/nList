@@ -1,18 +1,16 @@
 <?php
 
-
 namespace App\Repositories;
 
-use App\Models\Category;
 use App\Models\Event;
+use App\Models\Category;
 use App\Models\EventOrganiser;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Facades\App\Repositories\ApplicantListRepository;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class EventRepository implements RepositoryInterface
 {
-
     private $eventModel;
 
     public function __construct(Event $event)
@@ -30,7 +28,6 @@ class EventRepository implements RepositoryInterface
             });
 
             return $events;
-
         } catch (ModelNotFoundException $e) {
             return $e->getMessage();
         }
@@ -40,7 +37,7 @@ class EventRepository implements RepositoryInterface
     {
         $event = $this->eventModel::find($eventId);
 
-        foreach($event->slots as $key => $slot) {
+        foreach ($event->slots as $key => $slot) {
             $availability = ApplicantListRepository::getAvailableSlotPlaces($slot->id);
             $slot->setAvailabilityAttribute($availability);
         }
@@ -63,7 +60,6 @@ class EventRepository implements RepositoryInterface
             DB::commit();
 
             return $newEvent;
-
         } catch (\PDOException $e) {
             DB::rollBack();
         }
@@ -96,8 +92,8 @@ class EventRepository implements RepositoryInterface
             $event->description = $attributes['description'];
 
             $event->save();
-            return $event;
 
+            return $event;
         } catch (\PDOException $e) {
             DB::rollBack();
 
@@ -107,11 +103,9 @@ class EventRepository implements RepositoryInterface
 
     public function softDelete(int $id)
     {
-
     }
 
     public function hardDelete()
     {
-
     }
 }

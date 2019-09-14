@@ -1,11 +1,10 @@
 <?php
 
-
 namespace App\Repositories;
 
 use App\Models\ApplicantList;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ApplicantListRepository implements RepositoryInterface
 {
@@ -25,7 +24,6 @@ class ApplicantListRepository implements RepositoryInterface
     {
         try {
             return $this->applicantListModel::find($id);
-
         } catch (ModelNotFoundException $e) {
             return false;
         }
@@ -35,7 +33,6 @@ class ApplicantListRepository implements RepositoryInterface
     {
         try {
             return $this->applicantListModel::whereIn('id', $listIds)->get();
-
         } catch (ModelNotFoundException $e) {
             return false;
         }
@@ -45,7 +42,6 @@ class ApplicantListRepository implements RepositoryInterface
     {
         try {
             return $this->applicantListModel::create($list);
-
         } catch (ModelNotFoundException $e) {
             return false;
         }
@@ -61,10 +57,8 @@ class ApplicantListRepository implements RepositoryInterface
             $list->save();
 
             return $list;
-
         } catch (ModelNotFoundException $e) {
             return $e->getMessage();
-
         }
     }
 
@@ -83,7 +77,6 @@ class ApplicantListRepository implements RepositoryInterface
 
     public function hardDelete()
     {
-
     }
 
     /** select * from applicant_lists where slot_id = */
@@ -91,7 +84,6 @@ class ApplicantListRepository implements RepositoryInterface
     {
         try {
             return $this->applicantListModel::where('slot_id', $slot->id)->count();
-
         } catch (ModelNotFoundException $e) {
             return $e->getMessage();
         }
@@ -108,13 +100,13 @@ class ApplicantListRepository implements RepositoryInterface
                           JOIN applicant_lists al ON (s.id = al.slot_id) 
                         WHERE deleted_at IS NULL 
                           AND s.id = ? 
-                        GROUP BY s.id', [$slotId]
+                        GROUP BY s.id',
+                [$slotId]
             );
 
-            foreach($results as $result) {
+            foreach ($results as $result) {
                 return $result->availability;
             }
-
         } catch (\PDOException $e) {
             return $e->getMessage();
         }

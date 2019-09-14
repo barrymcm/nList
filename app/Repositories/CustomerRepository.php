@@ -2,10 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Models\Customer;
 use App\Models\User;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Models\Customer;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CustomerRepository implements RepositoryInterface
 {
@@ -14,20 +14,18 @@ class CustomerRepository implements RepositoryInterface
 
     public function __construct(Customer $customer, User $user)
     {
-       $this->customerModel = $customer;
-       $this->userModel = $user;
+        $this->customerModel = $customer;
+        $this->userModel = $user;
     }
 
     public function all()
     {
-
     }
 
     public function find($id)
     {
         try {
             return $this->customerModel::find($id);
-
         } catch (ModelNotFoundException $e) {
             logger($e->getMessage());
 
@@ -50,7 +48,7 @@ class CustomerRepository implements RepositoryInterface
                 'first_name' => $attributes['first_name'],
                 'last_name' => $attributes['last_name'],
                 'dob' => $attributes['dob'],
-                'gender' => $attributes['gender']
+                'gender' => $attributes['gender'],
             ]);
 
             $contactDetails = [
@@ -62,7 +60,7 @@ class CustomerRepository implements RepositoryInterface
                 'city' => $attributes['city'],
                 'county' => $attributes['county'],
                 'post_code' => $attributes['post_code'],
-                'country' => $attributes['country']
+                'country' => $attributes['country'],
             ];
 
             DB::table('customer_contact_details')->insert($contactDetails);
@@ -70,9 +68,9 @@ class CustomerRepository implements RepositoryInterface
             DB::commit();
 
             return $customer;
-
         } catch (ModelNotFoundException $e) {
             DB::rollBack();
+
             return $e->getMessage();
         }
     }
@@ -92,7 +90,7 @@ class CustomerRepository implements RepositoryInterface
                 'first_name' => $attributes['first_name'],
                 'last_name' => $attributes['last_name'],
                 'dob' => $attributes['dob'],
-                'gender' => $attributes['gender']
+                'gender' => $attributes['gender'],
             ]);
 
             $contactDetails = [
@@ -104,7 +102,7 @@ class CustomerRepository implements RepositoryInterface
                 'city' => $attributes['city'],
                 'county' => $attributes['county'],
                 'post_code' => $attributes['post_code'],
-                'country' => $attributes['country']
+                'country' => $attributes['country'],
             ];
 
             DB::table('customer_contact_details')
@@ -116,9 +114,9 @@ class CustomerRepository implements RepositoryInterface
             DB::commit();
 
             return $customer;
-
         } catch (ModelNotFoundException $e) {
             DB::rollBack();
+
             return $e->getMessage();
         }
     }
@@ -144,6 +142,5 @@ class CustomerRepository implements RepositoryInterface
 
     public function hardDelete()
     {
-
     }
 }

@@ -15,7 +15,6 @@ class RenameListId extends Migration
     {
         Schema::table('applicant_list', function (Blueprint $table) {
             $table->renameColumn('list_id', 'applicant_list_id');
-
         });
     }
 

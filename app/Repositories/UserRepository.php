@@ -2,12 +2,11 @@
 
 namespace App\Repositories;
 
-use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserRepository implements RepositoryInterface
 {
@@ -15,17 +14,15 @@ class UserRepository implements RepositoryInterface
 
     public function __construct(User $user)
     {
-       $this->userModel = $user;
+        $this->userModel = $user;
     }
 
     public function all()
     {
-
     }
 
     public function find($id)
     {
-
     }
 
     public function findById($userId)
@@ -53,10 +50,11 @@ class UserRepository implements RepositoryInterface
 
             if ($attributes['type'] == 'customer') {
                 DB::table('customers')->insert(['user_id' => $user->id]);
-                DB::table('user_role')->insert([
+                DB::table('user_role')->insert(
+                    [
                         'user_id' => $user->id,
                         'role_id' => $roleId,
-                        'created_at' => Carbon::createFromFormat('Y-m-d H:i:s', now())
+                        'created_at' => Carbon::createFromFormat('Y-m-d H:i:s', now()),
                     ]
                 );
             }
@@ -66,7 +64,7 @@ class UserRepository implements RepositoryInterface
                 DB::table('user_role')->insert([
                     'user_id' => $user->id,
                     'role_id' => $roleId,
-                    'created_at' => Carbon::createFromFormat('Y-m-d H:i:s', now())
+                    'created_at' => Carbon::createFromFormat('Y-m-d H:i:s', now()),
                 ]);
             }
 
@@ -75,6 +73,7 @@ class UserRepository implements RepositoryInterface
             return $user;
         } catch (\PDOException $e) {
             DB::rollBack();
+
             return $e->getMessage();
         }
     }
@@ -88,16 +87,13 @@ class UserRepository implements RepositoryInterface
 
     public function update(array $attributes, $userId)
     {
-
     }
 
     public function softDelete(int $userId)
     {
-
     }
 
     public function hardDelete()
     {
-
     }
 }

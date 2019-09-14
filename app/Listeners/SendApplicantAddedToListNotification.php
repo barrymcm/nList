@@ -3,8 +3,8 @@
 namespace App\Listeners;
 
 use App\Mail\AddedToList;
-use Illuminate\Support\Facades\Mail;
 use App\Events\ApplicantAddedToList;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class SendApplicantAddedToListNotification implements ShouldQueue
