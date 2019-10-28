@@ -1,15 +1,6 @@
-FROM alpine:latest
-LABEL maintainer="Barry McMahon <sendtobarrymcm@gmail.com>"
-LABEL description="This example Dockerfile installs NGINX."
-RUN apk add --update nginx && \
-        rm -rf /var/cache/apk/* && \
-        mkdir -p /tmp/nginx/
+FROM php:7.3-fpm-alpine
 
-COPY docker/nginx.conf /etc/nginx/nginx.conf
-COPY docker/default.conf /etc/nginx/conf.d/default.conf
-ADD docker/html.tar.gz /usr/share/nginx/
+RUN docker-php-ext-install pdo pdo_mysql
 
-EXPOSE 80/tcp
-
-ENTRYPOINT ["nginx"]
-CMD ["-g", "daemon off;"]
+RUN ln -sf /dev/stdout /var/log/nginx/access.log \
+	&& ln -sf /dev/stderr /var/log/nginx/error.log
