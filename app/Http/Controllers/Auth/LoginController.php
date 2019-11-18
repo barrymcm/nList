@@ -10,6 +10,7 @@ use App\Models\EventOrganiser;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
@@ -35,6 +36,8 @@ class LoginController extends Controller
 
     public function showLoginForm(Request $request)
     {
+        Log::info('This is some info');
+
         $list = $request->get('list')?: '';
         $event = $request->get('event')?: '';
 

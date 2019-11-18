@@ -43,7 +43,7 @@ class ApplicantsApiController extends Controller
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**
