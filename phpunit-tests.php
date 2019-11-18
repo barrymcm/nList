@@ -1,4 +1,4 @@
-#!/usr/bin/php
+<!-- #!/usr/bin/php -->
 <?php
 $projectName = basename(getcwd()); // get the name of your app
 

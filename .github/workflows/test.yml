@@ -1,6 +1,6 @@
-# - name: Laravel PHPUnit
-#   uses: nathanheffley/laravel-phpunit-action@v0.1.0
+- name: Laravel PHPUnit
+  uses: nathanheffley/laravel-phpunit-action@v0.1.0
 
-# - name: PHPCodeSniffer
-#   uses: rtCamp/action-phpcs-inspection@v1.0.0
+- name: PHPCodeSniffer
+  uses: rtCamp/action-phpcs-inspection@v1.0.0
 
