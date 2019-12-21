@@ -8,7 +8,11 @@ use Illuminate\Foundation\Auth\VerifiesEmails;
 
 class VerificationController extends Controller
 {
-    private const ROLE = [3 => 'customer', 2 => 'event.organisers'];
+    private const ROLE = [
+        3 => 'customer', 
+        2 => 'event.organisers',
+        1 => 'applicant',
+    ];
 
     /*
     |--------------------------------------------------------------------------
@@ -38,6 +42,7 @@ class VerificationController extends Controller
      */
     public function __construct()
     {
+        echo 11111;
         $this->middleware('auth')->only('resend');
         $this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');

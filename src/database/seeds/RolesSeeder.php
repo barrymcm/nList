@@ -24,6 +24,11 @@ class RolesSeeder extends Seeder
                 'display_name' => 'event organiser',
                 'description' => 'organises and administers events and lists',
             ],
+            'customer' => [
+                'name' => 'customer',
+                'display_name' => 'customer user',
+                'description' => 'not sure yet need to figure this role out'
+            ]
         ];
 
         foreach ($roles as $role) {

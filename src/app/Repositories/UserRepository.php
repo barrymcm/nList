@@ -81,11 +81,14 @@ class UserRepository implements RepositoryInterface
         }
     }
 
-    private function getRoleId($userType) : int
+    private function getRoleId($userType)
     {
-        return DB::table('roles')
-            ->where('name', $userType)
-            ->value('id');
+        try {
+            return DB::table('roles')->where('name', $userType)->value('id');    
+        } catch (\PDOException $e) {
+            Log::error($e->getMessage());
+        }
+        
     }
 
     public function update(array $attributes, $userId)
