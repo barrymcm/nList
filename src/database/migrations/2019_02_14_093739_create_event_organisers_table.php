@@ -15,7 +15,7 @@ class CreateEventOrganisersTable extends Migration
     {
         Schema::create('event_organisers', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('user_id')->nullable();
+            $table->unsignedInteger('user_id');
             $table->string('name');
             $table->text('description')->nullable();
             $table->timestamps();
