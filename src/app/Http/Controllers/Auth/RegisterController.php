@@ -29,7 +29,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = 'email/verify';
+    protected $redirectTo = '/login';
 
     /**
      * Create a new controller instance.
@@ -93,8 +93,8 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\User
      */
-    protected function create(array $data)
+    protected function create(array $user)
     {
-        return UserRepository::create($data);
+        return UserRepository::create($user);
     }
 }

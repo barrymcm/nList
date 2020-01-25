@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\VerifiesEmails;
+use App\Repositories\UserRepository;
 
 class VerificationController extends Controller
 {
@@ -32,7 +33,7 @@ class VerificationController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = 'login';
     protected $user;
 
     /**
@@ -40,17 +41,12 @@ class VerificationController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(
+        UserRepository $userRepository)
     {
+        $this->userRepository = $userRepository;
         $this->middleware('auth')->only('resend');
         $this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
-    }
-
-    public function redirectPath()
-    {
-        $roleId = request()->user()->role->role_id;
-
-        return route(self::ROLE[$roleId] . '.create');
     }
 }

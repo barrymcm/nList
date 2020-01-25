@@ -50,7 +50,11 @@ class UserRepository implements RepositoryInterface
             $roleId = $this->getRoleId($attributes['type']);
 
             if ($attributes['type'] == 'customer') {
-                DB::table('customers')->insert(['user_id' => $user->id]);
+                
+                DB::table('customers')->insert(
+                    ['user_id' => $user->id]
+                );
+                
                 DB::table('user_role')->insert(
                     [
                         'user_id' => $user->id,
@@ -62,7 +66,10 @@ class UserRepository implements RepositoryInterface
 
             if ($attributes['type'] == 'organiser') {
 
-                DB::table('event_organisers')->insert(['user_id' => $user->id, 'name' => $user->name]);
+                DB::table('event_organisers')->insert(
+                    ['user_id' => $user->id, 'name' => $user->name]
+                );
+                
                 DB::table('user_role')->insert([
                     'user_id' => $user->id,
                     'role_id' => $roleId,
@@ -81,10 +88,14 @@ class UserRepository implements RepositoryInterface
         }
     }
 
-    private function getRoleId($userType)
+    private function getRoleId(string $userType): int
     {
         try {
-            return DB::table('roles')->where('name', $userType)->value('id');    
+            
+            return DB::table('roles')
+                ->where('name', $userType)
+                ->value('id');
+
         } catch (\PDOException $e) {
             Log::error($e->getMessage());
         }
