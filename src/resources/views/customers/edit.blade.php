@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @if ($customer->first_name)
@@ -7,7 +8,6 @@
 @endif
 
 @section('content')
-
     <div>
         @if (session('status'))
             <p>{{ session('status') }}</p>

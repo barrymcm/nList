@@ -33,7 +33,7 @@ class VerificationController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = 'login';
+    // protected $redirectTo = 'login';
     protected $user;
 
     /**
@@ -41,11 +41,9 @@ class VerificationController extends Controller
      *
      * @return void
      */
-    public function __construct(
-        UserRepository $userRepository)
+    public function __construct()
     {
-        $this->userRepository = $userRepository;
-        $this->middleware('auth')->only('resend');
+        $this->middleware('auth');
         $this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
     }

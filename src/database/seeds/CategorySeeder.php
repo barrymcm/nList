@@ -11,7 +11,11 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        $categories = ['sport', 'news', 'music', 'business', 'motoring'];
+        $categories = [
+            'sport', 'news', 'music', 
+            'business', 'motoring', 'social', 'politics'
+        ];
+
         $faker = Faker\Factory::create();
 
         for ($i = 0; $i < 5; $i++) {

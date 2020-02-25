@@ -9,7 +9,7 @@
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
-                        @csrf
+                        <meta name="csrf-token" content="{{ csrf_token() }}">
                         <input type="hidden" name="list" value=" {{ $list }}">
                         <input type="hidden" name="event" value=" {{ $event }}">
 
@@ -44,7 +44,7 @@
                         <div class="form-group row">
                             <div class="col-md-6 offset-md-4">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                                    <!-- <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}> -->
 
                                     <label class="form-check-label" for="remember">
                                         {{ __('Remember Me') }}

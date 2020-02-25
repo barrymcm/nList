@@ -56,7 +56,7 @@ class CustomerRepository implements RepositoryInterface
                 'phone' => $attributes['phone'],
                 'address_1' => $attributes['address_1'],
                 'address_2' => $attributes['address_2'],
-                'address_3' => $attributes['address_3'],
+                'address_3' => $attributes['address_3'] ?? '',
                 'city' => $attributes['city'],
                 'county' => $attributes['county'],
                 'post_code' => $attributes['post_code'],
@@ -85,6 +85,7 @@ class CustomerRepository implements RepositoryInterface
         try {
             DB::beginTransaction();
             $customer = $this->customerModel::find($customerId);
+            $user = $this->userModel::find($customer->user_id);
 
             $customer->update([
                 'first_name' => $attributes['first_name'],
@@ -95,10 +96,11 @@ class CustomerRepository implements RepositoryInterface
 
             $contactDetails = [
                 'customer_id' => (int) $customer->id,
+                'email' => $user->email,
                 'phone' => $attributes['phone'],
                 'address_1' => $attributes['address_1'],
                 'address_2' => $attributes['address_2'],
-                'address_3' => $attributes['address_3'],
+                'address_3' => $attributes['address_3'] ?? '',
                 'city' => $attributes['city'],
                 'county' => $attributes['county'],
                 'post_code' => $attributes['post_code'],

@@ -32,7 +32,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/about';
+    protected $redirectTo = '/home';
 
     /**
      * Create a new controller instance.
@@ -62,7 +62,7 @@ class LoginController extends Controller
     {
         $list = $request->get('list');
         $event = $request->get('event');
-
+                            
         if (Auth::check()) {
             if ($user->role->role_id) {
                 $role = Role::find($user->role->role_id)->name;
@@ -73,7 +73,7 @@ class LoginController extends Controller
 
                     return redirect()->route(
                         'customers.show',
-                        ['customer' => $customer]
+                        ['customer' => $customer->id]
                     );
                 }
 
@@ -103,9 +103,5 @@ class LoginController extends Controller
         }
 
         return redirect('/login');
-    }
-
-    public function redirectTo(Request $request)
-    {
     }
 }

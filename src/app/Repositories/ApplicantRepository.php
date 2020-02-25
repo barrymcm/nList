@@ -44,7 +44,7 @@ class ApplicantRepository implements RepositoryInterface
     public function findByUserId($userId)
     {
         try {
-            return $this->applicantModel::where('user_id', $userId)->get();
+            return $this->applicantModel::where('customer_id', $userId)->get();
         } catch (ModelNotFoundException $e) {
             return false;
         }

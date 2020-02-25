@@ -61,9 +61,9 @@ class CustomersController extends Controller
         /**
          * @todo : refactor this into middleware - but make sure authentication check is done before removing it.
          */
-        Auth::check();
-        $userId = auth()->user()->id;
-
+        // Auth::check();
+        // $userId = auth()->user()->id;
+        
         return view('customers.create', ['userId' => $userId]);
     }
 
@@ -92,10 +92,12 @@ class CustomersController extends Controller
     {
         $customer = $this->customerRepository->find($id);
         $lists = $this->applicantListService->getLists($customer);
-        $this->authorize('view', $customer);
+        // $this->authorize('view', $customer);
 
         if ($this->customerService->hasCustomerProfile($customer)) {
-            return view('customers.show', ['customer' => $customer, 'lists' => $lists]);
+            return view('customers.show', 
+                ['customer' => $customer, 'lists' => $lists]
+            );
         }
 
         return redirect()->route('customers.edit', ['customer' => $id])
@@ -112,7 +114,6 @@ class CustomersController extends Controller
     {
         $customer = $this->customerRepository->find($id);
         $this->authorize('update', $customer);
-
         return view('customers.edit', ['customer' => $customer]);
     }
 
@@ -125,7 +126,7 @@ class CustomersController extends Controller
      */
     public function update(UpdateCustomer $request, $customerId)
     {
-        $attributes = $request->validated();
+        $attributes = $request->validated();    
         $customer = $this->customerRepository->update($attributes, $customerId);
 
         return redirect()->route('customers.show', ['customer' => $customer]);
@@ -140,7 +141,7 @@ class CustomersController extends Controller
     public function destroy($id)
     {
         $customer = $this->customerRepository->find($id);
-        $this->authorize('delete', $customer);
+        // $this->authorize('delete', $customer);
         $this->customerRepository->softDelete($customer->id);
         auth()->logout();
 

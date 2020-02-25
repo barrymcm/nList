@@ -8,6 +8,7 @@ use App\Http\Requests\StoreEvent;
 use App\Http\Requests\UpdateEvent;
 use Facades\App\Services\EventService;
 use Facades\App\Repositories\EventRepository;
+use Illuminate\Support\Facades\Auth;
 
 class EventsController extends Controller
 {

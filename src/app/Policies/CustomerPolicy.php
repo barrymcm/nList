@@ -13,13 +13,14 @@ class CustomerPolicy
     /**
      * Determine whether the user can view the customer.
      *
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\User  $user˘
      * @param  \App\Models\Customer  $customer
      * @return mixed
      */
     public function view(User $user, Customer $customer)
     {
-        return $user->customer->id == $customer->id;
+
+        // return $user->customer->id == $customer->id;
     }
 
     /**
@@ -42,7 +43,7 @@ class CustomerPolicy
      */
     public function update(User $user, Customer $customer)
     {
-        return $user->customer->id == $customer->id;
+        // return $user->customer->id == $customer->id;
     }
 
     /**

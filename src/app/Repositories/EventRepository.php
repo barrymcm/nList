@@ -54,7 +54,6 @@ class EventRepository implements RepositoryInterface
     public function create(array $event, $id = null)
     {
         try {
-            dd($event);
             DB::beginTransaction();
             $newEvent = $this->eventModel::create($event);
             DB::table('slots')->insert($this->createSlots($newEvent));

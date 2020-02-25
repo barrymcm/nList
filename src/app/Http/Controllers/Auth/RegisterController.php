@@ -6,8 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
-use Facades\App\Repositories\UserRepository;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Models\User;
+use Facades\App\Repositories\UserRepository;
 
 class RegisterController extends Controller
 {
@@ -24,12 +25,7 @@ class RegisterController extends Controller
 
     use RegistersUsers;
 
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/login';
+    protected $redirectTo = 'email/verify';
 
     /**
      * Create a new controller instance.
@@ -87,14 +83,9 @@ class RegisterController extends Controller
         ]);
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\User
-     */
-    protected function create(array $user)
+    protected function create(array $data)
     {
-        return UserRepository::create($user);
+        return UserRepository::create($data);
     }
+
 }

@@ -45,10 +45,7 @@ Route::resources(['events' => 'EventsController']);
 Route::resources(['event_organisers' => 'EventOrganisersController']);
 Route::resources(['applicant_lists' => 'ApplicantListsController']);
 Route::resources(['applicants' => 'ApplicantsController']);
-
-Route::middleware(['verified'])->group(function () {
-    Route::resources(['slots' => 'SlotsController']);
-    Route::resources(['customers' => 'CustomersController']);
-});
+Route::resources(['slots' => 'SlotsController']);
+Route::resources(['customers' => 'CustomersController']);
 
 Auth::routes(['verify' => true]);
