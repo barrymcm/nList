@@ -35,8 +35,6 @@ class ApplicantsController extends Controller
      * @todo Refactor to remove the need for all the if statments
      *
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -120,7 +118,6 @@ class ApplicantsController extends Controller
      *
      * @param StoreApplicant $request
      * @param Applicant $applicant
-     * @return \Illuminate\Http\Response
      */
     public function store(StoreApplicant $request)
     {
@@ -142,10 +139,7 @@ class ApplicantsController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function show(Request $request, $id)
     {
@@ -162,9 +156,7 @@ class ApplicantsController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function edit(Request $request, $id)
     {
@@ -188,7 +180,6 @@ class ApplicantsController extends Controller
      * @param StoreApplicant $request
      * @param Applicant $applicant
      * @param  int $id
-     * @return \Illuminate\Http\Response
      */
     public function update(StoreApplicant $request, $id)
     {
@@ -206,7 +197,6 @@ class ApplicantsController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
     {

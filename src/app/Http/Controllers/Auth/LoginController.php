@@ -104,4 +104,9 @@ class LoginController extends Controller
 
         return redirect('/login');
     }
+
+    protected function loggedOut(Request $request)
+    {
+        return redirect('home');
+    }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Facades\App\Repositories\UserRepository;
 
 class RegisterController extends Controller
@@ -25,7 +26,7 @@ class RegisterController extends Controller
 
     use RegistersUsers;
 
-    protected $redirectTo = 'email/verify';
+    protected $redirectTo = '/email/verify';
 
     /**
      * Create a new controller instance.
@@ -39,8 +40,6 @@ class RegisterController extends Controller
 
     /**
      * Show the application registration form.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function showRegistrationForm(Request $request)
     {
@@ -69,7 +68,7 @@ class RegisterController extends Controller
      * Get a validator for an incoming registration request.
      *
      * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Val[idator
+     * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
     {
@@ -87,5 +86,4 @@ class RegisterController extends Controller
     {
         return UserRepository::create($data);
     }
-
 }

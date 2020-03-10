@@ -4,13 +4,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get(
-    '/',
-    function () {
-        return view('home');
-    }
-);
-
-Route::get(
     '/home',
     function () {
         return view('home');
@@ -22,7 +15,7 @@ Route::get(
     function () {
         return view('about');
     }
-)->name('about');
+)->name('about')->middleware('verified');
 
 Route::get(
     '/contact',
@@ -41,11 +34,11 @@ Route::get(
 Route::get('select_account_type', 'Auth\RegisterController@selectAccountType')
     ->name('register.select_account_type');
 
+Auth::routes(['verify' => true]);
+
 Route::resources(['events' => 'EventsController']);
 Route::resources(['event_organisers' => 'EventOrganisersController']);
 Route::resources(['applicant_lists' => 'ApplicantListsController']);
 Route::resources(['applicants' => 'ApplicantsController']);
 Route::resources(['slots' => 'SlotsController']);
-Route::resources(['customers' => 'CustomersController']);
-
-Auth::routes(['verify' => true]);
+Route::resources(['customers' => 'CustomersController'])->middleware('verified');

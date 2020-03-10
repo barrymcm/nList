@@ -54,15 +54,14 @@ class CustomersController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
         /**
          * @todo : refactor this into middleware - but make sure authentication check is done before removing it.
          */
-        // Auth::check();
-        // $userId = auth()->user()->id;
+        Auth::check();
+        $userId = auth()->user()->id;
         
         return view('customers.create', ['userId' => $userId]);
     }
@@ -71,7 +70,6 @@ class CustomersController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(StoreCustomer $request)
     {
@@ -86,7 +84,6 @@ class CustomersController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
@@ -113,7 +110,7 @@ class CustomersController extends Controller
     public function edit($id)
     {
         $customer = $this->customerRepository->find($id);
-        $this->authorize('update', $customer);
+        
         return view('customers.edit', ['customer' => $customer]);
     }
 
@@ -136,12 +133,11 @@ class CustomersController extends Controller
      * Remove the specified resource from storage.
      * @todo the customer/user has to be logged out and all sessions destroyed.
      * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         $customer = $this->customerRepository->find($id);
-        // $this->authorize('delete', $customer);
+        $this->authorize('delete', $customer);
         $this->customerRepository->softDelete($customer->id);
         auth()->logout();
 

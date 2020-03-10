@@ -26,18 +26,18 @@ class UserRepository implements RepositoryInterface
     {
     }
 
-    public function findById(int $userId): User
+    public function findById(int $userId): ?User
     {
         try {
             $user = $this->userModel::where('id', $userId)->first();
 
             return $user;
         } catch (ModelNotFoundException $e) {
-            return false;
+            return null;
         }
     }
 
-    public function create(array $attributes, $id = null): User
+    public function create(array $attributes, $id = null): ?User
     {
         try {
             DB::beginTransaction();
@@ -84,7 +84,7 @@ class UserRepository implements RepositoryInterface
             Log::error($e->getMessage());
             DB::rollBack();
 
-             return false;
+             return null;
         }
     }
 

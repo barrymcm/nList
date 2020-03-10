@@ -20,7 +20,7 @@ class CustomerPolicy
     public function view(User $user, Customer $customer)
     {
 
-        // return $user->customer->id == $customer->id;
+        return $user->customer->id == $customer->id;
     }
 
     /**

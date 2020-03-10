@@ -1,4 +1,6 @@
-<?php // file ".php_cs"
+<?php 
+
+// file ".php_cs"
 
 use PhpCsFixer\Config;
 use Symfony\Component\Finder\Finder;
