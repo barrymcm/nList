@@ -7,12 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
     protected $fillable = [
-        'total_slots',
-        'event_organiser_id',
-        'category_id',
         'name',
+        'event_organiser_id',
         'description',
+        'category_id',
+        'total_slots',
     ];
+
+    protected $dates = ['deleted_at'];
 
     public function organiser()
     {

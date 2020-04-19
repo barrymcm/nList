@@ -13,7 +13,8 @@ class CategorySeeder extends Seeder
     {
         $categories = [
             'sport', 'news', 'music', 
-            'business', 'motoring', 'social', 'politics'
+            'business', 'motoring', 'social', 'politics', 
+            'technology'
         ];
 
         $faker = Faker\Factory::create();

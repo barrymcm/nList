@@ -9,7 +9,7 @@ class Applicant extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['user_id', 'first_name', 'last_name', 'dob', 'gender'];
+    protected $fillable = ['customer_id', 'list_id', 'first_name', 'last_name', 'dob', 'gender'];
     protected $dates = ['deleted_at'];
 
     public function user()

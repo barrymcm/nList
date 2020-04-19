@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateForeignKeyEventOrganiserIdOnEventsTable extends Migration
+class AddNameToApplicantLists extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class CreateForeignKeyEventOrganiserIdOnEventsTable extends Migration
      */
     public function up()
     {
-        Schema::table('events', function (Blueprint $table) {
-            $table->foreign('event_organiser_id')->references('id')->on('event_organisers');
+        Schema::table('applicant_lists', function (Blueprint $table) {
+            $table->string('name', 100)->after('slot_id');
         });
     }
 
@@ -25,8 +25,8 @@ class CreateForeignKeyEventOrganiserIdOnEventsTable extends Migration
      */
     public function down()
     {
-        Schema::table('events', function (Blueprint $table) {
-            $table->dropForeign('events_event_organiser_id_foreign');
+        Schema::table('applicant_lists', function (Blueprint $table) {
+            $table->dropColumn('name');
         });
     }
 }

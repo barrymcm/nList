@@ -14,7 +14,7 @@ class CreateForeignKeyEventIdOnSlotsTable extends Migration
     public function up()
     {
         Schema::table('slots', function (Blueprint $table) {
-            $table->foreign('event_id')->references('id')->on('slots');
+            $table->foreign('event_id')->references('id')->on('events');
         });
     }
 

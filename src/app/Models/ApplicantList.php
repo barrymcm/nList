@@ -16,7 +16,7 @@ class ApplicantList extends Model
     /**
      * @var array
      */
-    protected $fillable = ['slot_id', 'name', 'max_applicants'];
+    protected $fillable = ['slot_id', 'name', 'max_applicants', 'created_at', 'updated_at'];
 
     /**
      * @var array

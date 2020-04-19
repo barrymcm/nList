@@ -9,7 +9,7 @@ class EventOrganiser extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['user_id', 'name', 'description'];
+    protected $fillable = ['user_id', 'name', 'description', 'created_at'];
     protected $dates = ['deleted_at'];
 
     public function events()
