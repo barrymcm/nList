@@ -1,4 +1,4 @@
-\@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Customer Profile')
 
@@ -31,14 +31,13 @@
     <form action="{{ route('customers.destroy', $customer) }}" method="POST">
         @csrf
         @method('DELETE')
-        <input type="hidden" name="list" value="{{ $list }}">
+        <input type="hidden" name="list" value="{{ $lists }}">
         <input type="hidden" name="customer_id" value="{{ $customer->id }}">
         <input id="delete" type="submit" onclick="return confirm('Are you sure?')" name="submit" value="Delete">
     </form>
     <br>
-    <a href="{{ route('customers.edit', [$customer]) }}">Edit</a>
+    <a href="{{ route('customers.edit', [$customer]) }}">Edit Profile</a>
     <br><br>
-    <a href="{{ route('customer_lists.show', ['list' => $list, 'event' => $event]) }}">Back to List</a>
     <div>
         <h3>Customers Lists</h3>
     </div>

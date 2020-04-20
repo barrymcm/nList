@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreEventOganiser;
 use Facades\App\Repositories\EventOrganiserRepository;
@@ -27,7 +28,11 @@ class EventOrganisersController extends Controller
      */
     public function create()
     {
-        return view('event_organisers.create', ['userId' => 109]);
+        Auth::check();
+        $userId = auth()->user()->eventOrganiser->user_id;
+        $eventOrganiser = EventOrganiserRepository::findBy($userId);
+
+        return view('event_organisers.create', ['eventOrganiser' => $eventOrganiser]);
     }
 
     /**
@@ -41,7 +46,7 @@ class EventOrganisersController extends Controller
         $attributes = $request->validated();
         $eventOrganiser = EventOrganiserRepository::create($attributes);
 
-        return view('event_orgainsers.show', ['eventOrgainser' => $eventOrganiser]);
+        return view('event_organisers.show', ['eventOrganiser' => $eventOrganiser]);
     }
 
     /**
@@ -52,9 +57,9 @@ class EventOrganisersController extends Controller
      */
     public function show($id)
     {
-        $organiser = EventOrganiserRepository::find($id);
+        $eventOrganiser = EventOrganiserRepository::find($id);
 
-        return view('event_organisers.show', ['organiser' => $organiser]);
+        return view('event_organisers.show', ['eventOrganiser' => $eventOrganiser]);
     }
 
     /**

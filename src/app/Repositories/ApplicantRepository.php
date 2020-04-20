@@ -26,7 +26,7 @@ class ApplicantRepository implements RepositoryInterface
         }
     }
 
-    public function find($applicantId)
+    public function find(int $applicantId)
     {
         try {
             $applicant = $this->applicantModel::find($applicantId);
@@ -41,7 +41,7 @@ class ApplicantRepository implements RepositoryInterface
      * @param $userId
      * @return bool
      */
-    public function findByUserId($userId)
+    public function findByUserId(int $userId)
     {
         try {
             return $this->applicantModel::where('customer_id', $userId)->get();
@@ -50,7 +50,7 @@ class ApplicantRepository implements RepositoryInterface
         }
     }
 
-    public function create(array $attributes, $listId)
+    public function create(array $attributes, int $listId)
     {
         try {
             DB::beginTransaction();
@@ -61,7 +61,7 @@ class ApplicantRepository implements RepositoryInterface
                     'applicant_id' => $applicant->id,
                     'created_at' => Carbon::createFromFormat('Y-m-d H:i:s', now()),
                     'updated_at' => Carbon::createFromFormat('Y-m-d H:i:s', now()),
-                ]);
+                ]); 
             DB::commit();
 
             return $applicant;
@@ -72,7 +72,7 @@ class ApplicantRepository implements RepositoryInterface
         }
     }
 
-    public function update(array $attributes, $id)
+    public function update(array $attributes, int $id)
     {
         try {
             DB::beginTransaction();
@@ -119,7 +119,7 @@ class ApplicantRepository implements RepositoryInterface
     {
     }
 
-    public function getApplicantList($listId)
+    public function getApplicantList(int $listId)
     {
         return ApplicantListRepository::find($listId);
     }

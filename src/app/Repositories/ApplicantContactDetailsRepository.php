@@ -20,7 +20,7 @@ class ApplicantContactDetailsRepository implements RepositoryInterface
     {
     }
 
-    public function find($id)
+    public function find(int $id)
     {
         return $this->contactDetailsModel::find($id);
     }
@@ -48,7 +48,7 @@ class ApplicantContactDetailsRepository implements RepositoryInterface
         }
     }
 
-    public function update(array $attributes, $id)
+    public function update(array $attributes, int $id)
     {
         try {
             $contactDetails = $this->contactDetailsModel::find($id);

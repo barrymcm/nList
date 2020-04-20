@@ -17,7 +17,7 @@
         </head>
         <tbody>
         <tr>
-            <td>{{ $event }}</td>
+            <td>{{ $event->name }}</td>
             <td>{{ $list->name }}</td>
             <td>{{ $list->max_applicants }}</td>
             <td>{{ $list->max_applicants - count($list->applicants)}}</td>
@@ -61,12 +61,15 @@
     <br><br>
     @if(count($list->applicants) < $list->max_applicants)
         <a href="{{ route('applicants.create', ['list' => $list, 'event' => $event]) }}">Add me!</a>
+        @auth
         <br><br>
         <a href="{{ route('applicants.create', ['list' => $list, 'event' => $event]) }}">Add applicant!</a>
+        @endauth
     @endif
     <br><br>
     <a href="{{ route('events.show', ['event' => $event]) }}">Back to Slot</a>
     <br><br>
+    @auth
     <a href="{{ route('applicant_lists.edit', ['list' => $list, 'event' => $event]) }}">Edit List</a>
     <br><br>
     @if(count($list->applicants) < 1)
@@ -78,4 +81,5 @@
         </form>
     @endif
     <br>
+    @endauth
 @endsection

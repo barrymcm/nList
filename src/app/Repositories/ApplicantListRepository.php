@@ -20,7 +20,7 @@ class ApplicantListRepository implements RepositoryInterface
         return $this->applicantListModel::all();
     }
 
-    public function find($id)
+    public function find(int $id)
     {
         try {
             return $this->applicantListModel::find($id);
@@ -38,7 +38,7 @@ class ApplicantListRepository implements RepositoryInterface
         }
     }
 
-    public function create(array $list, $id = null)
+    public function create(array $list, int $id = null)
     {
         try {
             return $this->applicantListModel::create($list);
@@ -47,13 +47,15 @@ class ApplicantListRepository implements RepositoryInterface
         }
     }
 
-    public function update(array $listAttributes, $id)
+    public function update(array $listAttributes, int $id)
     {
         try {
             $list = $this->applicantListModel::find($id);
 
+            $list->slot_id = $listAttributes['slot_id'];
             $list->name = $listAttributes['name'];
             $list->max_applicants = $listAttributes['max_applicants'];
+
             $list->save();
 
             return $list;
@@ -89,7 +91,7 @@ class ApplicantListRepository implements RepositoryInterface
         }
     }
 
-    public function getAvailableSlotPlaces($slotId)
+    public function getAvailableSlotPlaces(int $slotId)
     {
         try {
 

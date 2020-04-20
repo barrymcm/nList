@@ -6,12 +6,13 @@ use App\Models\Event;
 use App\Models\Category;
 use App\Models\EventOrganiser;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Facades\App\Repositories\ApplicantListRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class EventRepository implements RepositoryInterface
 {
-    private $eventModel;
+    private Event $eventModel;
 
     public function __construct(Event $event)
     {
@@ -29,11 +30,13 @@ class EventRepository implements RepositoryInterface
 
             return $events;
         } catch (ModelNotFoundException $e) {
-            return $e->getMessage();
+            Log::error(['message' => $e->getMessage()]);
+
+            return null;
         }
     }
 
-    public function find($eventId)
+    public function find(int $eventId)
     {
         $event = $this->eventModel::find($eventId);
 
@@ -51,18 +54,22 @@ class EventRepository implements RepositoryInterface
         return $event;
     }
 
-    public function create(array $event, $id = null)
+    public function create(array $attributes, int $id = null): ?Event
     {
         try {
-            DB::beginTransaction();
-            $newEvent = $this->eventModel::create($event);
-            DB::table('slots')->insert($this->createSlots($newEvent));
+            DB::beginTransaction(); 
+            
+            $event = $this->eventModel->create($attributes);
+            // Bug : this will insert new slots and increment the event_id
+            DB::table('slots')->insert($this->createSlots($event));
             DB::commit();
 
-
-            return $newEvent;
+            return $event;
         } catch (\PDOException $e) {
             DB::rollBack();
+            Log::error(['message' => $e->getMessage()]);
+
+            return null;
         }
     }
 
@@ -78,7 +85,7 @@ class EventRepository implements RepositoryInterface
         return $rows;
     }
 
-    public function update(array $attributes, $id)
+    public function update(array $attributes, int $id)
     {
         try {
             $event = $this->eventModel::find($id);
@@ -97,6 +104,7 @@ class EventRepository implements RepositoryInterface
             return $event;
         } catch (\PDOException $e) {
             DB::rollBack();
+            Log::error(['message' => $e->getMessage()]);
 
             return false;
         }

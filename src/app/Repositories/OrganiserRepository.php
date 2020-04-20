@@ -17,7 +17,7 @@ class OrganiserRepository implements RepositoryInterface
     {
     }
 
-    public function find($id)
+    public function find(int $id)
     {
     }
 
@@ -25,7 +25,7 @@ class OrganiserRepository implements RepositoryInterface
     {
     }
 
-    public function update(array $organiser, $id)
+    public function update(array $organiser, int $id)
     {
     }
 

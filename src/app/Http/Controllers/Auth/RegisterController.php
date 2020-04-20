@@ -84,6 +84,13 @@ class RegisterController extends Controller
 
     protected function create(array $data)
     {
-        return UserRepository::create($data);
+        $user = UserRepository::create($data);
+
+        if(!$user) {
+            /** @todo send a message to tell the user something went wrong */
+            return view('auth.register', ['type' => $type, 'list' => $list, 'event' => $event]);
+        }
+ 
+        return $user;
     }
 }

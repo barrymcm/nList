@@ -92,7 +92,7 @@ class ApplicantsController extends Controller
              */
 
             $attributes = [
-                'user_id' => $user->customer->user_id,
+                'customer_id' => $user->customer->id,
                 'first_name' => $user->customer->first_name,
                 'last_name' => $user->customer->last_name,
                 'dob' => $user->customer->dob,

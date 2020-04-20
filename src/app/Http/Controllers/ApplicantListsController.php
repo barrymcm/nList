@@ -7,14 +7,20 @@ use App\Services\ApplicantListService;
 use App\Http\Requests\StoreApplicantList;
 use App\Http\Requests\CreateApplicantList;
 use Facades\App\Repositories\ApplicantListRepository;
+use App\Repositories\EventRepository;
 
 class ApplicantListsController extends Controller
 {
-    private $applicantListService;
+    private ApplicantListService $applicantListService;
+    private EventRepository $eventRepository;
 
-    public function __construct(ApplicantListService $applicantListService)
+    public function __construct(
+        ApplicantListService $applicantListService,
+        EventRepository $eventRepository
+    )
     {
         $this->applicantListService = $applicantListService;
+        $this->eventRepository = $eventRepository;
     }
 
     /**
@@ -73,8 +79,9 @@ class ApplicantListsController extends Controller
     {
         $event = $request->validate(['event' => 'required|integer']);
         $list = ApplicantListRepository::find($id);
+        $event = $this->eventRepository->find($event['event']);
 
-        return view('applicant_lists.show', ['list' => $list, 'event' => $event['event']]);
+        return view('applicant_lists.show', ['list' => $list, 'event' => $event]);
     }
 
     /**

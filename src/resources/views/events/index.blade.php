@@ -13,5 +13,7 @@
             </li>
         </ul>
     @endforeach
-    <a href="{{ route('events.create') }}">Create new event</a>
+    @auth
+        <a href="{{ route('events.create') }}">Create new event</a>
+    @endauth
 @endsection

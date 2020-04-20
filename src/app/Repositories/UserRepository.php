@@ -22,7 +22,7 @@ class UserRepository implements RepositoryInterface
     {
     }
 
-    public function find($id)
+    public function find(int $id)
     {
     }
 
@@ -37,7 +37,7 @@ class UserRepository implements RepositoryInterface
         }
     }
 
-    public function create(array $attributes, $id = null): ?User
+    public function create(array $attributes, int $id = null): ?User
     {
         try {
             DB::beginTransaction();
@@ -65,7 +65,6 @@ class UserRepository implements RepositoryInterface
             }
 
             if ($attributes['type'] == 'organiser') {
-
                 DB::table('event_organisers')->insert(
                     ['user_id' => $user->id, 'name' => $user->name]
                 );
@@ -84,7 +83,7 @@ class UserRepository implements RepositoryInterface
             Log::error($e->getMessage());
             DB::rollBack();
 
-             return null;
+            return null;
         }
     }
 
@@ -102,7 +101,7 @@ class UserRepository implements RepositoryInterface
         
     }
 
-    public function update(array $attributes, $userId)
+    public function update(array $attributes, int $userId)
     {
     }
 

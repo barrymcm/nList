@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\EventOrganiser;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class EventOrganiserRepository implements RepositoryInterface
@@ -23,16 +24,27 @@ class EventOrganiserRepository implements RepositoryInterface
         }
     }
 
-    public function find($id)
+    public function find(int $id)
     {
         try {
             return $this->eventOrganiserModel::find($id);
         } catch (ModelNotFoundException $e) {
-            return $e->getMessage();
+            Log::error($e->getMessage());
+            return null;
         }
     }
 
-    public function create(array $eventOrganiser, $id = null)
+    public function findBy(int $userId): EventOrganiser
+    {
+        try {
+            return $this->eventOrganiserModel::where('user_id', $userId)->first();
+        } catch (ModelNotFoundException $e) {
+            Log::error($e->getMessage());
+            return null;
+        }
+    }
+
+    public function create(array $eventOrganiser, int $id = null)
     {
         try {
             return $this->eventOrganiserModel::create($eventOrganiser);
@@ -41,8 +53,13 @@ class EventOrganiserRepository implements RepositoryInterface
         }
     }
 
-    public function update(array $eventOrganiser, $id)
+    public function update(array $eventOrganiser, int $id)
     {
+        try {
+            return $this->eventOrganiserModel::update($eventOrganiser);
+        } catch (ModelNotFoundException $e) {
+            return $e->getMessage();
+        }
     }
 
     public function softDelete(int $id)

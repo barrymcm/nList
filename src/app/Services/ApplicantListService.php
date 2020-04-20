@@ -78,6 +78,11 @@ class ApplicantListService
         $listDetails = [];
 
         $applicantIds = $this->applicantRepository->findByUserId($customer->user_id)->pluck('id');
+
+        if($applicantIds->isEmpty()) {
+            return collect($listDetails);
+        }
+
         $listIds = $this->applicantApplicantListRepository->findListsBy($applicantIds)->pluck('applicant_list_id');
         $lists = $this->applicantListRepository->findCustomersLists($listIds->all());
 

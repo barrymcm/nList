@@ -4,14 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\Category;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreEvent;
 use App\Http\Requests\UpdateEvent;
 use Facades\App\Services\EventService;
-use Facades\App\Repositories\EventRepository;
+use Facades\App\Repositories\EventRepository as EventRepositoryFacade;
+use App\Repositories\EventRepository;
 use Illuminate\Support\Facades\Auth;
 
 class EventsController extends Controller
 {
+
+    public function __construct(EventRepository $eventRepository)
+    {
+        $this->eventRepository = $eventRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +27,7 @@ class EventsController extends Controller
      */
     public function index()
     {
-        $events = EventRepository::all();
+        $events = EventRepositoryFacade::all();
 
         return view('events.index', ['events' => $events]);
     }
@@ -29,11 +37,14 @@ class EventsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         $categories = Category::all();
 
-        return view('events.create', ['categories' => $categories]);
+        return view('events.create', [
+            'categories' => $categories,
+            'event_organiser_id' => $request->input('eventOrganiser')
+        ]);
     }
 
     /**
@@ -45,8 +56,8 @@ class EventsController extends Controller
     public function store(StoreEvent $request)
     {
         $attributes = $request->validated();
-        $event = EventRepository::create($attributes);
-
+        $event = $this->eventRepository->create($attributes);
+        
         return view('events.show', ['event' => $event]);
     }
 
@@ -86,7 +97,7 @@ class EventsController extends Controller
     public function update(UpdateEvent $request, $id)
     {
         $attributes = $request->validated();
-        $event = EventRepository::update($attributes, $id);
+        $event = EventRepositoryFacade::update($attributes, $id);
 
         return view('events.show', ['event' => $event]);
     }

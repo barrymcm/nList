@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Customer;
 use Illuminate\Support\Facades\DB;
@@ -22,7 +23,7 @@ class CustomerRepository implements RepositoryInterface
     {
     }
 
-    public function find($id)
+    public function find(int $id)
     {
         try {
             return $this->customerModel::find($id);
@@ -38,21 +39,24 @@ class CustomerRepository implements RepositoryInterface
      * @param null $id
      * @return string
      */
-    public function create(array $attributes, $userId)
+    public function create(array $attributes, int $userId)
     {
         try {
             DB::beginTransaction();
             $customer = $this->customerModel::where('user_id', $userId)->first();
+            $user = $this->userModel::where('id', $customer->user_id)->first();
 
             $customer->update([
                 'first_name' => $attributes['first_name'],
                 'last_name' => $attributes['last_name'],
                 'dob' => $attributes['dob'],
                 'gender' => $attributes['gender'],
+                'created_at' => Carbon::createFromFormat('Y-m-d H:i:s', now())
             ]);
 
             $contactDetails = [
                 'customer_id' => (int) $customer->id,
+                'email' => $user->email,
                 'phone' => $attributes['phone'],
                 'address_1' => $attributes['address_1'],
                 'address_2' => $attributes['address_2'],
@@ -80,7 +84,7 @@ class CustomerRepository implements RepositoryInterface
      * @param $customerId
      * @return string
      */
-    public function update(array $attributes, $customerId)
+    public function update(array $attributes, int $customerId)
     {
         try {
             DB::beginTransaction();

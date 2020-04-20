@@ -8,8 +8,16 @@
     <title>Document</title>
 </head>
 <body>
-@section('nav')
     <ul class="navbar-nav ml-auto">
+        <ul>
+        <li><a href="{{ route('home') }}">Home</a></li>
+        <li><a href="{{ route('about') }}">About</a></li>
+        <li><a href="{{ route('contact_us') }}">Contact</a></li>
+        <li><a href="{{ route('events.index') }}">Events</a></li>
+        <li><a href="{{ route('event_organisers.index') }}">Event Organisers</a></li>
+    </ul>
+    <br/>
+    <ul>
         @guest
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -19,8 +27,8 @@
                     <a class="nav-link" href="{{ route('register.select_account_type') }}">{{ __('Register') }}</a>
                 </li>
             @endif
-        @else
-
+        @endguest
+        @auth
             <div>{{ Auth::user()->name }} <span class="caret"></span></div>
             <div>
                 @if (Auth::user()->customer)
@@ -32,7 +40,7 @@
                 @csrf
                 <input type="submit" name="Logout" value="Logout">
             </form>
-        @endguest
+        @endauth
     </ul>
 @show
 

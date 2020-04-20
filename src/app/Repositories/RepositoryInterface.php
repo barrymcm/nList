@@ -6,11 +6,11 @@ interface RepositoryInterface
 {
     public function all();
 
-    public function find($id);
+    public function find(int $id);
 
-    public function create(array $attributes, $id);
+    public function create(array $attributes, int $id);
 
-    public function update(array $attributes, $id);
+    public function update(array $attributes, int $id);
 
     public function softDelete(int $id);
 

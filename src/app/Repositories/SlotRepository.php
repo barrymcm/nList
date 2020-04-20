@@ -21,7 +21,7 @@ class SlotRepository implements RepositoryInterface
         return $this->slotModel::all();
     }
 
-    public function find($id)
+    public function find(int $id)
     {
         try {
             $slot = $this->slotModel::find($id);
@@ -33,7 +33,7 @@ class SlotRepository implements RepositoryInterface
         }
     }
 
-    public function create(array $attributes, $id = null)
+    public function create(array $attributes, int $id = null)
     {
         try {
             return DB::table('slots')->insert($attributes);
@@ -68,7 +68,7 @@ class SlotRepository implements RepositoryInterface
         return $rows;
     }
 
-    public function update(array $slot, $id)
+    public function update(array $slot, int $id)
     {
         try {
             $slotModel = $this->slotModel::find($id);

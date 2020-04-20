@@ -64,8 +64,10 @@ class SlotsController extends Controller
      */
     public function edit(Request $request, $id)
     {
+        /** @var @todo [validate the request] */
+        $eventId = $request->get('event');
         $slot = SlotRepository::find($id);
-        $event = $request->get('event');
+        $event = EventRepository::find($eventId);
 
         return view('slots.edit', ['slot' => $slot, 'event' => $event]);
     }

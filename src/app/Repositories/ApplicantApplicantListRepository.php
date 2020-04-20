@@ -18,7 +18,7 @@ class ApplicantApplicantListRepository implements RepositoryInterface
     {
     }
 
-    public function find($ids)
+    public function find(int $ids)
     {
     }
 
@@ -27,7 +27,7 @@ class ApplicantApplicantListRepository implements RepositoryInterface
      * @param $applicantIds
      * @return bool
      */
-    public function findBy($applicantListId, $applicantIds)
+    public function findBy(int $applicantListId, int $applicantIds)
     {
         try {
             return ApplicantApplicantList::where('applicant_list_id', $applicantListId)
@@ -42,7 +42,7 @@ class ApplicantApplicantListRepository implements RepositoryInterface
      * @param $applicantIds
      * @return bool
      */
-    public function findListsBy($applicantId)
+    public function findListsBy(int $applicantId)
     {
         try {
             return ApplicantApplicantList::whereIn('applicant_id', $applicantId)->get();
@@ -55,12 +55,12 @@ class ApplicantApplicantListRepository implements RepositoryInterface
      * @param array $attributes
      * @param $id
      */
-    public function create(array $attributes, $id)
+    public function create(array $attributes, int $id)
     {
         // TODO: Implement create() method.
     }
 
-    public function update(array $attributes, $id)
+    public function update(array $attributes, int $id)
     {
         // TODO: Implement update() method.
     }

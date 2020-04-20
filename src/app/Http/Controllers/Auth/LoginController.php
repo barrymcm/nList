@@ -77,15 +77,12 @@ class LoginController extends Controller
                     );
                 }
 
-                /**
-                 * @todo : Organiser model is not currently used.
-                 */
                 if ($role == 'organiser') {
-                    $organiser = EventOrganiser::find($user->organiser->id);
+                    $eventOrganiser = EventOrganiser::find($user->eventOrganiser->id);
 
                     return redirect()->route(
-                        'organisers.create',
-                        ['organiser' => $organiser]
+                        'event_organisers.show',
+                        ['eventOrganiser' => $eventOrganiser]
                     );
                 }
             }

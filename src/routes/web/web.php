@@ -41,4 +41,4 @@ Route::resources(['event_organisers' => 'EventOrganisersController']);
 Route::resources(['applicant_lists' => 'ApplicantListsController']);
 Route::resources(['applicants' => 'ApplicantsController']);
 Route::resources(['slots' => 'SlotsController']);
-Route::resources(['customers' => 'CustomersController'])->middleware('verified');
+Route::resources(['customers' => 'CustomersController']);

@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Event Slot')
+    
 
 @section('content')
-
+    <h3>{{ $event->name }}</h3>
     <form class="form form-group" action="{{ route('slots.update', $slot) }}" method="post">
         @csrf
         {{ method_field('PUT') }}
@@ -13,6 +13,12 @@
         <input type="text" name="name" value="{{ $slot->name }}">
         <label for="">Capacity</label>
         <input type="number" name="slot_capacity" value="{{ $slot->slot_capacity }}">
+        <label>Lists</label>
+        <select name="total_lists" id="">
+            @for($i = 1; $i <= 15; $i++)
+                <option value="{{ $i }}">{{ $i }}</option>
+            @endfor
+        </select>
         <label for="">Start Date</label>
         <input type="date" name="start_date" value="{{ $slot->start_date? $slot->start_date->format('Y-m-d') : '' }}">
         <label for="">End Date</label>

@@ -73,6 +73,7 @@ class CustomersController extends Controller
      */
     public function store(StoreCustomer $request)
     {
+        Auth::check();
         $attributes = $request->validated();
         $userId = $attributes['user_id'];
         $customer = $this->customerRepository->create($attributes, $userId);
@@ -87,13 +88,16 @@ class CustomersController extends Controller
      */
     public function show($id)
     {
+        Auth::check();
         $customer = $this->customerRepository->find($id);
         $lists = $this->applicantListService->getLists($customer);
-        // $this->authorize('view', $customer);
 
         if ($this->customerService->hasCustomerProfile($customer)) {
             return view('customers.show', 
-                ['customer' => $customer, 'lists' => $lists]
+                [
+                    'customer' => $customer, 
+                    'lists' => $lists
+                ]
             );
         }
 
@@ -109,6 +113,7 @@ class CustomersController extends Controller
      */
     public function edit($id)
     {
+        Auth::check();
         $customer = $this->customerRepository->find($id);
         
         return view('customers.edit', ['customer' => $customer]);
