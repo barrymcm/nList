@@ -13,7 +13,7 @@
             <p>{{ session('status') }}</p>
         @endif
     </div>
-    <form action="{{ route('customers.update', ['id' => $customer->id]) }}" method="POST">
+    <form action="{{ route('customers.update', $customer->id) }}" method="POST">
         @method('PUT')
         @csrf
         <input type="hidden" name="user_id" value="{{ $customer->user_id }}">
@@ -104,7 +104,7 @@
 
     </form>
     <br>
-    <a href="{{ route('customers.show', ['customer' => $customer]) }}">Cancel</a>
+    <a href="{{ route('customers.show', $customer->id) }}">Cancel</a>
     <br>
 
 @endsection

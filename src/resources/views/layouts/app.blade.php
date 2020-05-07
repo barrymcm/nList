@@ -33,7 +33,8 @@
             <div>
                 @if (Auth::user()->customer)
                     {{--Note: Watch this as there was an orphan user that didnt have a role that broke this--}}
-                    <a href="{{ route('customers.show', ['id' => Auth::user()->customer->id]) }}">My Account</a>
+
+                    <a href="{{ route('customers.show', Auth::user()->customer->id) }}">My Account</a>
                 @endif
             </div>
             <form id="logout-form" action="{{ route('logout') }}" method="POST">

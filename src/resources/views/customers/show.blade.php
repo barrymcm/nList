@@ -31,13 +31,13 @@
     <form action="{{ route('customers.destroy', $customer) }}" method="POST">
         @csrf
         @method('DELETE')
-        <input type="hidden" name="list" value="{{ $lists }}">
-        <input type="hidden" name="customer_id" value="{{ $customer->id }}">
-        <input id="delete" type="submit" onclick="return confirm('Are you sure?')" name="submit" value="Delete">
+            <input type="hidden" name="list" value="{{ $lists }}">
+            <input type="hidden" name="customer_id" value="{{ $customer->id }}">
+            <input id="delete" type="submit" onclick="return confirm('Are you sure?')" name="submit" value="Delete">
     </form>
     <br>
-    <a href="{{ route('customers.edit', [$customer]) }}">Edit Profile</a>
-    <br><br>
+    <a href="{{ route('customers.edit', $customer->id ) }}">Edit Profile</a>
+<br><br>
     <div>
         <h3>Customers Lists</h3>
     </div>

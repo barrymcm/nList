@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Event')
+@section('title', 'Event details')
 
 @section('content')
     <h3>Organiser: {{ $event->organiser }}</h3>
@@ -16,17 +16,17 @@
                 <li>Capacity: {{ $slot->slot_capacity }}</li>
                 <li>Remaining List Allocation: {{ $slot->availability }}</li>
                 <li>Lists:
-                    @if($slot->availability != 'empty')
-                    @auth
-                    <a href="{{ route('applicant_lists.create', ['slot' => $slot, 'event' => $event]) }}">Add a list</a>
-                    @endauth
-                @endif
+                    @if($slot->availability > 0)
+                        @auth
+                        <a href="{{ route('applicant_lists.create', ['slot' => $slot, 'event' => $event]) }}">Add a list</a>
+                        @endauth
+                    @endif
                 </li>
 
                 <ol>
                     @foreach($slot->applicantLists as $list)
                         <li>
-                            <a href="{{ route('applicant_lists.show', ['list' => $list, 'event' => $event]) }}">
+                            <a href="{{ route('applicant_lists.show', [$list, 'event' => $event]) }}">
                                 {{ $list->name }}
                             </a>
                             &nbsp; : &nbsp; List Quantity : {{ $list->max_applicants }}
@@ -37,6 +37,7 @@
                 <li>Start Date: {{ $slot->start_date }}</li>
                 <li>End Date: {{ $slot->end_date }}</li>
             </ul>
+            
             @auth
             @if(empty($slot->name))
                 <a href="{{ route('slots.edit', ['slot' => $slot->id, 'event' => $event->id])}}">Add slot details</a>
@@ -52,11 +53,11 @@
         <a href="{{ route('events.index') }}">Back</a>
         <br>
         <br>
-        <a href="{{ route('event_organisers.show', ['organiser' => $event->event_organiser_id]) }}">View Organiser</a>
+        <a href="{{ route('event_organisers.show', $event->event_organiser_id) }}">View Organiser</a>
         <br>
         <br>
         @auth
-        <a href="{{ route('slots.create', ['event' => $event]) }}">Add new Slot</a>
+        <a href="{{ route('slots.create', $event) }}">Add new Slot</a>
         <br>
         <br>
         <a href="{{ route('events.edit', $event->id) }}">Edit event</a>

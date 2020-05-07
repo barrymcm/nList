@@ -60,17 +60,17 @@
     @endif
     <br><br>
     @if(count($list->applicants) < $list->max_applicants)
-        <a href="{{ route('applicants.create', ['list' => $list, 'event' => $event]) }}">Add me!</a>
+        <a href="{{ route('applicants.create', [ 'list' => $list, 'event' => $event]) }}">Add me!</a>
         @auth
         <br><br>
-        <a href="{{ route('applicants.create', ['list' => $list, 'event' => $event]) }}">Add applicant!</a>
+        <a href="{{ route('applicants.create', [$list, 'event' => $event]) }}">Add applicant!</a>
         @endauth
     @endif
     <br><br>
-    <a href="{{ route('events.show', ['event' => $event]) }}">Back to Slot</a>
+    <a href="{{ route('events.show', $event) }}">Back to Slot</a>
     <br><br>
     @auth
-    <a href="{{ route('applicant_lists.edit', ['list' => $list, 'event' => $event]) }}">Edit List</a>
+    <a href="{{ route('applicant_lists.edit', [$list, 'event' => $event]) }}">Edit List</a>
     <br><br>
     @if(count($list->applicants) < 1)
         <form action="{{ route('applicant_lists.destroy', $list->id) }}" method="POST">
