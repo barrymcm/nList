@@ -22,12 +22,7 @@ class ApplicantApplicantListRepository implements RepositoryInterface
     {
     }
 
-    /**
-     * @param $applicantListId
-     * @param $applicantIds
-     * @return bool
-     */
-    public function findBy(int $applicantListId, int $applicantIds)
+    public function findBy(int $applicantListId, int $applicantIds): bool
     {
         try {
             return ApplicantApplicantList::where('applicant_list_id', $applicantListId)

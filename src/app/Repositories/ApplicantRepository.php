@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use Carbon\Carbon;
 use App\Models\Applicant;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Facades\App\Repositories\ApplicantListRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -33,31 +34,48 @@ class ApplicantRepository implements RepositoryInterface
 
             return $applicant;
         } catch (ModelNotFoundException $e) {
+            logger($e->getMessage());
+
             return false;
         }
     }
 
     /**
-     * @param $userId
-     * @return bool
+     * @todo  find usages and consider renaming user id is not matching customer * id param in the where clause
      */
-    public function findByUserId(int $userId)
+    public function findByUserId(int $userId): ?Collection
     {
         try {
             return $this->applicantModel::where('customer_id', $userId)->get();
         } catch (ModelNotFoundException $e) {
-            return false;
+            logger($e->getMessage());
+
+            return null;
         }
     }
 
-    public function create(array $attributes, int $listId)
+    /**
+     * @todo  review this to see if it can be made smart findBy(user_id/ customer_id)
+     */
+    public function findByCustomerId(int $customerId): ?Collection
+    {
+        try {
+            return $this->applicantModel::where('customer_id', $customerId)->get();
+        } catch (ModelNotFoundException $e) {
+            logger($e->getMessage());
+
+            return null;
+        }
+    }
+
+    public function create(array $attributes, int $list)
     {
         try {
             DB::beginTransaction();
             $applicant = $this->applicantModel::create($attributes);
             DB::table('applicant_applicant_list')
                 ->insert([
-                    'applicant_list_id' => $listId,
+                    'applicant_list_id' => $list,
                     'applicant_id' => $applicant->id,
                     'created_at' => Carbon::createFromFormat('Y-m-d H:i:s', now()),
                     'updated_at' => Carbon::createFromFormat('Y-m-d H:i:s', now()),
@@ -67,8 +85,9 @@ class ApplicantRepository implements RepositoryInterface
             return $applicant;
         } catch (ModelNotFoundException $e) {
             DB::rollBack();
-
-            return $e->getMessage();
+            logger($e->getMessage());
+            
+            return null;
         }
     }
 
@@ -101,8 +120,8 @@ class ApplicantRepository implements RepositoryInterface
             return $applicant;
         } catch (ModelNotFoundException $e) {
             DB::rollBack();
-
-            return $e->getMessage();
+            logger($e->getMessage());
+            return null;
         }
     }
 
@@ -111,6 +130,8 @@ class ApplicantRepository implements RepositoryInterface
         try {
             return $this->applicantModel::destroy($id);
         } catch (ModelNotFoundException $e) {
+            logger($e->getMessage());
+            
             return false;
         }
     }

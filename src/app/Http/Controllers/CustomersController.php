@@ -81,12 +81,7 @@ class CustomersController extends Controller
         return redirect()->route('customers.show', ['customer' => $customer]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     */
-    public function show($id)
+    public function show(int $id)
     {
         Auth::check();
         $customer = $this->customerRepository->find($id);
@@ -115,7 +110,7 @@ class CustomersController extends Controller
     {
         Auth::check();
         $customer = $this->customerRepository->find($id);
-        
+
         return view('customers.edit', ['customer' => $customer]);
     }
 

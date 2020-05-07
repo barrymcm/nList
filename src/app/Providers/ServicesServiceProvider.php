@@ -50,7 +50,10 @@ class ServicesServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(ApplicantService::class, function ($app) {
-            return new ApplicantService(new ApplicantRepository($app->make(Applicant::class)));
+            return new ApplicantService(
+                new ApplicantRepository($app->make(Applicant::class)),
+                new CustomerRepository($app->make(Customer::class), $app->make(User::class))
+            );
         });
 
         $this->app->bind(EventService::class, function ($app) {

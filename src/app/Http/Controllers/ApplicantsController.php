@@ -36,7 +36,7 @@ class ApplicantsController extends Controller
      *
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
         $user = auth()->user();
         $list = (int) request('list');
@@ -44,11 +44,8 @@ class ApplicantsController extends Controller
 
         if (! auth()->check()) {
             return redirect()->route(
-                'applicant_lists.show',
-                [
-                    'list' => $list,
-                    'event' => $event,
-                ]
+                'applicant_lists.show', 
+                [$list, 'event' => $event]
             )->with('warning', 'Whoops .. looks like your not logged in!');
         }
 
@@ -77,7 +74,7 @@ class ApplicantsController extends Controller
                 ])->with('notice', 'hmmmm .. there\'s no contact details .. You\'ll need to complete your profile first!');
             }
 
-            $isOnList = $this->applicantService->isUserOnList($user->customer->user_id, $list);
+            $isOnList = $this->applicantService->isCustomerOnList($user->customer->id, $list);
 
             if ($isOnList) {
                 return redirect()->route('applicant_lists.show', [
@@ -88,11 +85,11 @@ class ApplicantsController extends Controller
 
             /**
              * @todo - should a user be able to add additional applicants to a list  ( GDPR )?
-             * eg -  user may want to add 3 different people to a list.
+             * eg - admin user may want to add 3 different people to a list.
              */
-
             $attributes = [
                 'customer_id' => $user->customer->id,
+                'list_id' => $list,
                 'first_name' => $user->customer->first_name,
                 'last_name' => $user->customer->last_name,
                 'dob' => $user->customer->dob,
@@ -100,6 +97,7 @@ class ApplicantsController extends Controller
             ];
 
             $applicant = ApplicantRepository::create($attributes, $list);
+
             $this->applicantService->userAddedToListEvent($applicant);
 
             if ($applicant->id) {

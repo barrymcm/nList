@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Events\ApplicantAddedToList;
 use Illuminate\Foundation\Auth\User;
 use App\Repositories\ApplicantRepository;
+use App\Repositories\CustomerRepository;
 use Facades\App\Repositories\ApplicantListRepository;
 use Facades\App\Repositories\ApplicantApplicantListRepository;
 use Facades\App\Repositories\ApplicantContactDetailsRepository;
@@ -16,18 +17,21 @@ use Facades\App\Repositories\ApplicantContactDetailsRepository;
  */
 class ApplicantService
 {
-    /**
-     * @var ApplicantRepository
-     */
-    private $applicantRepository;
+    private ApplicantRepository $applicantRepository;
+
+    private CustomerRepository $customerRepository;
 
     /**
      * ApplicantService constructor.
      * @param ApplicantRepository $applicantRepository
      */
-    public function __construct(ApplicantRepository $applicantRepository)
+    public function __construct(
+        ApplicantRepository $applicantRepository,
+        CustomerRepository $customerRepository
+    )
     {
         $this->applicantRepository = $applicantRepository;
+        $this->customerRepository = $customerRepository;
     }
 
     /**
@@ -103,15 +107,20 @@ class ApplicantService
         return ($role->name == 'customer')? true : false;
     }
 
-    /**
-     * @param $userId
-     * @param $listId
-     * @return bool
-     */
-    public function isUserOnList($userId, $listId) : bool
+    public function isCustomerOnList(int $customerId, int $listId) : bool
     {
-        $applicant = $this->applicantRepository->findByUserId($userId);
-        $applicantIds = $applicant->pluck('id');
+        $customer = $this->customerRepository->find($customerId);
+       
+        if (!$customer->id) {
+            return false;
+        }
+
+        $applicant = $this->applicantRepository->findByCustomerId($customer->id);
+  
+        if (!$applicant->contains($customer->id)) {
+            return false;
+        }
+
         $applicantList = ApplicantApplicantListRepository::findBy($listId, $applicantIds);
 
         return ($applicantList)? true : false;
