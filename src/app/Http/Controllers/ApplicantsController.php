@@ -177,7 +177,7 @@ class ApplicantsController extends Controller
      *
      * @param StoreApplicant $request
      * @param Applicant $applicant
-     * @param  int $id
+     * @param int $id
      */
     public function update(StoreApplicant $request, $id)
     {
