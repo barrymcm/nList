@@ -109,21 +109,13 @@ class ApplicantService
 
     public function isCustomerOnList(int $customerId, int $listId) : bool
     {
-        $customer = $this->customerRepository->find($customerId);
-       
-        if (!$customer->id) {
-            return false;
+        $applicant = $this->applicantRepository->findByCustomerId($customerId);
+
+        if ($applicant->count() > 0) {
+            return true;
         }
 
-        $applicant = $this->applicantRepository->findByCustomerId($customer->id);
-  
-        if (!$applicant->contains($customer->id)) {
-            return false;
-        }
-
-        $applicantList = ApplicantApplicantListRepository::findBy($listId, $applicantIds);
-
-        return ($applicantList)? true : false;
+        return false;
     }
 
     /**

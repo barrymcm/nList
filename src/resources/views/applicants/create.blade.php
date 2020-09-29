@@ -51,6 +51,6 @@
         <input type="submit" value="submit">
     </form>
     <br>
-    <a href="{{ route('applicant_lists.show', ['list' => $list, 'event' => $event]) }}">Back to List</a>
+  
 
 @endsection

@@ -33,7 +33,5 @@
         <input type="submit" name="submit" value="Delete" >
     </form>
     <br><br>
-    <a href="{{ route('applicants.edit', [$applicant, 'event' => $event, 'list' => $list]) }}">Edit</a>
-    <br><br>
-    <a href="{{ route('applicant_lists.show', ['list' => $list, 'event' => $event]) }}">Back to List</a>
+    <a href="{{ route('applicant_lists.show', [$list, 'event' => $event]) }}">Back to List</a>
 @endsection

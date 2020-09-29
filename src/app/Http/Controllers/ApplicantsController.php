@@ -44,9 +44,10 @@ class ApplicantsController extends Controller
 
         if (! auth()->check()) {
             return redirect()->route(
-                'applicant_lists.show', 
-                [$list, 'event' => $event]
-            )->with('warning', 'Whoops .. looks like your not logged in!');
+                'applicant_lists.show', [
+                    $list, 
+                    'event' => $event
+            ])->with('warning', 'Whoops .. looks like your not logged in!');
         }
 
         if (! $user->email_verified_at) {
@@ -55,13 +56,10 @@ class ApplicantsController extends Controller
         }
 
         if ($this->applicantService->isListFull(request('list'))) {
-            return redirect()->route(
-                'applicant_lists.show',
-                [
-                    'list' => $list,
+            return redirect()->route('applicant_lists.show',[
+                    $list,
                     'event' => $event,
-                ]
-            )->with('warning', 'Uh oh... This list is already full!');
+            ])->with('warning', 'Uh oh... This list is already full!');
         }
 
         $isCustomer = $this->applicantService->hasCustomerAccount($user);
@@ -69,7 +67,7 @@ class ApplicantsController extends Controller
         if (auth()->check() && $isCustomer) {
             if (! $user->customer->first_name) {
                 return redirect()->route('applicant_lists.show', [
-                    'list' => $list,
+                    $list,
                     'event' => $event,
                 ])->with('notice', 'hmmmm .. there\'s no contact details .. You\'ll need to complete your profile first!');
             }
@@ -77,10 +75,11 @@ class ApplicantsController extends Controller
             $isOnList = $this->applicantService->isCustomerOnList($user->customer->id, $list);
 
             if ($isOnList) {
+
                 return redirect()->route('applicant_lists.show', [
-                    'list' => $list,
+                    $list, 
                     'event' => $event,
-                ])->with('warning', 'It looks like your already on the list!');
+                ])->with('status', 'It looks like your already on the list!');
             }
 
             /**
@@ -98,11 +97,11 @@ class ApplicantsController extends Controller
 
             $applicant = ApplicantRepository::create($attributes, $list);
 
-            $this->applicantService->userAddedToListEvent($applicant);
+            // $this->applicantService->userAddedToListEvent($applicant);
 
             if ($applicant->id) {
                 return redirect()->route('applicant_lists.show', [
-                    'list' => $list,
+                    $list,
                     'event' => $event,
                 ]);
             }
@@ -126,10 +125,8 @@ class ApplicantsController extends Controller
 
         $this->applicantService->userAddedToListEvent($applicant);
 
-        return redirect()->route(
-            'applicant_lists.show',
-            [
-                'list' => $attributes['list'],
+        return redirect()->route('applicant_lists.show',[
+                $attributes['list'],
                 'event' => $attributes['event'],
             ]
         );
@@ -205,7 +202,7 @@ class ApplicantsController extends Controller
         ApplicantContactDetailsRepository::softDelete($id);
 
         return redirect()
-            ->action('ApplicantListsController@show', ['list' => $list, 'event' => $event])
+            ->action('ApplicantListsController@show', [$list, 'event' => $event])
             ->with('status', 'Applicant removed');
     }
 }

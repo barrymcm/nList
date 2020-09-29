@@ -17,5 +17,4 @@
     </form>
     <br>
     <a href="{{ route('applicant_lists.show', ['list' => $list, 'event' => $event]) }}">Back</a>
-
 @endsection

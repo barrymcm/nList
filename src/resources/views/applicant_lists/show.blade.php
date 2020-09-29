@@ -2,7 +2,7 @@
 
 @section('title', 'Listing')
 
-@section('content')
+  @section('content')
     <table>
         <head>
             <tr>
@@ -22,7 +22,7 @@
             <td>{{ $list->max_applicants }}</td>
             <td>{{ $list->max_applicants - count($list->applicants)}}</td>
         </tr>
-        @foreach($list->applicants as $applicant)
+         @foreach($list->applicants as $applicant)
             <tr>
                 <td></td>
                 <td></td>
@@ -42,7 +42,7 @@
                         <input type="submit" value="Delete">
                     </form>
                 </td>
-            </tr>
+             </tr>
         @endforeach
         </tbody>
     </table>
@@ -52,23 +52,33 @@
         or if you dont have an account you can
         <a href="{{ route('register.select_account_type', ['list' => $list, 'event' => $event]) }}">register</a>
     @endif
-
+ 
     @if( session('notice'))
         <p class="alert-info">
             {{ session('notice') }} <a href="{{ route('customers.create', ['id' => auth()->user()->customer]) }}">Click here!</a>
         </p>
     @endif
+
+    @if( session('status'))
+        <p class="alert-info">{{ session('status') }}</p>
+    @endif
     <br><br>
+
     @if(count($list->applicants) < $list->max_applicants)
         <a href="{{ route('applicants.create', [ 'list' => $list, 'event' => $event]) }}">Add me!</a>
-        @auth
-        <br><br>
-        <a href="{{ route('applicants.create', [$list, 'event' => $event]) }}">Add applicant!</a>
-        @endauth
+        
+         <!-- Adding another applicant to the list may not be a viable option 
+         see comment on ApplicantsController line 87-->
+        <!-- @auth
+         <br><br>
+        <a href="{{ route('applicants.create', [ 'list' => $list, 'event' => $event]) }}">Add applicant!</a>
+        @endauth -->
     @endif
     <br><br>
     <a href="{{ route('events.show', $event) }}">Back to Slot</a>
     <br><br>
+
+    <!-- Only authorised organisers should be able to see this option -->
     @auth
     <a href="{{ route('applicant_lists.edit', [$list, 'event' => $event]) }}">Edit List</a>
     <br><br>

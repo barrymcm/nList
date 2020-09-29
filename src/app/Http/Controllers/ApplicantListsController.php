@@ -94,7 +94,9 @@ class ApplicantListsController extends Controller
         $event = $request->validate(['event' => 'required|integer']);
         $list = ApplicantListRepository::find($id);
 
-        return view('applicant_lists.edit', ['list' => $list, 'event' => $event['event']]);
+        return view('applicant_lists.edit', 
+            ['list' => $list, 'event' => $event['event']]
+        );
     }
 
     /**
