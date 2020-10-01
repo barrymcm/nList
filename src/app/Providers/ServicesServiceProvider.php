@@ -20,6 +20,7 @@ use App\Repositories\CustomerRepository;
 use App\Repositories\ApplicantRepository;
 use App\Repositories\ApplicantListRepository;
 use App\Repositories\ApplicantApplicantListRepository;
+use App\Repositories\UserRepository;
 
 class ServicesServiceProvider extends ServiceProvider
 {
@@ -52,7 +53,11 @@ class ServicesServiceProvider extends ServiceProvider
         $this->app->bind(ApplicantService::class, function ($app) {
             return new ApplicantService(
                 new ApplicantRepository($app->make(Applicant::class)),
-                new CustomerRepository($app->make(Customer::class), $app->make(User::class))
+                new CustomerRepository(
+                    $app->make(Customer::class), 
+                    $app->make(User::class)
+                ),
+                new UserRepository($app->make(User::class))
             );
         });
 

@@ -27,6 +27,8 @@ class SendApplicantAddedToListNotification implements ShouldQueue
      */
     public function handle(ApplicantAddedToList $event)
     {
-        Mail::to($event->applicant->user->email)->send(new AddedToList($event->applicant));
+        Mail::to($event->user->email)->send(
+            new AddedToList($event->applicant, $event->user)
+        );
     }
 }

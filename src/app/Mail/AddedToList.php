@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\User;
 use App\Models\Applicant;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -10,16 +11,19 @@ class AddedToList extends Mailable
 {
     use SerializesModels;
 
-    public $applicant;
+    public User $user;
+
+    public Applicant $applicant;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Applicant $applicant)
+    public function __construct(Applicant $applicant, User $user)
     {
         $this->applicant = $applicant;
+        $this->user = $user;
     }
 
     /**

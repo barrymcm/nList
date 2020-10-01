@@ -67,7 +67,7 @@
     @if(count($list->applicants) < $list->max_applicants)
         <a href="{{ route('applicants.create', [ 'list' => $list, 'event' => $event]) }}">Add me!</a>
         
-         <!-- Adding another applicant to the list may not be a viable option 
+         <!-- customers adding another applicant to the list may not be a viable option, maybe this should only be done by organisers.
          see comment on ApplicantsController line 87-->
         <!-- @auth
          <br><br>

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Role;
 use App\Events\ApplicantAddedToList;
 use Illuminate\Foundation\Auth\User;
+use App\Repositories\UserRepository;
 use App\Repositories\ApplicantRepository;
 use App\Repositories\CustomerRepository;
 use Facades\App\Repositories\ApplicantListRepository;
@@ -21,17 +22,21 @@ class ApplicantService
 
     private CustomerRepository $customerRepository;
 
+    private UserRepository $userRepository;
+
     /**
      * ApplicantService constructor.
      * @param ApplicantRepository $applicantRepository
      */
     public function __construct(
         ApplicantRepository $applicantRepository,
-        CustomerRepository $customerRepository
+        CustomerRepository $customerRepository,
+        UserRepository $userRepository
     )
     {
         $this->applicantRepository = $applicantRepository;
         $this->customerRepository = $customerRepository;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -92,7 +97,8 @@ class ApplicantService
      */
     public function userAddedToListEvent($applicant)
     {
-        event(new ApplicantAddedToList($applicant));
+        $user = $this->userRepository->findById($applicant->customer_id); 
+        event(new ApplicantAddedToList($applicant, $user));
     }
 
     /**
