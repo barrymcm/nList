@@ -82,7 +82,7 @@ class LoginController extends Controller
 
                     return redirect()->route(
                         'event_organisers.show',
-                        ['eventOrganiser' => $eventOrganiser]
+                        [$eventOrganiser->id]
                     );
                 }
             }

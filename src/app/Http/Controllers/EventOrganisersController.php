@@ -55,7 +55,7 @@ class EventOrganisersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         $eventOrganiser = EventOrganiserRepository::find($id);
 

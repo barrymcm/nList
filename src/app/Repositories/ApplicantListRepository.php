@@ -73,6 +73,7 @@ class ApplicantListRepository implements RepositoryInterface
 
             return $result;
         } catch (\PDOException $e) {
+            Log::error($e->getMessage());
             DB::rollBack();
         }
     }

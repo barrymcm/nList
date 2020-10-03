@@ -57,7 +57,7 @@
         <br>
         <br>
         @auth
-        <a href="{{ route('slots.create', $event) }}">Add new Slot</a>
+        <a href="{{ route('slots.create', ['event' => $event]) }}">Add new Slot</a>
         <br>
         <br>
         <a href="{{ route('events.edit', $event->id) }}">Edit event</a>
