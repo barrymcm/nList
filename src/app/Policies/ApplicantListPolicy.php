@@ -2,9 +2,10 @@
 
 namespace App\Policies;
 
-use App\ApplicantList;
+use App\Models\ApplicantList;
 use App\Models\User;
 use App\Models\Customer;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ApplicantListPolicy
@@ -26,7 +27,7 @@ class ApplicantListPolicy
      * Determine whether the user can view the applicant list.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\ApplicantList  $applicantList
+     * @param  \App\Model\ApplicantList  $applicantList
      * @return mixed
      */
     public function view(User $user, ApplicantList $applicantList)
@@ -54,7 +55,10 @@ class ApplicantListPolicy
      */
     public function update(User $user, ApplicantList $applicantList)
     {
-        //
+        return $user->id === 151 
+            ? Response::allow() 
+            : Response::deny('User not allowed to update the list');
+        // match the event organiser id from the user object and the event object
     }
 
     /**

@@ -108,19 +108,17 @@ class ApplicantListsController extends Controller
     public function update(Request $request, $id)
     {
         $attributes = $request->validate([
-            'event_id' => 'required|integer',
+            'slot_id' => 'required|integer',
             'name' => 'required|string|max:255',
             'max_applicants' => 'required|integer|min:1',
         ]);
 
         $list = ApplicantListRepository::update($attributes, $id);
+        $event = $this->eventRepository->find($request->event);
 
-        return view(
-            'applicant_lists.show',
-            [
-                'event' => $attributes['event_id'],
-                'list' => $list,
-            ]
+        return redirect()->route('events.show', $event)->with(
+            'status',
+            'Applicant list updated'
         );
     }
 
