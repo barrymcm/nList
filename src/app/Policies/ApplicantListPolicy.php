@@ -31,7 +31,7 @@ class ApplicantListPolicy
      */
     public function view(User $user, ApplicantList $applicantList)
     {
-        dd($user);
+
     }
 
     /**
@@ -42,7 +42,7 @@ class ApplicantListPolicy
      */
     public function create(User $user, Customer $customer)
     {
-        return $user;
+
     }
 
     /**
