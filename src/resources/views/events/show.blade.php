@@ -25,20 +25,18 @@
 
                 <ol>
                     @foreach($slot->applicantLists as $list)
-                        <li>
-                            <a href="{{ route('applicant_lists.show', [$list, 'event' => $event]) }}">
-                                {{ $list->name }}
-                            </a>
-                            &nbsp; : &nbsp; List Quantity : {{ $list->max_applicants }}
-                                  {{--Remaining Places :  {{ $list->max_applicants - count($list->applicants) }}--}}
-                            <a href="{{ route('applicant_lists.edit', [$list, 'event' => $event]) }}">edit</a>
-                            <form action="{{ route('applicant_lists.destroy', [$list, 'event' => $event]) }}" method="post">
-                            @csrf
-                            {{ method_field('DELETE') }}
-                            <input type="submit" name="submit" value="Delete">
-        </form>
+                    <li>
+                    <a href="{{ route('applicant_lists.show', [$list, 'event' => $event]) }}">{{ $list->name }}</a>
+                    &nbsp; : &nbsp; List Capacity : {{ $list->max_applicants }}
+                              {{--Remaining Places :  {{ $list->max_applicants - count($list->applicants) }}--}}
+                    <a href="{{ route('applicant_lists.edit', [$list, 'event' => $event]) }}">edit</a>
+                    <form action="{{ route('applicant_lists.destroy', [$list, 'event' => $event]) }}" method="post">
+                        @csrf
+                        {{ method_field('DELETE') }}
+                        <input type="submit" name="submit" value="Delete">
+                    </form>
 
-                        </li>
+                    </li>
                     @endforeach
                 </ol>
                 <li>Start Date: {{ $slot->start_date }}</li>

@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('title', 'Listing')
-
   @section('content')
     <table>
         <head>
@@ -33,14 +32,16 @@
                 <td>{{ $applicant->created_at->format('h:i:s A') }}</td>
                 <td><a href="{{ route('applicants.show', [$applicant, 'event' => $event, 'list' => $list]) }}">Details</a></td>
                 <td>
+                    @if (Auth::user()->customer->id === $applicant->customer_id)
                     <form action="{{ route('applicants.destroy', $applicant) }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
-                        <input type="hidden" name="event" value="{{ $event }}">
+                        <input type="hidden" name="event" value="{{ $event->id }}">
                         <input type="hidden" name="list_id" value="{{ $list->id }}">
                         <input type="submit" value="Delete">
                     </form>
+                    @endif
                 </td>
             </tr>
         @endforeach

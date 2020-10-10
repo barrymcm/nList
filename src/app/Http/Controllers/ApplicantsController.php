@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Gate;
 use App\Models\Applicant;
 use Illuminate\Http\Request;
 use App\Services\ApplicantService;
@@ -198,8 +199,10 @@ class ApplicantsController extends Controller
         $list = $request->get('list_id');
         $event = $request->get('event');
 
-        ApplicantRepository::softDelete($id);
-        ApplicantContactDetailsRepository::softDelete($id);
+        $applicant = ApplicantRepository::find($id);
+
+        ApplicantRepository::softDelete($applicant->id);
+        ApplicantContactDetailsRepository::softDelete($applicant->id);
 
         return redirect()
             ->action('ApplicantListsController@show', [$list, 'event' => $event])
