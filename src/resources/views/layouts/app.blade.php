@@ -28,20 +28,23 @@
                 </li>
             @endif
         @endguest
-        @auth
-            <div>{{ Auth::user()->name }} <span class="caret"></span></div>
-            <div>
-                @if (Auth::user()->customer)
-                    {{--Note: Watch this as there was an orphan user that didnt have a role that broke this--}}
+        <div>{{ Auth::user()->name }} <span class="caret"></span></div>
+        <div>
+            @if (Auth::user()->customer)
+                {{--Note: Watch this as there was an orphan user that didnt have a role that broke this--}}
 
-                    <a href="{{ route('customers.show', Auth::user()->customer->id) }}">My Account</a>
-                @endif
-            </div>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST">
-                @csrf
-                <input type="submit" name="Logout" value="Logout">
-            </form>
-        @endauth
+                <a href="{{ route('customers.show', Auth::user()->customer->id) }}">My Account</a>
+            @endif
+        </div>
+        <div>
+            @if (Auth::user()->eventOrganiser)
+                <a href="{{ route('event_organisers.show', Auth::user()->eventOrganiser->id) }}">My Account</a>
+            @endif
+        </div>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST">
+            @csrf
+            <input type="submit" name="Logout" value="Logout">
+        </form>
     </ul>
 @show
 
