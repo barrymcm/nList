@@ -4,7 +4,9 @@
 
 @section('content')
     @if (isset($user->eventOrganiser))
-    <p>Add a new event <a href="{{ route('events.create', ['eventOrganiser' => $eventOrganiser]) }}">here!</a></p>
+        @if ($user->eventOrganiser->id === $eventOrganiser->id)
+            <p>Add a new event <a href="{{ route('events.create', ['organiser' => $eventOrganiser->id]) }}">here!</a></p>
+        @endif
     @endif
 
     <ul>
