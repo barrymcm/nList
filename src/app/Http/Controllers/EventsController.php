@@ -27,13 +27,9 @@ class EventsController extends Controller
      */
     public function index()
     {
-        if (Auth::check()) {
-            $user = Auth::user();
-        }
-
         $events = EventRepositoryFacade::all();
 
-        return view('events.index', ['events' => $events, 'user' => $user]);
+        return view('events.index', ['events' => $events]);
     }
 
     /**
@@ -43,12 +39,11 @@ class EventsController extends Controller
      */
     public function create(Request $request)
     {
-        $attributes = $request->validate(['organiser' => 'required|integer']);
         $categories = Category::all();
 
         return view('events.create', [
             'categories' => $categories,
-            'event_organiser_id' => $attributes['organiser']
+            'event_organiser_id' => $request->input('eventOrganiser')
         ]);
     }
 
@@ -74,13 +69,9 @@ class EventsController extends Controller
      */
     public function show($id)
     {
-        if (Auth::check()) {
-            $user = Auth::user();    
-        }
-        
         $event = EventService::find($id);
 
-        return view('events.show', ['event' => $event, 'user' => $user]);
+        return view('events.show', ['event' => $event]);
     }
 
     /**
