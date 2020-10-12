@@ -13,7 +13,11 @@
             </li>
         </ul>
     @endforeach
-    @auth
-        <a href="{{ route('events.create') }}">Create new event</a>
-    @endauth
+    
+    <br><br>
+
+    @if (isset($user->eventOrganiser))
+        <a href="{{ route('events.create', ['organiser' => $user->eventOrganiser->id]) }}">Create new event</a>
+    @endif
+
 @endsection

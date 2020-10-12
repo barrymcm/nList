@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Services\ApplicantListService;
 use App\Http\Requests\StoreApplicantList;
@@ -45,6 +47,7 @@ class ApplicantListsController extends Controller
         return view(
             'applicant_lists.create',
             [
+                'user' => Auth::user(),
                 'slot' => $attributes['slot'],
                 'event' => $attributes['event'],
             ]
@@ -59,10 +62,20 @@ class ApplicantListsController extends Controller
     public function store(StoreApplicantList $request)
     {
         $attributes = $request->validated();
+
+        if (Gate::denies('create', Auth::user())) {
+
+            return view('applicant_lists.show', 
+                [
+                    'slot' => $attributes['slot_id'],
+                    'event' => $attributes['event_id'],
+                ]
+            );
+        }
+
         $this->applicantListService->tryCreateApplicantList($attributes);
 
-        return redirect()->route(
-            'events.show',
+        return redirect()->route('events.show',
             [
                 'event' => $attributes['event_id'],
             ]
@@ -80,8 +93,9 @@ class ApplicantListsController extends Controller
         $event = $request->validate(['event' => 'required|integer']);
         $list = ApplicantListRepository::find($id);
         $event = $this->eventRepository->find($event['event']);
+        $user = Auth::user();
 
-        return view('applicant_lists.show', ['list' => $list, 'event' => $event]);
+        return view('applicant_lists.show', ['list' => $list, 'event' => $event, 'user' => $user]);
     }
 
     /**

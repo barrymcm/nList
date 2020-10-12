@@ -30,17 +30,47 @@
                 <td>{{ $applicant->first_name }} {{ $applicant->last_name }}</td>
                 <td>{{ $applicant->created_at->format('l jS \\of F Y') }}</td>
                 <td>{{ $applicant->created_at->format('h:i:s A') }}</td>
-                <td><a href="{{ route('applicants.show', [$applicant, 'event' => $event, 'list' => $list]) }}">Details</a></td>
-                <td>
-                    @if (Auth::user()->customer->id === $applicant->customer_id)
-                    <form action="{{ route('applicants.destroy', $applicant) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
-                        <input type="hidden" name="event" value="{{ $event->id }}">
-                        <input type="hidden" name="list_id" value="{{ $list->id }}">
-                        <input type="submit" value="Delete">
-                    </form>
+
+
+                
+                    <!-- 
+                        if the user is a customer check their id and make sure they can only remove themselves from the list.
+
+                        if the user is an organiser then check the event organiser id matches their id and let them remove applicants from the list.
+                    --> 
+                    @if ($user->role->role_id === 3)
+                        @if($user->customer->id === $applicant->customer_id)
+                            <td>
+                                <a href="{{ route('applicants.show', [ $applicant, 'event' => $event, 'list' => $list ]) }}">Details</a>
+                            </td>
+
+                            <form action="{{ route('applicants.destroy', $applicant) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
+                                <input type="hidden" name="event" value="{{ $event->id }}">
+                                <input type="hidden" name="list_id" value="{{ $list->id }}">
+                                <input type="submit" value="Delete">
+                            </form>
+                        @endif
+                    @endif
+
+                    @if ($user->role->role_id === 2)
+                        @if($user->eventOrganiser->id === $event->event_organiser_id)
+
+                            <td>
+                                <a href="{{ route('applicants.show', [ $applicant, 'event' => $event, 'list' => $list ]) }}">Details</a>
+                            </td>
+
+                            <form action="{{ route('applicants.destroy', $applicant) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
+                                <input type="hidden" name="event" value="{{ $event->id }}">
+                                <input type="hidden" name="list_id" value="{{ $list->id }}">
+                                <input type="submit" value="Delete">
+                            </form>
+                        @endif
                     @endif
                 </td>
             </tr>
@@ -65,32 +95,36 @@
     @endif
     <br><br>
 
-    @if(count($list->applicants) < $list->max_applicants)
-        <a href="{{ route('applicants.create', [ 'list' => $list, 'event' => $event]) }}">Add me!</a>
-        
-         <!-- customers adding another applicant to the list may not be a viable option, maybe this should only be done by organisers.
-         see comment on ApplicantsController line 87-->
-        <!-- @auth
-         <br><br>
-        <a href="{{ route('applicants.create', [ 'list' => $list, 'event' => $event]) }}">Add applicant!</a>
-        @endauth -->
+    @if (isset($user->customer))
+        @if (count($list->applicants) < $list->max_applicants)
+            <a href="{{ route('applicants.create', [ 'list' => $list, 'event' => $event]) }}">Add me!</a>
+            
+             <!-- customers adding another applicant to the list may not be a viable option, maybe this should only be done by organisers.
+             see comment on ApplicantsController line 87-->
+            <!-- @auth
+             <br><br>
+            <a href="{{ route('applicants.create', [ 'list' => $list, 'event' => $event]) }}">Add applicant!</a>
+            @endauth -->
+        @endif
     @endif
     <br><br>
     <a href="{{ route('events.show', $event) }}">Back to Slot</a>
     <br><br>
 
     <!-- Only authorised organisers should be able to see this option -->
-    @auth
-    <a href="{{ route('applicant_lists.edit', [$list, 'event' => $event]) }}">Edit List</a>
-    <br><br>
-    @if(count($list->applicants) < 1)
-        <form action="{{ route('applicant_lists.destroy', $list->id) }}" method="POST">
-            @csrf
-            @method('DELETE')
-            <input type="hidden" name="event" value="{{ $event }}">
-            <input type="submit" name="submit" value="Delete List">
-        </form>
+    @if (isset($user->eventOrganiser))
+        @if ($user->eventOrganiser->id === $event->event_organiser_id)
+            <a href="{{ route('applicant_lists.edit', [$list, 'event' => $event]) }}">Edit List</a>
+            <br><br>
+            @if(count($list->applicants) < 1)
+                <form action="{{ route('applicant_lists.destroy', $list->id) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <input type="hidden" name="event" value="{{ $event }}">
+                    <input type="submit" name="submit" value="Delete List">
+                </form>
+            @endif
+            <br>
+        @endif
     @endif
-    <br>
-    @endauth
 @endsection

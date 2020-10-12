@@ -3,7 +3,10 @@
 @section('title', 'Event Organiser')
 
 @section('content')
+    @if (isset($user->eventOrganiser))
     <p>Add a new event <a href="{{ route('events.create', ['eventOrganiser' => $eventOrganiser]) }}">here!</a></p>
+    @endif
+
     <ul>
         <li><h3>{{ $eventOrganiser->name }}</h3></li>
         <li>{{ $eventOrganiser->description }}</li>
