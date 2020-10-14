@@ -93,7 +93,10 @@ class EventsController extends Controller
     {
         $categories = Category::all();
 
-        return view('events.edit', ['event' => $event, 'categories' => $categories->all()]);
+        return view('events.edit', [
+            'event' => $event, 
+            'categories' => $categories->all()
+        ]);
     }
 
     /**

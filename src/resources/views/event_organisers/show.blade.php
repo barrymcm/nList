@@ -3,11 +3,12 @@
 @section('title', 'Event Organiser')
 
 @section('content')
-    @if (isset($user->eventOrganiser))
-        @if ($user->eventOrganiser->id === $eventOrganiser->id)
+
+    @isset(Auth::user()->eventOrganiser)
+        @if (Auth::user()->eventOrganiser->id === $eventOrganiser->id)
             <p>Add a new event <a href="{{ route('events.create', ['organiser' => $eventOrganiser->id]) }}">here!</a></p>
         @endif
-    @endif
+    @endisset
 
     <ul>
         <li><h3>{{ $eventOrganiser->name }}</h3></li>

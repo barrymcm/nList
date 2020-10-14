@@ -24,16 +24,6 @@
             @endforeach
         </select>
 
-        <label for="slots">Slots</label>
-        <select name="total_slots" id="">
-            @for($i = 1; $i <= 15; $i++)
-                @if($i == $event->total_slots)
-                    <option value="{{ $event->total_slots }}" selected>{{ $event->total_slots  }}</option>
-                @else
-                    <option value="{{ $i }}">{{ $i }}</option>
-                @endif
-            @endfor
-        </select>
         <input type="submit" value="submit">
     </form>
     

@@ -28,7 +28,6 @@ class UpdateEvent extends FormRequest
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
             'category_id' => 'required|integer',
-            'total_slots' => 'required|integer',
         ];
     }
 }

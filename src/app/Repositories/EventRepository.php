@@ -90,11 +90,6 @@ class EventRepository implements RepositoryInterface
         try {
             $event = $this->eventModel::find($id);
 
-            DB::beginTransaction();
-            DB::table('slots')->insert($this->createSlots($event));
-            DB::commit();
-
-            $event->total_slots = $attributes['total_slots'];
             $event->category_id = $attributes['category_id'];
             $event->name = $attributes['name'];
             $event->description = $attributes['description'];
