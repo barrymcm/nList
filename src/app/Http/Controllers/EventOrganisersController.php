@@ -18,7 +18,9 @@ class EventOrganisersController extends Controller
     {
         $organisers = EventOrganiserRepository::all();
 
-        return view('event_organisers.index', ['organisers' => $organisers]);
+        return view('event_organisers.index', [
+            'organisers' => $organisers
+        ]);
     }
 
     /**
@@ -32,7 +34,9 @@ class EventOrganisersController extends Controller
         $userId = auth()->user()->eventOrganiser->user_id;
         $eventOrganiser = EventOrganiserRepository::findBy($userId);
 
-        return view('event_organisers.create', ['eventOrganiser' => $eventOrganiser]);
+        return view('event_organisers.create', [
+            'eventOrganiser' => $eventOrganiser
+        ]);
     }
 
     /**
@@ -46,7 +50,9 @@ class EventOrganisersController extends Controller
         $attributes = $request->validated();
         $eventOrganiser = EventOrganiserRepository::create($attributes);
 
-        return view('event_organisers.show', ['eventOrganiser' => $eventOrganiser]);
+        return view('event_organisers.show', [
+            'eventOrganiser' => $eventOrganiser
+        ]);
     }
 
     /**
@@ -63,7 +69,11 @@ class EventOrganisersController extends Controller
 
         $eventOrganiser = EventOrganiserRepository::find($id);
 
-        return view('event_organisers.show', ['eventOrganiser' => $eventOrganiser, 'user' => $user]);
+        return view('event_organisers.show', [
+            'eventOrganiser' => $eventOrganiser, 
+            'user' => $user
+        ]);
+        
     }
 
     /**

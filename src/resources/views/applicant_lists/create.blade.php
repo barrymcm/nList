@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <form action="{{ route('applicant_lists.store', [$slot, 'event' => $event]) }}" method="POST">
+    <form action="{{ route('applicant_lists.store', ['slot' => $slot, 'event' => $event]) }}" method="POST">
         @csrf
         <input type="hidden" name="event_id" value="{{ $event }}">
         <input type="hidden" name="slot_id" value="{{ $slot }}">

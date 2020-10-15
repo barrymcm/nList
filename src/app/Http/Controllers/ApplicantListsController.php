@@ -90,9 +90,9 @@ class ApplicantListsController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $event = $request->validate(['event' => 'required|integer']);
+        $attribute = $request->validate(['event' => 'required|integer']);
         $list = ApplicantListRepository::find($id);
-        $event = $this->eventRepository->find($event['event']);
+        $event = $this->eventRepository->find($attribute['event']);
         $user = Auth::user();
 
         return view('applicant_lists.show', ['list' => $list, 'event' => $event, 'user' => $user]);

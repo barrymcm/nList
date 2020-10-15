@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Gate;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Applicant;
 use Illuminate\Http\Request;
 use App\Services\ApplicantService;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreApplicant;
 use Facades\App\Repositories\ApplicantRepository;
 use Facades\App\Repositories\ApplicantContactDetailsRepository;

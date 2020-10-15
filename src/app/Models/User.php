@@ -12,25 +12,12 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, Notifiable, SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'name', 'email', 'password',
     ];
 
-    /**
-     * @var array
-     */
     protected $dates = ['deleted_at'];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
         'password', 'remember_token',
     ];
@@ -54,19 +41,4 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(UserRole::class);
     }
-
-    /**
-     * select `roles`.*, `user_role`.`user_id` as `laravel_through_key`
-     *  from `roles`
-     *  inner join `user_role` on `user_role`.`user_id` = `roles`.`user_role_id`
-     * where `user_role`.`user_id` = 88
-     * limit 1
-     *
-     * select `roles`.*, `user_role`.`user_id` as `laravel_through_key`
-     *  from `roles` inner
-     *  join `user_role` on `user_role`.`id` = `roles`.`user_role_id`
-     * where `user_role`.`user_id` = 88
-     * limit 1
-     *
-     */
 }

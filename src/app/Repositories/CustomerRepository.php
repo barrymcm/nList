@@ -23,7 +23,7 @@ class CustomerRepository implements RepositoryInterface
     {
     }
 
-    public function find(int $id)
+    public function find(int $id): ?Customer
     {
         try {
             return $this->customerModel::find($id);
