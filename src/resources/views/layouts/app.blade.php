@@ -28,6 +28,8 @@
                 </li>
             @endif
         @endguest
+
+        @if (Auth::check())
         <div>{{ Auth::user()->name }} <span class="caret"></span></div>
         <div>
             @if (Auth::user()->customer)
@@ -45,6 +47,7 @@
             @csrf
             <input type="submit" name="Logout" value="Logout">
         </form>
+        @endif
     </ul>
 @show
 
