@@ -16,7 +16,7 @@
     
     <br><br>
 
-    @if (isset($user->eventOrganiser))
+    @if (@isset($user->eventOrganiser))
         <a href="{{ route('events.create', ['organiser' => $user->eventOrganiser->id]) }}">Create new event</a>
     @endif
 

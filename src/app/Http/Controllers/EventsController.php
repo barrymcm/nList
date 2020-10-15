@@ -27,6 +27,8 @@ class EventsController extends Controller
      */
     public function index()
     {
+        $user = null;
+
         if (Auth::check()) {
             $user = Auth::user();
         }
@@ -43,6 +45,10 @@ class EventsController extends Controller
      */
     public function create(Request $request)
     {
+        if (!Auth::user()->eventOrganiser) {
+            return redirect('show')->with('status', 'You do not have permission to create a new event');
+        }
+
         $attributes = $request->validate(['organiser' => 'required|integer']);
         $categories = Category::all();
 
@@ -60,10 +66,15 @@ class EventsController extends Controller
      */
     public function store(StoreEvent $request)
     {
+        if (!Auth::user()->eventOrganiser) {
+            return redirect('login')->with('status', 'You are not logged in!');
+        }
+
+        $user = Auth::user();
         $attributes = $request->validated();
         $event = $this->eventRepository->create($attributes);
         
-        return view('events.show', ['event' => $event]);
+        return redirect()->route('events.show', ['event' => $event, 'user' => $user]);
     }
 
     /**
@@ -72,15 +83,20 @@ class EventsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
+        $user = null;
+
         if (Auth::check()) {
-            $user = Auth::user();    
+            $user = Auth::user();
         }
-        
+
+        $user = Auth::user();  
         $event = EventService::find($id);
 
-        return view('events.show', ['event' => $event, 'user' => $user]);
+        return view('events.show', [
+            'event' => $event, 'user' => $user
+        ]);  
     }
 
     /**
@@ -91,6 +107,10 @@ class EventsController extends Controller
      */
     public function edit(Event $event)
     {
+        if (!Auth::user()->eventOrganiser) {
+            return redirect()->route('show.events', [$event])->with('status', 'You cannot update this event!');
+        }
+
         $categories = Category::all();
 
         return view('events.edit', [
@@ -108,10 +128,16 @@ class EventsController extends Controller
      */
     public function update(UpdateEvent $request, $id)
     {
+        if (!Auth::user()->eventOrganiser) {
+            return redirect()->route('show.events', [$event])->with('status', 'You cannot update this event!');
+        }
+
         $attributes = $request->validated();
         $event = EventRepositoryFacade::update($attributes, $id);
 
-        return view('events.show', ['event' => $event]);
+        return redirect()->route('events.show', [
+            'event' => $event, 'user' => Auth::user()
+        ])->with('notice', 'Event details updated');
     }
 
     /**
