@@ -9,7 +9,7 @@
             <p>Add a new event <a href="{{ route('events.create', ['organiser' => $eventOrganiser->id]) }}">here!</a></p>
         @endif
     @endisset
-
+    
     <ul>
         <li><h3>{{ $eventOrganiser->name }}</h3></li>
         <li>{{ $eventOrganiser->description }}</li>

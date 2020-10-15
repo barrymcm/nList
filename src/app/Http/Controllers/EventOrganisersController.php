@@ -63,17 +63,20 @@ class EventOrganisersController extends Controller
      */
     public function show(int $id)
     {
-        if (Auth::check()) {
-            $user = Auth::user();
-        }
-
         $eventOrganiser = EventOrganiserRepository::find($id);
 
+        if (Auth::check()) {
+            $user = Auth::user();
+
+            return view('event_organisers.show', [
+                'eventOrganiser' => $eventOrganiser, 
+                'user' => $user
+            ]);
+        }
+
         return view('event_organisers.show', [
-            'eventOrganiser' => $eventOrganiser, 
-            'user' => $user
-        ]);
-        
+            'eventOrganiser' => $eventOrganiser,
+        ]);    
     }
 
     /**
