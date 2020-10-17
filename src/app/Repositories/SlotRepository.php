@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Slot;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Facades\App\Repositories\ApplicantListRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -36,8 +37,13 @@ class SlotRepository implements RepositoryInterface
     public function create(array $attributes, int $id = null)
     {
         try {
+
+            DB::table('events')->where('id', $attributes['event_id'])
+                ->increment('total_slots');
+
             return DB::table('slots')->insert($attributes);
         } catch (\PDOException $e) {
+            Log::error($e->getMessage());
             return false;
         }
     }
@@ -52,6 +58,7 @@ class SlotRepository implements RepositoryInterface
 
             return $slot;
         } catch (\PDOException $e) {
+            Log::error($e->getMessage());
             DB::rollback();
         }
     }

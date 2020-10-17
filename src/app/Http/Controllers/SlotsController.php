@@ -7,6 +7,7 @@ use App\Http\Requests\StoreSlot;
 use App\Http\Requests\UpdateSlot;
 use Facades\App\Repositories\SlotRepository;
 use Facades\App\Repositories\EventRepository;
+use Illuminate\Support\Facades\Auth;
 
 class SlotsController extends Controller
 {
@@ -26,9 +27,19 @@ class SlotsController extends Controller
      */
     public function create(Request $request)
     {
-        $event = $request->validate(['event' => 'required|integer']);
+        $attribute = $request->validate(['event_id' => 'required|integer']);
+        $event = EventRepository::find($attribute['event_id']);
 
-        return view('slots.create', $event);
+        if(!Auth::user()->eventOrganiser) {
+            
+            return redirect()->route('events.show', [
+                'event' => $event, 'user' => Auth::user()
+            ])->with('notice', 'You do not have permission to create a slot for this event');
+        }
+
+        $event = EventRepository::find($attribute['event_id']);
+
+        return view('slots.create', ['event' => $event]);
     }
 
     /**
