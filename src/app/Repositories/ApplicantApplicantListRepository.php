@@ -40,7 +40,7 @@ class ApplicantApplicantListRepository implements RepositoryInterface
     public function findListsBy(int $applicantId)
     {
         try {
-            return ApplicantApplicantList::whereIn('applicant_id', $applicantId)->get();
+            return ApplicantApplicantList::where('applicant_id', $applicantId)->get();
         } catch (ModelNotFoundException $e) {
             return false;
         }

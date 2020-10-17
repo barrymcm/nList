@@ -46,7 +46,7 @@ class ApplicantRepository implements RepositoryInterface
     public function findByUserId(int $userId): ?Collection
     {
         try {
-            return $this->applicantModel::where('customer_id', $userId)->get();
+            return $this->applicantModel::where('user_id', $userId)->get();
         } catch (ModelNotFoundException $e) {
             logger($e->getMessage());
 
@@ -60,7 +60,9 @@ class ApplicantRepository implements RepositoryInterface
     public function findByCustomerId(int $customerId): ?Collection
     {
         try {
-            return $this->applicantModel::where('customer_id', $customerId)->get();
+            return $this->applicantModel::where(
+                'customer_id', $customerId
+            )->get();
         } catch (ModelNotFoundException $e) {
             logger($e->getMessage());
 

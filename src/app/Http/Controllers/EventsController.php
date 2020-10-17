@@ -45,11 +45,12 @@ class EventsController extends Controller
      */
     public function create(Request $request)
     {
+        $attributes = $request->validate(['organiser' => 'required|integer']);
+
         if (!Auth::user()->eventOrganiser) {
-            return redirect('show')->with('status', 'You do not have permission to create a new event');
+            return redirect()->route('events.show')->with('status', 'You do not have permission to create a new event');
         }
 
-        $attributes = $request->validate(['organiser' => 'required|integer']);
         $categories = Category::all();
 
         return view('events.create', [
@@ -74,7 +75,9 @@ class EventsController extends Controller
         $attributes = $request->validated();
         $event = $this->eventRepository->create($attributes);
         
-        return redirect()->route('events.show', ['event' => $event, 'user' => $user]);
+        return redirect()->route('events.show', [
+            'event' => $event, 'user' => $user
+        ]);
     }
 
     /**
@@ -91,7 +94,7 @@ class EventsController extends Controller
             $user = Auth::user();
         }
 
-        $user = Auth::user();  
+        $user = Auth::user();
         $event = EventService::find($id);
 
         return view('events.show', [
