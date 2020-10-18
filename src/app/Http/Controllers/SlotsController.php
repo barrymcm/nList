@@ -30,7 +30,7 @@ class SlotsController extends Controller
         $attribute = $request->validate(['event_id' => 'required|integer']);
         $event = EventRepository::find($attribute['event_id']);
 
-        if(!Auth::user()->eventOrganiser) {
+        if(! isset(Auth::user()->eventOrganiser)) {
             
             return redirect()->route('events.show', [
                 'event' => $event, 'user' => Auth::user()
