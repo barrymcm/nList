@@ -21,7 +21,10 @@
 
         @if($slot->slot_capacity > 0)
             @if (@isset($user->eventOrganiser))
-                @if ($user->eventOrganiser->id === $event->event_organiser_id)
+                @if (
+                    $user->eventOrganiser->id === $event->event_organiser_id
+                    && @count($slot->applicantLists) < $slot->total_lists
+                )
                     <li>Lists:
                         <a href="{{ route('applicant_lists.create', ['slot' => $slot, 'event' => $event]) }}">Add a list</a>
                     </li>
