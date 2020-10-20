@@ -15,8 +15,9 @@
     @foreach($event->slots as $slot)     
     <ul>
         <li>Name: {{ $slot->name }}</li>
-        <li>Capacity: {{ $slot->slot_capacity }}</li>
-        <li>Remaining List Allocation: {{ $slot->slot_capacity }}</li>
+        <li>Total slot capacity: {{ $slot->slot_capacity }}</li>
+        <li>Lists allocated: {{ $slot->total_lists }}</li>
+        <li>Remaining slot allocation: {{ $slot->slot_capacity }}</li>
         
         @if($slot->slot_capacity > 0)
             @if (@isset($user->eventOrganiser))

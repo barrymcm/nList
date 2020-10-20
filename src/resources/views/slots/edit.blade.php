@@ -16,7 +16,13 @@
         <label>Lists</label>
         <select name="total_lists" id="">
             @for($i = 1; $i <= 15; $i++)
-                <option value="{{ $i }}">{{ $i }}</option>
+                @if (@isset($slot->total_lists) && $slot->total_lists == $i)
+                    <option selected="{{ $slot->total_lists }}" value="{{ $slot->total_lists }}">
+                        {{ $slot->total_lists }}
+                    </option>
+                @else
+                    <option value="{{ $i }}">{{ $i }}</option>
+                @endif
             @endfor
         </select>
         <label for="">Start Date</label>

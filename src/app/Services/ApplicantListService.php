@@ -4,6 +4,8 @@ namespace App\Services;
 
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use App\Models\Customer;
+use App\Models\Slot;
 use App\Repositories\SlotRepository;
 use App\Repositories\ApplicantRepository;
 use App\Repositories\ApplicantListRepository;
@@ -58,32 +60,28 @@ class ApplicantListService
         return false;
     }
 
-    private function isAvailability($slot, $totalAllocatedPlaces) : bool
+    private function isAvailability(\App\Models\Slot $slot, int $totalAllocatedPlaces) : bool
     {
-        $placesAvalable = ($slot->slot_capacity - $totalAllocatedPlaces);
+        $placesAvailable = ($slot->slot_capacity - $totalAllocatedPlaces);
 
-        if ($placesAvalable > 0) {
+        if ($placesAvailable > 0 || $slot->slot_capacity == $totalAllocatedPlaces) {
             return true;
         }
 
         return false;
     }
 
-    /**
-     * @param $customer
-     * @return Collection
-     */
-    public function getLists($customer): Collection
+    public function getLists(Customer $customer): Collection
     {
         $listDetails = [];
 
-        $applicantIds = $this->applicantRepository->findByUserId($customer->user_id)->pluck('id');
+        $applicantIds = $this->applicantRepository->findByCustomerId($customer->id)->pluck('id');
 
         if($applicantIds->isEmpty()) {
             return collect($listDetails);
         }
 
-        $listIds = $this->applicantApplicantListRepository->findListsBy($applicantIds)->pluck('applicant_list_id');
+        $listIds = $this->applicantApplicantListRepository->findListsBy($applicantIds->first())->pluck('applicant_list_id');
         $lists = $this->applicantListRepository->findCustomersLists($listIds->all());
 
         foreach ($lists as $list) {
