@@ -17,8 +17,8 @@
         <li>Name: {{ $slot->name }}</li>
         <li>Total slot capacity: {{ $slot->slot_capacity }}</li>
         <li>Lists allocated: {{ $slot->total_lists }}</li>
-        <li>Remaining slot allocation: {{ $slot->slot_capacity }}</li>
-        
+        <li>Remaining slot allocation: {{ $slot->availability }}</li>
+
         @if($slot->slot_capacity > 0)
             @if (@isset($user->eventOrganiser))
                 @if ($user->eventOrganiser->id === $event->event_organiser_id)
