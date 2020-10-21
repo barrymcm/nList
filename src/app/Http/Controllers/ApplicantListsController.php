@@ -44,6 +44,12 @@ class ApplicantListsController extends Controller
     {
         $attributes = $request->validated();
 
+        if (!Auth::user()->eventOrganiser) {
+            return redirect()->route('events.show', [
+                'event' => $attributes['event']
+            ])->with('notice', 'You dont have permission to change this event');  
+        }
+
         return view(
             'applicant_lists.create',
             [
@@ -63,20 +69,17 @@ class ApplicantListsController extends Controller
     {
         $attributes = $request->validated();
 
-        if (Gate::denies('create', Auth::user())) {
-
-            return view('applicant_lists.show', 
-                [
-                    'slot' => $attributes['slot_id'],
-                    'event' => $attributes['event_id'],
-                ]
-            );
+        if (!Auth::user()->eventOrganiser) {
+            return redirect()->route('events.show', [
+                'event' => $attributes['event_id']
+            ])->with('notice', 'You dont have permission to change this event');  
         }
 
         $this->applicantListService->tryCreateApplicantList($attributes);
 
         return redirect()->route('events.show',
             [
+                'slot' => $attributes['slot_id'],
                 'event' => $attributes['event_id'],
             ]
         );
@@ -90,12 +93,15 @@ class ApplicantListsController extends Controller
      */
     public function show(Request $request, $id)
     {
+        $user = Auth::user();
+
         $attribute = $request->validate(['event' => 'required|integer']);
         $list = ApplicantListRepository::find($id);
         $event = $this->eventRepository->find($attribute['event']);
-        $user = Auth::user();
 
-        return view('applicant_lists.show', ['list' => $list, 'event' => $event, 'user' => $user]);
+        return view('applicant_lists.show', [
+            'list' => $list, 'event' => $event, 'user' => $user]
+        );
     }
 
     /**
@@ -108,9 +114,15 @@ class ApplicantListsController extends Controller
         $event = $request->validate(['event' => 'required|integer']);
         $list = ApplicantListRepository::find($id);
 
-        return view('applicant_lists.edit', 
-            ['list' => $list, 'event' => $event['event']]
-        );
+        if (!Auth::user()->eventOrganiser) {
+            return redirect()->route('applicant_lists.show', [
+                'list' => $list, 'event' => $event
+            ])->with('notice', 'You dont have permission to change this event');  
+        }
+
+        return view('applicant_lists.edit', [
+            'list' => $list, 'event' => $event['event']
+        ]);
     }
 
     /**
@@ -130,10 +142,15 @@ class ApplicantListsController extends Controller
         $list = ApplicantListRepository::update($attributes, $id);
         $event = $this->eventRepository->find($request->event);
 
-        return redirect()->route('events.show', $event)->with(
-            'status',
-            'Applicant list updated'
-        );
+        if (!Auth::user()->eventOrganiser) {
+            return redirect()->route('applicant_lists.show', [
+                'list' => $list, 'event' => $event
+            ])->with('notice', 'You dont have permission to change this event');  
+        }
+
+        return redirect()->route('events.show', [
+            'event' => $event, 'user' => Auth::user()
+        ])->with('status', 'Applicant list updated');
     }
 
     /**
