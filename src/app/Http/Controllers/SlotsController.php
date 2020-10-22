@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\DeleteSlot;
 use App\Http\Requests\StoreSlot;
 use App\Http\Requests\UpdateSlot;
 use Facades\App\Repositories\SlotRepository;
@@ -93,20 +94,40 @@ class SlotsController extends Controller
     public function update(UpdateSlot $request, $id)
     {
         $attributes = $request->validated();
-        $slot = SlotRepository::update($attributes, $id);
-        $event = EventRepository::find($slot->event_id);
 
+        $event = EventRepository::find($attributes['event_id']);
+
+        if(! isset(Auth::user()->eventOrganiser->id) == $event->event_organiser_id) {
+            
+            return redirect()->route('events.show', [
+                'event' => $attributes['event_id'], 'user' => Auth::user()
+            ])->with('notice', 'You do not have permission to update a slot for this event');
+        }
+
+        $slot = SlotRepository::update($attributes, $id);
+    
         return redirect()->route('events.show', ['event' => $event]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy(DeleteSlot $request, int $id)
     {
-        //
+        $attributes = $request->validated();
+        $event = EventRepository::find($attributes['event']);
+
+        if(! isset(Auth::user()->eventOrganiser->id) == $event->event_organiser_id) {
+            
+            return redirect()->route('events.show', [
+                'event' => $attributes['event'], 'user' => Auth::user()
+            ])->with('notice', 'You do not have permission to delete a slot for this event');
+        }
+
+        $isDeleted = SlotRepository::softDelete($id);
+
+        if ($isDeleted) {
+            return redirect()->route('events.show', ['event' => $attributes['event']])->with('notice', 'Slot removed');
+        }
+
+        return redirect()->route('events.show', ['event' => $attributes['event']])->with('notice', 'Slot was not removed');
+        
     }
 }

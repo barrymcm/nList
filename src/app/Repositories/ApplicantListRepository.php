@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Slot;
 use App\Models\ApplicantList;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -82,11 +83,10 @@ class ApplicantListRepository implements RepositoryInterface
     {
     }
 
-    /** select * from applicant_lists where slot_id = */
-    public function countListsInSlot($slot) : int
+    public function countListsInSlot(int $id) : int
     {
         try {
-            return $this->applicantListModel::where('slot_id', $slot->id)->count();
+            return $this->applicantListModel::where('slot_id', $id)->count();
         } catch (ModelNotFoundException $e) {
             return $e->getMessage();
         }

@@ -64,6 +64,13 @@
                 @else
                     <a href="{{ route('slots.edit', ['slot' => $slot->id, 'event' => $event->id])}}">Edit slot details</a>
                 @endif
+                    <form action="{{ route('slots.destroy', [$slot, 'event' => $event]) }}" method="POST">
+                        @csrf
+                        {{ method_field('DELETE') }}
+                        <input type="hidden" name="slot" value="{{ $slot->id }}">
+                        <input type="hidden" name="event" value="{{ $event->id }}">
+                        <input type="submit" name="submit" value="Delete Slot">
+                    </form>
             @endif
         @endif
         <br>

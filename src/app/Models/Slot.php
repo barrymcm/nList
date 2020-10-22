@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Slot extends Model
 {
+    use SoftDeletes;
+
     public $attributes = ['availability'];
     protected $dates = ['start_date', 'end_date', 'created_at'];
     protected $fillable = [
