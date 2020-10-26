@@ -12,6 +12,13 @@
         <li>Event Slots: {{ $event->total_slots }}</li>
         <br>
     </ul>
+
+    @if(session('message'))
+        <div class="alert alert-message">
+            <h3>{{ session('message') }}</h3>
+        </div>
+    @endif
+
     @foreach($event->slots as $slot)     
     <ul>
         <li>Name: {{ $slot->name }}</li>
@@ -49,6 +56,7 @@
                     </form>
                     @endif
                 @endif
+
 
                 </li>
             @endforeach

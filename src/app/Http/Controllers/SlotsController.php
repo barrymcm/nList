@@ -8,6 +8,7 @@ use App\Http\Requests\StoreSlot;
 use App\Http\Requests\UpdateSlot;
 use Facades\App\Repositories\SlotRepository;
 use Facades\App\Repositories\EventRepository;
+use Facades\App\Services\SlotService;
 use Illuminate\Support\Facades\Auth;
 
 class SlotsController extends Controller
@@ -113,21 +114,28 @@ class SlotsController extends Controller
     {
         $attributes = $request->validated();
         $event = EventRepository::find($attributes['event']);
+        session()->forget(['message']);
 
-        if(! isset(Auth::user()->eventOrganiser->id) == $event->event_organiser_id) {
+        if (! isset(Auth::user()->eventOrganiser->id) 
+            || Auth::user()->eventOrganiser->id != $event->event_organiser_id
+        ) {
             
             return redirect()->route('events.show', [
-                'event' => $attributes['event'], 'user' => Auth::user()
+                'event' => $event, 'user' => Auth::user()
             ])->with('notice', 'You do not have permission to delete a slot for this event');
         }
 
-        $isDeleted = SlotRepository::softDelete($id);
+        $isDeleted = SlotService::deleteSlot($id);
 
         if ($isDeleted) {
-            return redirect()->route('events.show', ['event' => $attributes['event']])->with('notice', 'Slot removed');
+            session()->flash('message', 'Slot was removed');
+
+            return redirect()->route('events.show', ['event' => $event])->with('status', 'Slot removed');
         }
 
-        return redirect()->route('events.show', ['event' => $attributes['event']])->with('notice', 'Slot was not removed');
+        session()->flash('message', 'Slot was not removed. You must cancel the lists before removing the slot');
+
+        return redirect()->route('events.show', ['event' => $event]);
         
     }
 }

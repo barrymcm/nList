@@ -96,12 +96,6 @@ class SlotRepository implements RepositoryInterface
     public function softDelete(int $id)
     {
         try {           
-            $lists = ApplicantListRepository::countListsInSlot($id);
-
-            if ($lists > 0) {
-                return false;
-            }
-       
             DB::beginTransaction();
             $result = $this->slotModel->destroy($id);
             DB::commit();
@@ -111,7 +105,7 @@ class SlotRepository implements RepositoryInterface
             Log::error($e->getMessage());
             DB::rollBack();
             
-            return;
+            return null;
         }
     }
 

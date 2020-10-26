@@ -4,7 +4,9 @@ namespace App\Repositories;
 
 use App\Models\Slot;
 use App\Models\ApplicantList;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ApplicantListRepository implements RepositoryInterface
@@ -27,6 +29,17 @@ class ApplicantListRepository implements RepositoryInterface
             return $this->applicantListModel::find($id);
         } catch (ModelNotFoundException $e) {
             return false;
+        }
+    }
+
+    public function findSlotLists(int $id) : ?Collection
+    {
+        try {
+            return $this->applicantListModel::where('slot_id', $id)->get();
+        } catch(ModelNotFoundException $e) {
+            Log::error($e->getMessage());
+
+            return null;
         }
     }
 
@@ -65,7 +78,7 @@ class ApplicantListRepository implements RepositoryInterface
         }
     }
 
-    public function softDelete(int $id)
+    public function softDelete(int $id): bool
     {
         try {
             DB::beginTransaction();
@@ -76,6 +89,8 @@ class ApplicantListRepository implements RepositoryInterface
         } catch (\PDOException $e) {
             Log::error($e->getMessage());
             DB::rollBack();
+
+            return false;
         }
     }
 

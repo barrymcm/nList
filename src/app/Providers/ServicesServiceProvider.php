@@ -62,12 +62,19 @@ class ServicesServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(EventService::class, function ($app) {
-            return new EventService(new EventRepository($app->make(Event::class)));
+            return new EventService(new EventRepository(
+                $app->make(Event::class)));
         });
 
         $this->app->bind(CustomerService::class, function ($app) {
             return new CustomerService(
                 new CustomerRepository($app->make(Customer::class), $app->make(User::class))
+            );
+        });
+
+        $this->app->bind(SlotService::class, function ($app) {
+            return new SlotService(
+                new SlotRepository($app->make(Slot::class))
             );
         });
     }
