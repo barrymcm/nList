@@ -4,22 +4,31 @@ namespace App\Repositories;
 
 use App\Models\ApplicantApplicantList;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Collection;
 
 class ApplicantApplicantListRepository implements RepositoryInterface
 {
     private $applicantList;
 
-    public function __construct(ApplicantApplicantList $applicantList)
+    public function __construct(ApplicantApplicantList $applicantApplicantList)
     {
-        $this->applicantList = $applicantList;
+        $this->applicantApplicantList = $applicantApplicantList;
     }
 
     public function all()
     {
     }
 
-    public function find(int $ids)
+    public function find(int $list): ?Collection
     {
+        try {
+            return ApplicantApplicantList::where('applicant_list_id', $list)->get();
+        } catch (ModelNotFoundException $e) {
+            Log::error($e->getMessage());
+
+            return null;
+        }
     }
 
     public function findBy(int $applicantListId, int $applicantIds): bool

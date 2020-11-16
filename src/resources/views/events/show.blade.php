@@ -47,13 +47,15 @@
                 
                 @if (@isset($user->eventOrganiser))
                     @if ($user->eventOrganiser->id === $event->event_organiser_id)
+                    <div>
                         <a href="{{ route('applicant_lists.edit', [$list, 'event' => $event]) }}">edit</a>
 
                         <form action="{{ route('applicant_lists.destroy', [$list, 'event' => $event]) }}" method="post">
                             @csrf
                             {{ method_field('DELETE') }}
-                        <input type="submit" name="submit" value="Delete">
-                    </form>
+                            <input type="submit" name="submit" value="Cancel">
+                        </form>
+                    </div>
                     @endif
                 @endif
 
@@ -61,24 +63,27 @@
                 </li>
             @endforeach
         </ol>
-
+        <br><br>
         <li>Start Date: {{ $slot->start_date }}</li>
         <li>End Date: {{ $slot->end_date }}</li>
+        <br>
         
         @if (@isset($user->eventOrganiser))
             @if ($user->eventOrganiser->id === $event->event_organiser_id)
                 @if(@empty($slot->name))
-                    <a href="{{ route('slots.edit', ['slot' => $slot->id, 'event' => $event->id])}}">Add slot details</a>
+                    <a href="{{ route('slots.edit', ['slot' => $slot->id, 'event' => $event->id])}}">Add slot details</a><br>
                 @else
-                    <a href="{{ route('slots.edit', ['slot' => $slot->id, 'event' => $event->id])}}">Edit slot details</a>
+                    <a href="{{ route('slots.edit', ['slot' => $slot->id, 'event' => $event->id])}}">Edit slot details</a><br>
                 @endif
+                    <br>
                     <form action="{{ route('slots.destroy', [$slot, 'event' => $event]) }}" method="POST">
                         @csrf
                         {{ method_field('DELETE') }}
                         <input type="hidden" name="slot" value="{{ $slot->id }}">
                         <input type="hidden" name="event" value="{{ $event->id }}">
-                        <input type="submit" name="submit" value="Delete Slot">
+                        <input type="submit" name="submit" value="Cancel Slot">
                     </form>
+                    <br>
             @endif
         @endif
         <br>

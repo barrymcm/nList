@@ -118,4 +118,15 @@ class ApplicantListService
 
         return 'N/A';
     }
+
+    public function hasApplicants(int $listId) : bool
+    {
+        $list = $this->applicantListRepository->find($listId);   
+
+        if ($list->applicants->count() > 0) {
+            return true;
+        }
+
+        return false;
+    }
 }

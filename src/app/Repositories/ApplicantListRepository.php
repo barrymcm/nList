@@ -28,7 +28,9 @@ class ApplicantListRepository implements RepositoryInterface
         try {
             return $this->applicantListModel::find($id);
         } catch (ModelNotFoundException $e) {
-            return false;
+            Log::error($e->getMessage());
+
+            return null;
         }
     }
 
@@ -48,7 +50,9 @@ class ApplicantListRepository implements RepositoryInterface
         try {
             return $this->applicantListModel::whereIn('id', $listIds)->get();
         } catch (ModelNotFoundException $e) {
-            return false;
+            Log::error($e->getMessage());
+
+            return null;
         }
     }
 

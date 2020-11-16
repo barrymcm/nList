@@ -91,7 +91,7 @@ class ApplicantListsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, int $id)
     {
         $user = Auth::user();
 
@@ -100,7 +100,10 @@ class ApplicantListsController extends Controller
         $event = $this->eventRepository->find($attribute['event']);
 
         return view('applicant_lists.show', [
-            'list' => $list, 'event' => $event, 'user' => $user]
+                'list' => $list, 
+                'event' => $event, 
+                'user' => $user
+            ]
         );
     }
 
@@ -109,7 +112,7 @@ class ApplicantListsController extends Controller
      *
      * @param  int  $id
      */
-    public function edit(Request $request, $id)
+    public function edit(Request $request, int $id)
     {
         $event = $request->validate(['event' => 'required|integer']);
         $list = ApplicantListRepository::find($id);
@@ -131,7 +134,7 @@ class ApplicantListsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         $attributes = $request->validate([
             'slot_id' => 'required|integer',
@@ -154,18 +157,42 @@ class ApplicantListsController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Soft delete the specified list.
      *
      * @param  int  $id
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id)
     {
-        $event = $request->validate(['event' => 'required|integer']);
-        ApplicantListRepository::softDelete($id);
+        $attributes = $request->validate([
+            'event' => 'required|integer',
+        ]);
 
-        return redirect()->route('events.show', $event)->with(
-            'status',
-            'Applicant list removed'
-        );
+        $list = ApplicantListRepository::find($id);
+        $event = $this->eventRepository->find($attributes['event']);
+        $url = route('cancel.list', ['list' => $list, 'event' => $event]);
+
+        // Authorise user action
+        $user = Auth::user();
+
+
+        if ($this->applicantListService->hasApplicants($id)) {
+            
+            return redirect()->route('applicant_lists.show', [
+                $list, 'event' => $event
+            ])
+                ->with(
+                    'cancel',
+                    'Applicants will be automatically notified of the cancellation! 
+                    <a href="'. $url .'">Confirm cancellation</a>'
+            );
+        }
+
+        if (ApplicantListRepository::softDelete($id)) {
+            $message = "($list->name) list canceled";
+        } else {
+            $message = "Oops!! something went wrong. The ($list->name) list could not be canceled, please notify customer service";
+        }
+
+        return redirect()->route('events.show', $event)->with('message', $message);
     }
 }

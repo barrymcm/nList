@@ -130,10 +130,10 @@ class SlotsController extends Controller
         if ($isDeleted) {
             session()->flash('message', 'Slot was removed');
 
-            return redirect()->route('events.show', ['event' => $event])->with('status', 'Slot removed');
+            return redirect()->route('events.show', ['event' => $event])->with('status', 'Slot cancelled');
         }
 
-        session()->flash('message', 'Slot was not removed. You must cancel the lists before removing the slot');
+        session()->flash('message', 'Slot was not cancelled. You must cancel the lists before removing the slot');
 
         return redirect()->route('events.show', ['event' => $event]);
         

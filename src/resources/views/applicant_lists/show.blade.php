@@ -1,7 +1,13 @@
 @extends('layouts.app')
 
 @section('title', 'Listing')
+
   @section('content')
+    @if(session()->has('cancel'))
+        <p class="alert-info">{!! session()->get('cancel') !!}</p>
+        
+        <br>
+    @endif  
     <table>
         <head>
             <tr>
@@ -30,9 +36,6 @@
                 <td>{{ $applicant->first_name }} {{ $applicant->last_name }}</td>
                 <td>{{ $applicant->created_at->format('l jS \\of F Y') }}</td>
                 <td>{{ $applicant->created_at->format('h:i:s A') }}</td>
-
-
-                
                     <!-- 
                         if the user is a customer check their id and make sure they can only remove themselves from the list.
 
@@ -44,14 +47,16 @@
                                 <a href="{{ route('applicants.show', [ $applicant, 'event' => $event, 'list' => $list ]) }}">Details</a>
                             </td>
 
-                            <form action="{{ route('applicants.destroy', $applicant) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
-                                <input type="hidden" name="event" value="{{ $event->id }}">
-                                <input type="hidden" name="list_id" value="{{ $list->id }}">
-                                <input type="submit" value="Delete">
-                            </form>
+                            <td>
+                                <form action="{{ route('applicants.destroy', $applicant) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
+                                    <input type="hidden" name="event" value="{{ $event->id }}">
+                                    <input type="hidden" name="list_id" value="{{ $list->id }}">
+                                    <input type="submit" value="Delete">
+                                </form>
+                            </td>
                         @endif
                     @endif
 
@@ -62,14 +67,16 @@
                                 <a href="{{ route('applicants.show', [ $applicant, 'event' => $event, 'list' => $list ]) }}">Details</a>
                             </td>
 
-                            <form action="{{ route('applicants.destroy', $applicant) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
-                                <input type="hidden" name="event" value="{{ $event->id }}">
-                                <input type="hidden" name="list_id" value="{{ $list->id }}">
-                                <input type="submit" value="Delete">
-                            </form>
+                            <td>
+                                <form action="{{ route('applicants.destroy', $applicant) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
+                                    <input type="hidden" name="event" value="{{ $event->id }}">
+                                    <input type="hidden" name="list_id" value="{{ $list->id }}">
+                                    <input type="submit" value="Delete">
+                                </form>
+                            </td>
                         @endif
                     @endif
                 </td>
@@ -120,8 +127,8 @@
                 <form action="{{ route('applicant_lists.destroy', $list->id) }}" method="POST">
                     @csrf
                     @method('DELETE')
-                    <input type="hidden" name="event" value="{{ $event }}">
-                    <input type="submit" name="submit" value="Delete List">
+                    <input type="hidden" name="event" value="{{ $event->id }}">
+                    <input type="submit" name="submit" value="Cancel List">
                 </form>
             @endif
             <br>

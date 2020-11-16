@@ -30,7 +30,7 @@ class ApplicantRepository implements RepositoryInterface
     public function find(int $applicantId)
     {
         try {
-            $applicant = $this->applicantModel::find($applicantId);
+            $applicant = $this->applicantModel::findOrFail($applicantId);
 
             return $applicant;
         } catch (ModelNotFoundException $e) {

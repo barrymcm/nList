@@ -77,5 +77,14 @@ class ServicesServiceProvider extends ServiceProvider
                 new SlotRepository($app->make(Slot::class))
             );
         });
+
+        $this->app->bind(CancellationService::class, function ($app) {
+            return new CancellationService(
+                new ApplicantApplicantListRepository(
+                    $app->make(ApplicantApplicantList::class),
+                    $app->make(Applicant::class)
+                )
+            );
+        });
     }
 }
