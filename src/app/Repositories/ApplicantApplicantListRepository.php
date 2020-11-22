@@ -23,7 +23,7 @@ class ApplicantApplicantListRepository implements RepositoryInterface
     public function find(int $list): ?Collection
     {
         try {
-            return ApplicantApplicantList::where('applicant_list_id', $list)->get();
+            return $this->applicantApplicantList::where('applicant_list_id', $list)->get();
         } catch (ModelNotFoundException $e) {
             Log::error($e->getMessage());
 
@@ -34,7 +34,7 @@ class ApplicantApplicantListRepository implements RepositoryInterface
     public function findBy(int $applicantListId, int $applicantIds): bool
     {
         try {
-            return ApplicantApplicantList::where('applicant_list_id', $applicantListId)
+            return $this->applicantApplicantList::where('applicant_list_id', $applicantListId)
                 ->whereIn('applicant_id', $applicantIds)->value('applicant_id');
         } catch (ModelNotFoundException $e) {
             return false;
@@ -49,7 +49,7 @@ class ApplicantApplicantListRepository implements RepositoryInterface
     public function findListsBy(int $applicantId)
     {
         try {
-            return ApplicantApplicantList::where('applicant_id', $applicantId)->get();
+            return $this->applicantApplicantList::where('applicant_id', $applicantId)->get();
         } catch (ModelNotFoundException $e) {
             return false;
         }

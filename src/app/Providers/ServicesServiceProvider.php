@@ -24,21 +24,11 @@ use App\Repositories\UserRepository;
 
 class ServicesServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap services.
-     *
-     * @return void
-     */
     public function boot()
     {
-        //
+
     }
 
-    /**
-     * Register services.
-     *
-     * @return void
-     */
     public function register()
     {
         $this->app->bind(ApplicantListService::class, function ($app) {
@@ -53,11 +43,9 @@ class ServicesServiceProvider extends ServiceProvider
         $this->app->bind(ApplicantService::class, function ($app) {
             return new ApplicantService(
                 new ApplicantRepository($app->make(Applicant::class)),
-                new CustomerRepository(
-                    $app->make(Customer::class), 
-                    $app->make(User::class)
-                ),
-                new UserRepository($app->make(User::class))
+                new CustomerRepository($app->make(Customer::class), $app->make(User::class)),
+                new UserRepository($app->make(User::class)),
+                new ApplicantApplicantListRepository($app->make(ApplicantApplicantList::class))
             );
         });
 
@@ -80,10 +68,8 @@ class ServicesServiceProvider extends ServiceProvider
 
         $this->app->bind(CancellationService::class, function ($app) {
             return new CancellationService(
-                new ApplicantApplicantListRepository(
-                    $app->make(ApplicantApplicantList::class),
-                    $app->make(Applicant::class)
-                )
+                new ApplicantApplicantListRepository($app->make(ApplicantApplicantList::class)),
+                new ApplicantRepository($app->make(Applicant::class))
             );
         });
     }

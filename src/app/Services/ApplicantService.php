@@ -3,13 +3,14 @@
 namespace App\Services;
 
 use App\Models\Role;
+use App\Models\Applicant;
 use App\Events\ApplicantAddedToList;
 use Illuminate\Foundation\Auth\User;
 use App\Repositories\UserRepository;
 use App\Repositories\ApplicantRepository;
 use App\Repositories\CustomerRepository;
+use App\Repositories\ApplicantApplicantListRepository;
 use Facades\App\Repositories\ApplicantListRepository;
-use Facades\App\Repositories\ApplicantApplicantListRepository;
 use Facades\App\Repositories\ApplicantContactDetailsRepository;
 
 /**
@@ -19,10 +20,9 @@ use Facades\App\Repositories\ApplicantContactDetailsRepository;
 class ApplicantService
 {
     private ApplicantRepository $applicantRepository;
-
     private CustomerRepository $customerRepository;
-
     private UserRepository $userRepository;
+    private ApplicantApplicantListRepository $applicantApplicantListRepository;
 
     /**
      * ApplicantService constructor.
@@ -31,12 +31,14 @@ class ApplicantService
     public function __construct(
         ApplicantRepository $applicantRepository,
         CustomerRepository $customerRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        ApplicantApplicantListRepository $applicantApplicantListRepository
     )
     {
         $this->applicantRepository = $applicantRepository;
         $this->customerRepository = $customerRepository;
         $this->userRepository = $userRepository;
+        $this->applicantApplicantListRepository = $applicantApplicantListRepository;
     }
 
     /**
@@ -44,7 +46,7 @@ class ApplicantService
      * @param User $user
      * @return bool|string
      */
-    public function tryAddApplicantToList($attributes, User $user)
+    public function tryAddApplicantToList(array $attributes, User $user) : ?Applicant
     {
         $applicantAttributes = $this->assignApplicantAttributes($attributes, $user);
         $listId = $attributes['list'];
@@ -60,12 +62,7 @@ class ApplicantService
         return false;
     }
 
-    /**
-     * @param $attributes
-     * @param User $user
-     * @return array
-     */
-    private function assignApplicantAttributes($attributes, User $user) : array
+    private function assignApplicantAttributes(array $attributes, User $user) : array
     {
         return [
             'user_id' => $user->id,
@@ -76,10 +73,6 @@ class ApplicantService
         ];
     }
 
-    /**
-     * @param int $listId
-     * @return bool
-     */
     public function isListFull(int $listId) : bool
     {
         $listCount = $this->applicantRepository->getListCount($listId);
@@ -92,20 +85,13 @@ class ApplicantService
         return false;
     }
 
-    /**
-     * @param $applicant
-     */
-    public function userAddedToListEvent($applicant)
+    public function userAddedToListEvent(Applicant $applicant) : void
     {
         $user = $this->userRepository->findById($applicant->customer_id); 
         event(new ApplicantAddedToList($applicant, $user));
     }
 
-    /**
-     * @param $user
-     * @return bool
-     */
-    public function hasCustomerAccount($user) : bool
+    public function hasCustomerAccount(User $user) : bool
     {
         $userRoleId = $user->role->role_id;
         $role = Role::find($userRoleId);
@@ -116,20 +102,23 @@ class ApplicantService
     public function isCustomerOnList(int $customerId, int $listId) : bool
     {
         $applicant = $this->applicantRepository->findByCustomerId($customerId);
+        $applicantAndListRecord = $this->applicantApplicantListRepository
+            ->findListsBy($applicant->first()->id);
 
-        if ($applicant->count() > 0) {
+        $applicantListId = $applicantAndListRecord->first()->applicant_list_id;
+        $applicantId = $applicantAndListRecord->first()->applicant_id;
+
+        if ($applicant->count() > 0 
+            && $applicantId === $applicant->first()->id
+            && $listId === $applicantListId
+        ) {
             return true;
         }
 
         return false;
     }
 
-    /**
-     * @param $applicantId
-     * @param $attributes
-     * @return array
-     */
-    public function assignApplicantContactDetails($applicantId, $attributes): array
+    public function assignApplicantContactDetails(int $applicantId, array $attributes): array
     {
         return [
             'applicant_id' => $applicantId,

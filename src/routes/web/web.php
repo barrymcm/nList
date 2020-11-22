@@ -42,3 +42,14 @@ Route::resources(['applicant_lists' => 'ApplicantListsController']);
 Route::resources(['applicants' => 'ApplicantsController']);
 Route::resources(['slots' => 'SlotsController']);
 Route::resources(['customers' => 'CustomersController']);
+
+Route::name('cancel')->group( function () {
+    Route::get('cancel/list', 'CancellationController@cancelList')
+        ->name('.list');
+
+    Route::get('cancel/slot', 'CancellationController@cancelSlot')
+        ->name('.slot');
+
+    Route::get('cancel/event', 'CancellationController@cancelEvent')
+        ->name('.event');
+});

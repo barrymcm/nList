@@ -17,6 +17,11 @@ class Applicant extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
     public function contactDetails()
     {
         return $this->hasOne(ApplicantContactDetails::class);

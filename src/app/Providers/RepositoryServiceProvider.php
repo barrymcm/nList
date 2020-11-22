@@ -8,18 +8,20 @@ use App\Models\Event;
 use App\Models\Customer;
 use App\Models\Applicant;
 use App\Models\EventOrganiser;
-use App\Repositories\SlotRepository;
-use App\Repositories\UserRepository;
-use App\Repositories\EventRepository;
+use App\Models\ApplicantList;
 use App\Models\ApplicantApplicantList;
 use App\Models\ApplicantContactDetails;
-use Illuminate\Support\ServiceProvider;
+use App\Repositories\EventRepository;
+use App\Repositories\UserRepository;
+use App\Repositories\SlotRepository;
 use App\Repositories\CustomerRepository;
 use App\Repositories\ApplicantRepository;
 use App\Repositories\RepositoryInterface;
 use App\Repositories\EventOrganiserRepository;
+use App\Repositories\ApplicantListRepository;
 use App\Repositories\ApplicantApplicantListRepository;
 use App\Repositories\ApplicantContactDetailsRepository;
+use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -40,6 +42,7 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind(RepositoryInterface::class, new ApplicantListRepository(new ApplicantList));
         $this->app->bind(RepositoryInterface::class, new ApplicantRepository(new Applicant));
         $this->app->bind(RepositoryInterface::class, new EventRepository(new Event));
         $this->app->bind(RepositoryInterface::class, new SlotRepository(new Slot));

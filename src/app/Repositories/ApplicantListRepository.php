@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Slot;
-use App\Models\ApplicantList;
+use App\Models\ApplicantList;;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -11,22 +11,22 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ApplicantListRepository implements RepositoryInterface
 {
-    private $applicantListModel;
+    private $applicantList;
 
-    public function __construct(ApplicantList $applicantListModel)
+    public function __construct(ApplicantList $applicantList)
     {
-        $this->applicantListModel = $applicantListModel;
+        $this->applicantList = $applicantList;
     }
 
     public function all()
     {
-        return $this->applicantListModel::all();
+        return $this->applicantList::all();
     }
 
-    public function find(int $id)
+    public function find(int $id) : ?ApplicantList
     {
         try {
-            return $this->applicantListModel::find($id);
+            return $this->applicantList::find($id);
         } catch (ModelNotFoundException $e) {
             Log::error($e->getMessage());
 
@@ -37,7 +37,7 @@ class ApplicantListRepository implements RepositoryInterface
     public function findSlotLists(int $id) : ?Collection
     {
         try {
-            return $this->applicantListModel::where('slot_id', $id)->get();
+            return $this->applicantList::where('slot_id', $id)->get();
         } catch(ModelNotFoundException $e) {
             Log::error($e->getMessage());
 
@@ -48,7 +48,7 @@ class ApplicantListRepository implements RepositoryInterface
     public function findCustomersLists(array $listIds)
     {
         try {
-            return $this->applicantListModel::whereIn('id', $listIds)->get();
+            return $this->applicantList::whereIn('id', $listIds)->get();
         } catch (ModelNotFoundException $e) {
             Log::error($e->getMessage());
 
@@ -59,7 +59,7 @@ class ApplicantListRepository implements RepositoryInterface
     public function create(array $list, int $id = null)
     {
         try {
-            return $this->applicantListModel::create($list);
+            return $this->applicantList::create($list);
         } catch (ModelNotFoundException $e) {
             return false;
         }
@@ -68,7 +68,7 @@ class ApplicantListRepository implements RepositoryInterface
     public function update(array $listAttributes, int $id)
     {
         try {
-            $list = $this->applicantListModel::find($id);
+            $list = $this->applicantList::find($id);
 
             $list->slot_id = $listAttributes['slot_id'];
             $list->name = $listAttributes['name'];
@@ -86,7 +86,7 @@ class ApplicantListRepository implements RepositoryInterface
     {
         try {
             DB::beginTransaction();
-            $result = $this->applicantListModel::destroy($id);
+            $result = $this->applicantList::destroy($id);
             DB::commit();
 
             return $result;
@@ -105,7 +105,7 @@ class ApplicantListRepository implements RepositoryInterface
     public function countListsInSlot(int $id) : int
     {
         try {
-            return $this->applicantListModel::where('slot_id', $id)->count();
+            return $this->applicantList::where('slot_id', $id)->count();
         } catch (ModelNotFoundException $e) {
             return $e->getMessage();
         }
