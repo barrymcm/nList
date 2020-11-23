@@ -6,7 +6,7 @@
 
     <h3>Organiser: {{ $event->organiser }}</h3>
     <ul>
-        <li>Name: {{ $event->name }}</li>
+        <li>Event Name: {{ $event->name }}</li>
         <li>Description: {{ $event->description }}</li>
         <li>Category: {{ $event->category->name }}</li>
         <li>Event Slots: {{ $event->total_slots }}</li>
@@ -21,53 +21,58 @@
 
     @foreach($event->slots as $slot)     
     <ul>
-        <li>Name: {{ $slot->name }}</li>
-        <li>Total slot capacity: {{ $slot->slot_capacity }}</li>
-        <li>Lists allocated: {{ $slot->total_lists }}</li>
-        <li>Remaining slot allocation: {{ $slot->availability }}</li>
+        <li>Slot Name: {{ $slot->name }}</li>
+        
+        @if ($slot->deleted_at != null) 
+            <li>Status: Canceled</li>
+        @else
+            <li>Status: Active</li>
+            <li>Total slot capacity: {{ $slot->slot_capacity }}</li>
+            <li>Lists allocated: {{ $slot->total_lists }}</li>
+            <li>Remaining slot allocation: {{ $slot->availability }}</li>
 
-        @if($slot->slot_capacity > 0)
-            @if (@isset($user->eventOrganiser))
-                @if (
-                    $user->eventOrganiser->id === $event->event_organiser_id
-                    && @count($slot->applicantLists) < $slot->total_lists
-                )
-                    <li>Lists:
-                        <a href="{{ route('applicant_lists.create', ['slot' => $slot, 'event' => $event]) }}">Add a list</a>
-                    </li>
-                @endif
-            @endif
-        @endif
-        <ol>
-            @foreach($slot->applicantLists as $list)
-                <li>
-
-                <a href="{{ route('applicant_lists.show', [$list, 'event' => $event]) }}">{{ $list->name }}</a>
-                &nbsp; : &nbsp; List Capacity : {{ $list->max_applicants }} {{--Remaining Places :  {{ $list->max_applicants - count($list->applicants) }}--}}
-                
+            @if($slot->slot_capacity > 0)
                 @if (@isset($user->eventOrganiser))
-                    @if ($user->eventOrganiser->id === $event->event_organiser_id)
-                    <div>
-                        <a href="{{ route('applicant_lists.edit', [$list, 'event' => $event]) }}">edit</a>
-
-                        <form action="{{ route('applicant_lists.destroy', [$list, 'event' => $event]) }}" method="post">
-                            @csrf
-                            {{ method_field('DELETE') }}
-                            <input type="submit" name="submit" value="Cancel">
-                        </form>
-                    </div>
+                    @if (
+                        $user->eventOrganiser->id === $event->event_organiser_id
+                        && @count($slot->applicantLists) < $slot->total_lists
+                    )
+                        <li>Lists:
+                            <a href="{{ route('applicant_lists.create', ['slot' => $slot, 'event' => $event]) }}">Add a list</a>
+                        </li>
                     @endif
                 @endif
+            @endif
+            <ol>
+                @foreach($slot->applicantLists as $list)
+                    <li>
 
+                    <a href="{{ route('applicant_lists.show', [$list, 'event' => $event]) }}">{{ $list->name }}</a>
+                    &nbsp; : &nbsp; List Capacity : {{ $list->max_applicants }} {{--Remaining Places :  {{ $list->max_applicants - count($list->applicants) }}--}}
+                    
+                    @if (@isset($user->eventOrganiser))
+                        @if ($user->eventOrganiser->id === $event->event_organiser_id)
+                        <div>
+                            <a href="{{ route('applicant_lists.edit', [$list, 'event' => $event]) }}">edit</a>
 
-                </li>
-            @endforeach
-        </ol>
-        <br><br>
-        <li>Start Date: {{ $slot->start_date }}</li>
-        <li>End Date: {{ $slot->end_date }}</li>
-        <br>
-        
+                            <form action="{{ route('applicant_lists.destroy', [$list, 'event' => $event]) }}" method="post">
+                                @csrf
+                                {{ method_field('DELETE') }}
+                                <input type="submit" name="submit" value="Cancel">
+                            </form>
+                        </div>
+                        @endif
+                    @endif
+
+                    </li>
+                @endforeach
+            </ol>
+            <br><br>
+            <li>Start Date: {{ $slot->start_date }}</li>
+            <li>End Date: {{ $slot->end_date }}</li>
+            <br>
+        @endif
+
         @if (@isset($user->eventOrganiser))
             @if ($user->eventOrganiser->id === $event->event_organiser_id)
                 @if(@empty($slot->name))

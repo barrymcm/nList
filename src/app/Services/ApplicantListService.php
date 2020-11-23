@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use App\Models\Customer;
 use App\Models\Slot;
+use App\Models\ApplicantList;
 use App\Repositories\SlotRepository;
 use App\Repositories\ApplicantRepository;
 use App\Repositories\ApplicantListRepository;
@@ -21,6 +22,7 @@ class ApplicantListService
     private const LIST_STATUS_PENDING = 'pending';
     private const LIST_STATUS_CURRENT = 'current';
     private const LIST_STATUS_EXPIRED = 'expired';
+    private const LIST_STATUS_CANCELED = 'canceled';
 
     public function __construct(
         ApplicantListRepository $applicantListRepository,
@@ -75,14 +77,9 @@ class ApplicantListService
     {
         $listDetails = [];
 
-        $applicantIds = $this->applicantRepository->findByCustomerId($customer->id)->pluck('id');
-
-        if($applicantIds->isEmpty()) {
-            return collect($listDetails);
-        }
-
-        $listIds = $this->applicantApplicantListRepository->findListsBy($applicantIds->first())->pluck('applicant_list_id');
-        $lists = $this->applicantListRepository->findCustomersLists($listIds->all());
+        $applicants = $this->applicantRepository->findByCustomerId($customer->id);
+        $listIds = $applicants->pluck('list_id')->unique()->values()->toArray();
+        $lists = $this->applicantListRepository->findCustomersLists($listIds);
 
         foreach ($lists as $list) {
             $listDetails[] = $this->serialize($list);
@@ -94,16 +91,23 @@ class ApplicantListService
     private function serialize($list)
     {
         return [
-            'listName' => $list->name,
-            'slotName' => $list->slot->name,
             'eventName' => $list->slot->event->name,
-            'startDate' => $list->slot->start_date->format('Y-m-d H:i:s'),
-            'status' => $this->getListStatus($list->slot->start_date->format('Y-m-d')),
+            'slotName' => $list->slot->name,
+            'listName' => $list->name,
+            'startDate' => $list->slot->start_date->format('Y-m-d'),
+            'endDate' => $list->slot->end_date->format('Y-m-d'),
+            'status' => $this->getListStatus($list),
         ];
     }
 
-    private function getListStatus($date): string
+    private function getListStatus(ApplicantList $list): string
     {
+        $date = $list->slot->start_date->format('Y-m-d');
+
+        if ($list->deleted_at != null) {
+            return self::LIST_STATUS_CANCELED;
+        }
+
         if ($date > Carbon::now()) {
             return self::LIST_STATUS_PENDING;
         }

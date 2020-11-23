@@ -60,9 +60,8 @@ class ApplicantRepository implements RepositoryInterface
     public function findByCustomerId(int $customerId): ?Collection
     {
         try {
-            return $this->applicantModel::where(
-                'customer_id', $customerId
-            )->get();
+            return $this->applicantModel::where('customer_id', $customerId)
+                ->withTrashed()->get();
         } catch (ModelNotFoundException $e) {
             logger($e->getMessage());
 

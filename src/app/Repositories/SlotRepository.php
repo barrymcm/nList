@@ -22,7 +22,7 @@ class SlotRepository implements RepositoryInterface
         return $this->slotModel::all();
     }
 
-    public function find(int $id): Slot
+    public function find(int $id): ?Slot
     {
         try {
             $slot = $this->slotModel::find($id);
@@ -30,14 +30,15 @@ class SlotRepository implements RepositoryInterface
 
             return $slot;
         } catch (ModelNotFoundException $e) {
-            return false;
+            Log::error($e->getMessage());
+            
+            return null;
         }
     }
 
     public function create(array $attributes, int $id = null)
     {
         try {
-
             DB::table('events')->where('id', $attributes['event_id'])
                 ->increment('total_slots');
 

@@ -48,7 +48,7 @@ class ApplicantListRepository implements RepositoryInterface
     public function findCustomersLists(array $listIds)
     {
         try {
-            return $this->applicantList::whereIn('id', $listIds)->get();
+            return $this->applicantList::whereIn('id', $listIds)->withTrashed()->get();
         } catch (ModelNotFoundException $e) {
             Log::error($e->getMessage());
 

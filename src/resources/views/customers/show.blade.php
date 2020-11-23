@@ -47,14 +47,16 @@
             <th>Slot</th>
             <th>List Name</th>
             <th>Start Date</th>
+            <th>End Date</th>
             <th>Status</th>
         </tr>
     @forelse($lists as $list)
         <tr>
-            <td>{{ $list['listName'] }} </td>
-            <td>{{ $list['slotName'] }}</td>
             <td>{{ $list['eventName'] }}</td>
+            <td>{{ $list['slotName'] }}</td>
+            <td>{{ $list['listName'] }} </td>
             <td>{{ $list['startDate'] }}</td>
+            <td>{{ $list['endDate'] }}</td>
             <td>{{ $list['status'] }}</td>
         </tr>
     @empty
