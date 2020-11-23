@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Services\ApplicantListService;
+use App\Services\ApplicantService;
 use App\Http\Requests\StoreApplicantList;
 use App\Http\Requests\CreateApplicantList;
 use Facades\App\Repositories\ApplicantListRepository;
@@ -15,14 +16,17 @@ class ApplicantListsController extends Controller
 {
     private ApplicantListService $applicantListService;
     private EventRepository $eventRepository;
+    private ApplicantService $applicantService;
 
     public function __construct(
         ApplicantListService $applicantListService,
-        EventRepository $eventRepository
+        EventRepository $eventRepository,
+        ApplicantService $applicantService
     )
     {
         $this->applicantListService = $applicantListService;
         $this->eventRepository = $eventRepository;
+        $this->applicantService = $applicantService;
     }
 
     /**
@@ -98,11 +102,13 @@ class ApplicantListsController extends Controller
         $attribute = $request->validate(['event' => 'required|integer']);
         $list = ApplicantListRepository::find($id);
         $event = $this->eventRepository->find($attribute['event']);
+        $isOnList = $this->applicantService->isCustomerOnList($user->customer->id, $list->id);
 
         return view('applicant_lists.show', [
                 'list' => $list, 
                 'event' => $event, 
-                'user' => $user
+                'user' => $user,
+                'isOnList' => $isOnList,
             ]
         );
     }

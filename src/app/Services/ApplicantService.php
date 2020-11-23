@@ -101,17 +101,9 @@ class ApplicantService
 
     public function isCustomerOnList(int $customerId, int $listId) : bool
     {
-        $applicant = $this->applicantRepository->findByCustomerId($customerId);
-        $applicantAndListRecord = $this->applicantApplicantListRepository
-            ->findListsBy($applicant->first()->id);
+        $applicant = $this->applicantRepository->findByCustomerAndListId($customerId, $listId);
 
-        $applicantListId = $applicantAndListRecord->first()->applicant_list_id;
-        $applicantId = $applicantAndListRecord->first()->applicant_id;
-
-        if ($applicant->count() > 0 
-            && $applicantId === $applicant->first()->id
-            && $listId === $applicantListId
-        ) {
+        if ($applicant->count() > 0) {
             return true;
         }
 

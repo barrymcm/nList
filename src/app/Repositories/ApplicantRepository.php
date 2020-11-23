@@ -69,6 +69,19 @@ class ApplicantRepository implements RepositoryInterface
         }
     }
 
+    public function findByCustomerAndListId(int $customerId, int $listId): ?Collection
+    {
+        try {
+            return $this->applicantModel::where('customer_id', $customerId)
+                ->where('list_id', $listId)
+                ->get();
+        } catch (ModelNotFoundException $e) {
+            logger($e->getMessage());
+
+            return null;
+        }
+    }
+
     public function create(array $attributes, int $list)
     {
         try {

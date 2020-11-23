@@ -103,7 +103,7 @@
     <br><br>
 
     @if (isset($user->customer))
-        @if (count($list->applicants) < $list->max_applicants)
+        @if (count($list->applicants) < $list->max_applicants && !$isOnList)
             <a href="{{ route('applicants.create', [ 'list' => $list, 'event' => $event]) }}">Add me!</a>
             
              <!-- customers adding another applicant to the list may not be a viable option, maybe this should only be done by organisers.
