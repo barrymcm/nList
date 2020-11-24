@@ -14,8 +14,12 @@
         <input type="number" name="slot_capacity" value="">
         <label for="">Start Date</label>
         <input type="date" name="start_date" value="">
+        <label for="">Start Time</label>
+        <input type="time" name="start_time" value="">
         <label for="">End Date</label>
         <input type="date" name="end_date" value="">
+        <label for="">End Time</label>
+        <input type="time" name="end_time" value="">
         <br>
         <input type="submit" value="submit">
     <br>

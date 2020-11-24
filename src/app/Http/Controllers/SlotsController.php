@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\DeleteSlot;
+use Illuminate\Http\Response;
 use App\Http\Requests\StoreSlot;
 use App\Http\Requests\UpdateSlot;
+use App\Http\Requests\DeleteSlot;
+use Illuminate\Support\Facades\Auth;
+use Facades\App\Services\SlotService;
 use Facades\App\Repositories\SlotRepository;
 use Facades\App\Repositories\EventRepository;
-use Facades\App\Services\SlotService;
-use Illuminate\Support\Facades\Auth;
 
 class SlotsController extends Controller
 {
@@ -53,6 +54,8 @@ class SlotsController extends Controller
     public function store(StoreSlot $request)
     {
         $attributes = $request->validated();
+        $attributes = SlotService::addTimes($attributes);
+
         SlotRepository::create($attributes);
 
         return redirect()->route('events.show', $attributes['event_id']);
@@ -77,7 +80,6 @@ class SlotsController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        /** @var @todo [validate the request] */
         $eventId = $request->get('event');
         $slot = SlotRepository::find($id);
         $event = EventRepository::find($eventId);
@@ -95,7 +97,6 @@ class SlotsController extends Controller
     public function update(UpdateSlot $request, $id)
     {
         $attributes = $request->validated();
-
         $event = EventRepository::find($attributes['event_id']);
 
         if(! isset(Auth::user()->eventOrganiser->id) == $event->event_organiser_id) {
@@ -135,7 +136,6 @@ class SlotsController extends Controller
 
         session()->flash('message', 'Slot was not cancelled. You must cancel the lists before removing the slot');
 
-        return redirect()->route('events.show', ['event' => $event]);
-        
+        return redirect()->route('events.show', ['event' => $event]);  
     }
 }

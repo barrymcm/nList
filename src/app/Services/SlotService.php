@@ -60,4 +60,14 @@ class SlotService
 
 		return true;
 	}
+
+	public function addTimes(array $attributes): array
+	{
+		$attributes['start_date'] = $attributes['start_date'] . ' ' . $attributes['start_time'];
+		$attributes['end_date'] =  $attributes['end_date'] . ' ' . $attributes['end_time'];
+
+		unset($attributes['start_time'], $attributes['end_time']);
+
+		return $attributes;
+	}
 }

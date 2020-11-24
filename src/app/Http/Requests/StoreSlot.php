@@ -28,7 +28,9 @@ class StoreSlot extends FormRequest
             'name' => 'string',
             'slot_capacity' => 'integer|required',
             'start_date' => 'date|after_or_equal:today',
+            'start_time' => 'required',
             'end_date' => 'date|after_or_equal:today',
+            'end_time' => 'required',
         ];
     }
 }
