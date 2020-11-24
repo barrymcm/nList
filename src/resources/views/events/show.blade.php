@@ -68,8 +68,27 @@
                 @endforeach
             </ol>
             <br><br>
-            <li>Start Date: {{ $slot->start_date }}</li>
-            <li>End Date: {{ $slot->end_date }}</li>
+            <li>Start Date: {{ 
+                $slot->start_date->englishDayOfWeek . ' ' . 
+                $slot->start_date->day . ' ' .
+                $slot->start_date->shortEnglishMonth . ' ' .
+                $slot->start_date->year
+            }}</li>
+            <li>Start Time: {{ 
+                $slot->start_date->hour . ':' . 
+                $slot->start_date->minute
+            }}</li>
+            <br>
+            <li>End Date: {{ 
+                $slot->end_date->englishDayOfWeek . ' ' . 
+                $slot->end_date->day . ' ' .
+                $slot->end_date->shortEnglishMonth . ' ' .
+                $slot->end_date->year
+            }}</li>
+            <li>End Time: {{ 
+                $slot->end_date->hour . ':' . 
+                $slot->end_date->minute
+            }}</li>
             <br>
         @endif
 
