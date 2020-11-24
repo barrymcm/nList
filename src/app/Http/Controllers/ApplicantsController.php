@@ -33,9 +33,7 @@ class ApplicantsController extends Controller
     }
 
     /**
-     * @todo Refactor to remove the need for all the if statments
-     *
-     * Show the form for creating a new resource.
+     * @todo - refactor ApplicantsController::create
      */
     public function create(Request $request)
     {
@@ -47,7 +45,7 @@ class ApplicantsController extends Controller
             return redirect()->route(
                 'applicant_lists.show', [
                     $list, 
-                    'event' => $event
+                    'event' => $event,
             ])->with('warning', 'Whoops .. looks like your not logged in!');
         }
 
@@ -108,7 +106,10 @@ class ApplicantsController extends Controller
             }
         }
 
-        return view('applicants.create', ['list' => $list, 'event' => $event]);
+        return view('applicants.create', [
+            'list' => $list, 
+            'event' => $event,
+        ]);
     }
 
     /**
