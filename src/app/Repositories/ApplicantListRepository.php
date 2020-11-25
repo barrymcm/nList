@@ -34,10 +34,10 @@ class ApplicantListRepository implements RepositoryInterface
         }
     }
 
-    public function findSlotLists(int $id) : ?Collection
+    public function findSlotLists(int $slotId) : ?Collection
     {
         try {
-            return $this->applicantList::where('slot_id', $id)->get();
+            return $this->applicantList::where('slot_id', $slotId)->get();
         } catch(ModelNotFoundException $e) {
             Log::error($e->getMessage());
 

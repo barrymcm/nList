@@ -79,30 +79,32 @@ class ApplicantListsController extends Controller
             ])->with('notice', 'You dont have permission to change this event');  
         }
 
-        $this->applicantListService->tryCreateApplicantList($attributes);
+        if (! $this->applicantListService->tryCreateApplicantList($attributes)) {
+            $message = 'The list was not created because you don\'t have enough places left in the slot';
+        } else {
+            $message = 'A new list was created';
+        }
 
         return redirect()->route('events.show',
             [
                 'slot' => $attributes['slot_id'],
                 'event' => $attributes['event_id'],
             ]
-        );
+        )->with('notice', $message);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show(Request $request, int $id)
     {
         $user = Auth::user();
+        $isOnList = false;
 
         $attribute = $request->validate(['event' => 'required|integer']);
         $list = ApplicantListRepository::find($id);
         $event = $this->eventRepository->find($attribute['event']);
-        $isOnList = $this->applicantService->isCustomerOnList($user->customer->id, $list->id);
+        
+        if ($user->customer) {
+            $isOnList = $this->applicantService->isCustomerOnList($user->customer->id, $list->id);
+        }
 
         return view('applicant_lists.show', [
                 'list' => $list, 

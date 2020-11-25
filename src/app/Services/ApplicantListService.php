@@ -36,7 +36,7 @@ class ApplicantListService
         $this->applicantRepository = $applicantRepository;
     }
 
-    public function tryCreateApplicantList(array $attributes)
+    public function tryCreateApplicantList(array $attributes) : ? ApplicantList
     {
         $maxApplicants = $attributes['max_applicants'];
         $slotId = $attributes['slot_id'];
@@ -44,16 +44,16 @@ class ApplicantListService
         $slot = $this->slotRepository->find($slotId);
 
         if (
-            ! $this->isListSizeWithinMaximumSlotCapacity($slot, $maxApplicants) ||
+            ! $this->isListSizeWithinSlotCapacity($slot, $maxApplicants) ||
             ! $this->isAvailability($slot, $maxApplicants)
         ) {
-            return false;
+            return null;
         }
 
         return $this->applicantListRepository->create($attributes);
     }
 
-    private function isListSizeWithinMaximumSlotCapacity($slot, $maxApplicants) : bool
+    private function isListSizeWithinSlotCapacity(Slot $slot, int $maxApplicants) : bool
     {
         if ($slot->slot_capacity >= $maxApplicants) {
             return true;
@@ -62,11 +62,18 @@ class ApplicantListService
         return false;
     }
 
-    private function isAvailability(\App\Models\Slot $slot, int $totalAllocatedPlaces) : bool
+    private function isAvailability(Slot $slot, int $maxApplicants) : bool
     {
-        $placesAvailable = ($slot->slot_capacity - $totalAllocatedPlaces);
+        $lists = $this->applicantListRepository->findSlotLists($slot->id);
+        $totalListPlaces = 0;
 
-        if ($placesAvailable > 0 || $slot->slot_capacity == $totalAllocatedPlaces) {
+        $lists->each(function ($list) use (&$totalListPlaces) {
+            $totalListPlaces =+ $list->max_applicants;
+        });
+
+        $placesAvailable = ($slot->slot_capacity - ($totalListPlaces + $maxApplicants));
+
+        if ($placesAvailable > 0) {
             return true;
         }
 
