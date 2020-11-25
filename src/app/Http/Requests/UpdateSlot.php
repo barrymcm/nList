@@ -31,6 +31,8 @@ class UpdateSlot extends FormRequest
             'total_lists' => 'integer|min:0',
             'start_date' => 'date|after:today',
             'end_date' => 'date|after:today',
+            'start_time' => 'required',
+            'end_time' => 'required',
         ];
     }
 }

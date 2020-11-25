@@ -105,7 +105,8 @@ class SlotsController extends Controller
                 'event' => $attributes['event_id'], 'user' => Auth::user()
             ])->with('notice', 'You do not have permission to update a slot for this event');
         }
-
+        
+        $attributes = SlotService::addTimes($attributes);
         $slot = SlotRepository::update($attributes, $id);
     
         return redirect()->route('events.show', ['event' => $event]);

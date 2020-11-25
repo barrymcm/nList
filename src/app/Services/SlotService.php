@@ -63,8 +63,12 @@ class SlotService
 
 	public function addTimes(array $attributes): array
 	{
-		$attributes['start_date'] = $attributes['start_date'] . ' ' . $attributes['start_time'];
-		$attributes['end_date'] =  $attributes['end_date'] . ' ' . $attributes['end_time'];
+		$seconds = ':00';
+
+		$attributes['start_date'] = $attributes['start_date'] . ' ' . 
+			$attributes['start_time'] . $seconds;
+		$attributes['end_date'] =  $attributes['end_date'] . ' ' . 
+			$attributes['end_time'] . $seconds;
 
 		unset($attributes['start_time'], $attributes['end_time']);
 
