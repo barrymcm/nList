@@ -5,7 +5,6 @@
   @section('content')
     @if(session()->has('cancel'))
         <p class="alert-info">{!! session()->get('cancel') !!}</p>
-        
         <br>
     @endif  
     <table>

@@ -29,15 +29,15 @@
         <input type="date" name="start_date" value="{{ $slot->start_date ? $slot->start_date->format('Y-m-d') : '' }}">
         
         <label for="">Start Time</label>
-        <input type="time" name="start_time" value="{{ 
-            $slot->start_date->hour . ':' . $slot->start_date->minute 
+        <input type="time" name="start_time" value="{{ ($slot->start_date != NULL)?
+            $slot->start_date->hour . ':' . $slot->start_date->minute : ''
         }}">
         <label for="">End Date</label>
         <input type="date" name="end_date" value="{{ $slot->end_date ? $slot->end_date->format('Y-m-d') : '' }}"> 
         
         <label for="">End Time</label>
-        <input type="time" name="end_time" value="{{ 
-            $slot->end_date->hour . ':' .  $slot->end_date->minute
+        <input type="time" name="end_time" value="{{ ($slot->end_date != NULL)?
+            $slot->end_date->hour . ':' .  $slot->end_date->minute : ''
         }}">
         <br>
         <input type="submit" value="submit">

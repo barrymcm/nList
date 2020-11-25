@@ -13,9 +13,10 @@
         <br>
     </ul>
 
-    @if(session('message'))
+    @if(session()->has('message') || session()->has('notice'))
         <div class="alert alert-message">
             <h3>{{ session('message') }}</h3>
+            <h3>{{ session('notice') }}</h3>
         </div>
     @endif
 
@@ -68,16 +69,19 @@
                 @endforeach
             </ol>
             <br><br>
+            @if ($slot->start_date != NULL && $slot->end_date != NULL)
             <li>Start Date: {{ 
                 $slot->start_date->englishDayOfWeek . ' ' . 
                 $slot->start_date->day . ' ' .
                 $slot->start_date->shortEnglishMonth . ' ' .
                 $slot->start_date->year
             }}</li>
+            
             <li>Start Time: {{ 
                 $slot->start_date->hour . ':' . 
                 $slot->start_date->minute
             }}</li>
+            
             <br>
             <li>End Date: {{ 
                 $slot->end_date->englishDayOfWeek . ' ' . 
@@ -85,10 +89,12 @@
                 $slot->end_date->shortEnglishMonth . ' ' .
                 $slot->end_date->year
             }}</li>
+            
             <li>End Time: {{ 
                 $slot->end_date->hour . ':' . 
                 $slot->end_date->minute
             }}</li>
+            @endif
             <br>
         @endif
 
