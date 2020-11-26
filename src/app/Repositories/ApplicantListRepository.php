@@ -61,6 +61,8 @@ class ApplicantListRepository implements RepositoryInterface
         try {
             return $this->applicantList::create($list);
         } catch (ModelNotFoundException $e) {
+            Log::error($e->getMessage());
+
             return false;
         }
     }
@@ -78,7 +80,9 @@ class ApplicantListRepository implements RepositoryInterface
 
             return $list;
         } catch (ModelNotFoundException $e) {
-            return $e->getMessage();
+            Log::error($e->getMessage());
+
+            return null;
         }
     }
 
@@ -107,6 +111,8 @@ class ApplicantListRepository implements RepositoryInterface
         try {
             return $this->applicantList::where('slot_id', $id)->count();
         } catch (ModelNotFoundException $e) {
+            Log::error($e->getMessage());
+
             return $e->getMessage();
         }
     }
@@ -114,14 +120,14 @@ class ApplicantListRepository implements RepositoryInterface
     public function getAvailableSlotPlaces(int $slotId)
     {
         try {
-
             /** @noinspection SqlDialectInspection */
             $results = DB::select(
                 'SELECT s.slot_capacity - SUM(al.max_applicants) AS availability 
                         FROM slots s 
                           JOIN applicant_lists al ON (s.id = al.slot_id) 
-                        WHERE deleted_at IS NULL 
-                          AND s.id = ? 
+                        WHERE s.deleted_at IS NULL 
+                          AND al.deleted_at IS NULL 
+                          AND s.id = ?
                         GROUP BY s.id',
                 [$slotId]
             );
@@ -130,6 +136,8 @@ class ApplicantListRepository implements RepositoryInterface
                 return $result->availability;
             }
         } catch (\PDOException $e) {
+            Log::error($e->getMessage());
+
             return $e->getMessage();
         }
     }

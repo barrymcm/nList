@@ -70,6 +70,8 @@ class SlotsController extends Controller
     public function show($id)
     {
         $slot = SlotRepository::find($id);
+
+        return redirect()->route('home');
     }
 
     /**

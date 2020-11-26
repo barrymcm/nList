@@ -22,14 +22,15 @@ class SlotRepository implements RepositoryInterface
         return $this->slotModel::all();
     }
 
-    public function find(int $id): ?Slot
+    public function find(int $id) : ?Slot
     {
         try {
-            $slot = $this->slotModel::find($id);
-            $slot->availability = ApplicantListRepository::getAvailableSlotPlaces($id);
+            $slot = $this->slotModel::findOrFail($id);
+            $slot->availability = ApplicantListRepository::getAvailableSlotPlaces($id);   
 
-            return $slot;
-        } catch (ModelNotFoundException $e) {
+            return $slot; 
+
+        } catch (Throwable|ModelNotFoundException $e) {
             Log::error($e->getMessage());
             
             return null;
