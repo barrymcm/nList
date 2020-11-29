@@ -96,7 +96,7 @@ class CustomersController extends Controller
             );
         }
 
-        return redirect()->route('customers.edit', ['customer' => $id])
+        return redirect()->route('customers.create', ['userId' => $customer->user_id])
             ->with('status', 'It looks like you need to add your details!');
     }
 

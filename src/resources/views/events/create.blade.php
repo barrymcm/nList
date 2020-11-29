@@ -26,5 +26,7 @@
         <input type="submit" value="submit">
     </form>
     <br>
-    <div><a href="{{ route('events.index') }}">Back to events</a></div>
+    <div>
+        <a href="{{ route('events.index') }}">Back to events</a>
+    </div>
 @endsection

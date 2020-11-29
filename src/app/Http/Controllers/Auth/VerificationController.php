@@ -46,7 +46,6 @@ class VerificationController extends Controller
         if ($user->role->role_id === $roles['event.organiser']) {
             return $user->eventOrganiser->name != null ? '/event_organisers/' . $user->eventOrganiser->id : $this->redirectTo;
         }
-
     }
 
     /**

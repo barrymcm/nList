@@ -52,7 +52,10 @@ class UserRepository implements RepositoryInterface
             if ($attributes['type'] == 'customer') {
                 
                 DB::table('customers')->insert(
-                    ['user_id' => $user->id]
+                    [
+                        'user_id' => $user->id,
+                        'created_at' => Carbon::createFromFormat('Y-m-d H:i:s', now()),
+                    ]
                 );
                 
                 DB::table('user_role')->insert(
@@ -66,7 +69,10 @@ class UserRepository implements RepositoryInterface
 
             if ($attributes['type'] == 'organiser') {
                 DB::table('event_organisers')->insert(
-                    ['user_id' => $user->id, 'name' => $user->name]
+                    [
+                        'user_id' => $user->id, 
+                        'name' => $user->name,
+                    ]
                 );
                 
                 DB::table('user_role')->insert([

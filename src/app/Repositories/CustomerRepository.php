@@ -51,7 +51,6 @@ class CustomerRepository implements RepositoryInterface
                 'last_name' => $attributes['last_name'],
                 'dob' => $attributes['dob'],
                 'gender' => $attributes['gender'],
-                'created_at' => Carbon::createFromFormat('Y-m-d H:i:s', now())
             ]);
 
             $contactDetails = [
@@ -65,6 +64,7 @@ class CustomerRepository implements RepositoryInterface
                 'county' => $attributes['county'],
                 'post_code' => $attributes['post_code'],
                 'country' => $attributes['country'],
+                'created_at' => Carbon::createFromFormat('Y-m-d H:i:s', now()),
             ];
 
             DB::table('customer_contact_details')->insert($contactDetails);
@@ -109,6 +109,7 @@ class CustomerRepository implements RepositoryInterface
                 'county' => $attributes['county'],
                 'post_code' => $attributes['post_code'],
                 'country' => $attributes['country'],
+                'updated_at' => Carbon::createFromFormat('Y-m-d H:i:s', now()),
             ];
 
             DB::table('customer_contact_details')

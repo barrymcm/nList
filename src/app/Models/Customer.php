@@ -9,8 +9,12 @@ class Customer extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['user_id', 'first_name', 'last_name', 'dob', 'gender', 'created_at'];
-    protected $dates = ['deleted_at'];
+    protected $fillable = [
+        'user_id', 'first_name', 'last_name', 
+        'dob', 'gender', 
+    ];
+
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     public function user()
     {
