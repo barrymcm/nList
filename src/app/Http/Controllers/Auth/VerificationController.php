@@ -6,9 +6,13 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\VerifiesEmails;
 use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Auth;
+
 
 class VerificationController extends Controller
 {
+    use VerifiesEmails;
+
     private const ROLE = [
         3 => 'customer', 
         2 => 'event.organisers',
@@ -25,12 +29,25 @@ class VerificationController extends Controller
     | be re-sent if the user didn't receive the original email message.
     |
     */
-
-    use VerifiesEmails;
     
     protected string $redirectTo = '/registered';
     
     protected User $user;
+
+    public function redirectTo()
+    {
+        $user = Auth::user();
+        $roles = array_flip(self::ROLE);
+
+        if ($user->role->role_id === $roles['customer']) {
+            return $user->customer->first_name != null ? '/customers/' . $user->customer->id : $this->redirectTo;
+        }
+
+        if ($user->role->role_id === $roles['event.organiser']) {
+            return $user->eventOrganiser->name != null ? '/event_organisers/' . $user->eventOrganiser->id : $this->redirectTo;
+        }
+
+    }
 
     /**
      * Create a new controller instance.
