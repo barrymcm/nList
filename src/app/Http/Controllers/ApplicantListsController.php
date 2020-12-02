@@ -102,7 +102,7 @@ class ApplicantListsController extends Controller
         $list = ApplicantListRepository::find($id);
         $event = $this->eventRepository->find($attribute['event']);
         
-        if ($user->customer) {
+        if (isset($user->customer)) {
             $isOnList = $this->applicantService->isCustomerOnList($user->customer->id, $list->id);
         }
 
