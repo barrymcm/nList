@@ -36,7 +36,7 @@
                 <td>{{ $applicant->created_at->format('l jS \\of F Y') }}</td>
                 <td>{{ $applicant->created_at->format('h:i:s A') }}</td>
                     
-                    @if ($user->role->role_id === 3)
+                    @if (@isset($user->customer))
                         @if($user->customer->id === $applicant->customer_id)
                             <td>
                                 <a href="{{ route('applicants.show', [ $applicant, 'event' => $event, 'list' => $list ]) }}">Details</a>
@@ -55,7 +55,7 @@
                         @endif
                     @endif
 
-                    @if ($user->role->role_id === 2)
+                    @if (@isset($user->eventOrganiser))
                         @if($user->eventOrganiser->id === $event->event_organiser_id)
                             <td>
                                 <a href="{{ route('applicants.show', [ $applicant, 'event' => $event, 'list' => $list ]) }}">Details</a>
