@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UpdateCustomer;
 use App\Services\ApplicantListService;
 use App\Repositories\CustomerRepository;
+use Illuminate\Support\Facades\Gate;
 
 class CustomersController extends Controller
 {
@@ -41,39 +42,15 @@ class CustomersController extends Controller
         $this->applicantListService = $applicantListService;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     */
     public function create()
     {
-        /**
-         * @todo : refactor this into middleware - but make sure authentication check is done before removing it.
-         */
-        Auth::check();
         $userId = auth()->user()->id;
         
         return view('customers.create', ['userId' => $userId]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     */
     public function store(StoreCustomer $request)
     {
-        Auth::check();
         $attributes = $request->validated();
         $userId = $attributes['user_id'];
         $customer = $this->customerRepository->create($attributes, $userId);
@@ -82,8 +59,7 @@ class CustomersController extends Controller
     }
 
     public function show(int $id)
-    {
-        Auth::check();
+    {           
         $customer = $this->customerRepository->find($id);
         $lists = $this->applicantListService->getLists($customer);
 
@@ -100,28 +76,14 @@ class CustomersController extends Controller
             ->with('status', 'It looks like you need to add your details!');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function edit(int $id)
     {
-        Auth::check();
         $customer = $this->customerRepository->find($id);
 
         return view('customers.edit', ['customer' => $customer]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateCustomer $request, $customerId)
+    public function update(UpdateCustomer $request, int $customerId)
     {
         $attributes = $request->validated();    
         $customer = $this->customerRepository->update($attributes, $customerId);
@@ -129,15 +91,9 @@ class CustomersController extends Controller
         return redirect()->route('customers.show', ['customer' => $customer]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @todo the customer/user has to be logged out and all sessions destroyed.
-     * @param  int  $id
-     */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $customer = $this->customerRepository->find($id);
-        $this->authorize('delete', $customer);
         $this->customerRepository->softDelete($customer->id);
         auth()->logout();
 

@@ -7,6 +7,7 @@
     @section('title', 'Add Customer profile')
 @endif
 
+@can('update', $customer)
 @section('content')
     <div>
         @if (session('status'))
@@ -108,3 +109,4 @@
     <br>
 
 @endsection
+@endcan
