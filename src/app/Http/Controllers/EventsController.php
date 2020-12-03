@@ -37,10 +37,12 @@ class EventsController extends Controller
     {
         $attributes = $request->validate(['organiser' => 'required|integer']);
         $categories = Category::all();
+        $user = Auth::user();
 
         return view('events.create', [
             'categories' => $categories,
-            'eventOrganiser' => Auth::user()->eventOrganiser,
+            'eventOrganiser' => $user->eventOrganiser,
+            'user' => $user,
         ]);
     }
 
@@ -64,9 +66,7 @@ class EventsController extends Controller
 
         $event = EventService::find($id);
 
-        return view('events.show', [
-            'event' => $event, 'user' => $user
-        ]);  
+        return view('events.show', ['event' => $event, 'user' => $user]);
     }
 
     public function edit(Event $event)
