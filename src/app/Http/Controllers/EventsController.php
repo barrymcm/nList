@@ -20,11 +20,6 @@ class EventsController extends Controller
         $this->eventRepository = $eventRepository;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $user = null;
@@ -38,54 +33,27 @@ class EventsController extends Controller
         return view('events.index', ['events' => $events, 'user' => $user]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create(Request $request)
     {
         $attributes = $request->validate(['organiser' => 'required|integer']);
-
-        if (!Auth::user()->eventOrganiser) {
-            return redirect()->route('events.show')->with('status', 'You do not have permission to create a new event');
-        }
-
         $categories = Category::all();
 
         return view('events.create', [
             'categories' => $categories,
-            'event_organiser_id' => $attributes['organiser']
+            'eventOrganiser' => Auth::user()->eventOrganiser,
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(StoreEvent $request)
     {
-        if (!Auth::user()->eventOrganiser) {
-            return redirect('login')->with('status', 'You are not logged in!');
-        }
-
         $user = Auth::user();
         $attributes = $request->validated();
+        $attributes['event_organiser_id'] = $user->eventOrganiser->id;
         $event = $this->eventRepository->create($attributes);
         
-        return redirect()->route('events.show', [
-            'event' => $event, 'user' => $user
-        ]);
+        return redirect()->route('events.show', ['event' => $event, 'user' => $user]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show(int $id)
     {
         $user = null;
@@ -94,7 +62,6 @@ class EventsController extends Controller
             $user = Auth::user();
         }
 
-        $user = Auth::user();
         $event = EventService::find($id);
 
         return view('events.show', [
@@ -102,55 +69,31 @@ class EventsController extends Controller
         ]);  
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Event $event)
     {
-        if (!Auth::user()->eventOrganiser) {
-            return redirect()->route('show.events', [$event])->with('status', 'You cannot update this event!');
-        }
-
         $categories = Category::all();
 
         return view('events.edit', [
             'event' => $event, 
-            'categories' => $categories->all()
+            'categories' => $categories->all(),
+            'eventOrganiser' => Auth::user()->eventOrganiser,
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.s
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(UpdateEvent $request, $id)
     {
-        if (!Auth::user()->eventOrganiser) {
-            return redirect()->route('show.events', [$event])->with('status', 'You cannot update this event!');
-        }
-
         $attributes = $request->validated();
         $event = EventRepositoryFacade::update($attributes, $id);
 
-        return redirect()->route('events.show', [
-            'event' => $event, 'user' => Auth::user()
-        ])->with('notice', 'Event details updated');
+        return redirect()->route('events.show', ['event' => $event, 'user' => Auth::user()])
+            ->with('notice', 'Event details updated');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Request $request, $id)
     {
-        
+        $event = EventService::find($id);
+
+        return view('events.show', ['event' => $event, 'user' => Auth::user()])
+            ->with('message', 'Delete does not work yet!! duh .. :)');  
     }
 }

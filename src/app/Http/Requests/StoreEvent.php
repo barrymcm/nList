@@ -25,7 +25,6 @@ class StoreEvent extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'event_organiser_id' => 'required|integer',
             'description' => 'required|string|max:255',
             'category_id' => 'required|integer',
             'total_slots' => 'required|integer',
