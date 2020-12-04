@@ -12,27 +12,16 @@ class ApplicantListPolicy
 {
     use HandlesAuthorization;
 
-    /**
-     * Determine whether the user can view any applicant lists.
-     *
-     * @param  \App\Models\User  $user
-     * @return mixed
-     */
-    public function viewAny(User $user)
+    public function view(User $user)
     {
-        //
+        $eventOrganiser = $user->eventOrganiser;
+        
+        return $eventOrganiser->user->is($user);
     }
 
-    /**
-     * Determine whether the user can view the applicant list.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Model\ApplicantList  $applicantList
-     * @return mixed
-     */
-    public function view(User $user, ApplicantList $applicantList)
+    public function addMe(User $user) 
     {
-
+        return $user->customer->applicant->is($user);
     }
 
     /**
@@ -41,9 +30,11 @@ class ApplicantListPolicy
      * @param  \App\Models\User  $user
      * @return mixed
      */
-    public function create(User $user, Customer $customer)
+    public function create(User $user)
     {
-
+        return $user->eventOrganiser->is($user)
+            ? Response::allow() 
+            : Response::deny('User not allowed to create a list');
     }
 
     /**
@@ -55,10 +46,9 @@ class ApplicantListPolicy
      */
     public function update(User $user, ApplicantList $applicantList)
     {
-        return $user->id === 151 
-            ? Response::allow() 
-            : Response::deny('User not allowed to update the list');
-        // match the event organiser id from the user object and the event object
+        $eventOrganiser = $user->eventOrganiser;
+        
+        return $eventOrganiser->user->is($user);
     }
 
     /**

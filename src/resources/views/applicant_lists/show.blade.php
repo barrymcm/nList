@@ -36,43 +36,39 @@
                 <td>{{ $applicant->created_at->format('l jS \\of F Y') }}</td>
                 <td>{{ $applicant->created_at->format('h:i:s A') }}</td>
                     
-                    @if (@isset($user->customer))
-                        @if($user->customer->id === $applicant->customer_id)
-                            <td>
-                                <a href="{{ route('applicants.show', [ $applicant, 'event' => $event, 'list' => $list ]) }}">Details</a>
-                            </td>
+                    @can('view', $applicant)
+                        <td>
+                            <a href="{{ route('applicants.show', [ $applicant, 'event' => $event, 'list' => $list ]) }}">Details</a>
+                        </td>
 
-                            <td>
-                                <form action="{{ route('applicants.destroy', $applicant) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
-                                    <input type="hidden" name="event" value="{{ $event->id }}">
-                                    <input type="hidden" name="list_id" value="{{ $list->id }}">
-                                    <input type="submit" value="Delete">
-                                </form>
-                            </td>
-                        @endif
-                    @endif
+                        <td>
+                            <form action="{{ route('applicants.destroy', $applicant) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
+                                <input type="hidden" name="event" value="{{ $event->id }}">
+                                <input type="hidden" name="list_id" value="{{ $list->id }}">
+                                <input type="submit" value="Delete">
+                            </form>
+                        </td>
+                    @endcan
 
-                    @if (@isset($user->eventOrganiser))
-                        @if($user->eventOrganiser->id === $event->event_organiser_id)
-                            <td>
-                                <a href="{{ route('applicants.show', [ $applicant, 'event' => $event, 'list' => $list ]) }}">Details</a>
-                            </td>
+                    @can('organiser-view', $user)
+                        <td>
+                            <a href="{{ route('applicants.show', [ $applicant, 'event' => $event, 'list' => $list ]) }}">Details</a>
+                        </td>
 
-                            <td>
-                                <form action="{{ route('applicants.destroy', $applicant) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
-                                    <input type="hidden" name="event" value="{{ $event->id }}">
-                                    <input type="hidden" name="list_id" value="{{ $list->id }}">
-                                    <input type="submit" value="Delete">
-                                </form>
-                            </td>
-                        @endif
-                    @endif
+                        <td>
+                            <form action="{{ route('applicants.destroy', $applicant) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
+                                <input type="hidden" name="event" value="{{ $event->id }}">
+                                <input type="hidden" name="list_id" value="{{ $list->id }}">
+                                <input type="submit" value="Delete">
+                            </form>
+                        </td>
+                    @endcan
                 </td>
             </tr>
         @endforeach
@@ -96,29 +92,26 @@
     @endif
     <br><br>
 
-    @if (isset($user->customer))
+    @can('addMe', $user)
         @if (count($list->applicants) < $list->max_applicants && !$isOnList)
             <a href="{{ route('applicants.create', [ 'list' => $list, 'event' => $event]) }}">Add me!</a>
         @endif
-    @endif
+    @endcan
     <br><br>
     <a href="{{ route('events.show', $event) }}">Back to Slot</a>
     <br><br>
 
-    <!-- Only authorised organisers should be able to see this option -->
-    @if (isset($user->eventOrganiser))
-        @if ($user->eventOrganiser->id === $event->event_organiser_id)
-            <a href="{{ route('applicant_lists.edit', [$list, 'event' => $event]) }}">Edit List</a>
-            <br><br>
-            @if(count($list->applicants) < 1)
-                <form action="{{ route('applicant_lists.destroy', $list->id) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <input type="hidden" name="event" value="{{ $event->id }}">
-                    <input type="submit" name="submit" value="Cancel List">
-                </form>
-            @endif
-            <br>
+    @can('organiser-view', $user)
+        <a href="{{ route('applicant_lists.edit', [$list, 'event' => $event]) }}">Edit List</a>
+        <br><br>
+        @if(count($list->applicants) < 1)
+            <form action="{{ route('applicant_lists.destroy', $list->id) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <input type="hidden" name="event" value="{{ $event->id }}">
+                <input type="submit" name="submit" value="Cancel List">
+            </form>
         @endif
-    @endif
+        <br>
+    @endcan
 @endsection

@@ -3,15 +3,20 @@
 namespace App\Providers;
 
 use App\Models\Customer;
-use App\Models\User;
 use App\Models\ApplicantList;
 use App\Models\Applicant;
+use App\Models\Event;
+use App\Models\EventOrganiser;
 use App\Policies\CustomerPolicy;
 use App\Policies\ApplicantListPolicy;
 use App\Policies\ApplicantPolicy;
-use Laravel\Passport\Passport;
-use Illuminate\Support\Facades\Gate;
+use App\Policies\EventPolicy;
+use App\Policies\EventOrganiserPolicy;
+
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
+use App\Models\User;
+use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -24,16 +29,19 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\Customer' => 'App\Policies\CustomerPolicy',
         'App\Models\ApplicantList' => 'App\Policies\ApplicantListPolicy',
         'App\Models\Applicant' => 'App\Policies\ApplicantPolicy',
+        'App\Models\Event' => 'App\Policies\EventPolicy',
+        'App\Models\EventOrganiser' => 'App\Policies\EventOrganiserPolicy',
     ];
 
-    /**
-     * Register any authentication / authorization services.
-     *
-     * @return void
-     */
     public function boot()
     {
         $this->registerPolicies();
+
+        Gate::define('organiser-view', function (User $user) {
+            $eventOrganiser = $user->eventOrganiser;
+        
+            return isset($eventOrganiser)? $eventOrganiser->user->is($user) : false;
+        });
 
         Passport::routes();
     }

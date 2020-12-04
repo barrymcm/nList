@@ -30,7 +30,6 @@ class EventOrganisersController extends Controller
      */
     public function create()
     {
-        Auth::check();
         $userId = auth()->user()->eventOrganiser->user_id;
         $eventOrganiser = EventOrganiserRepository::findBy($userId);
 

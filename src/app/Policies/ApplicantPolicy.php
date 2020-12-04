@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Applicant;
+use App\Models\Applicant;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -30,7 +30,7 @@ class ApplicantPolicy
      */
     public function view(User $user, Applicant $applicant)
     {
-        //
+        return $applicant->customer->user->is($user);
     }
 
     /**
@@ -41,7 +41,7 @@ class ApplicantPolicy
      */
     public function create(User $user)
     {
-        //
+        return $applicant->customer->user->is($user);
     }
 
     /**

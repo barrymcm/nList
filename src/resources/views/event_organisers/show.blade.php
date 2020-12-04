@@ -4,12 +4,9 @@
 
 @section('content')
 
-    @isset(Auth::user()->eventOrganiser)
-        @if (Auth::user()->eventOrganiser->id === $eventOrganiser->id)
-            <p>Add a new event <a href="{{ route('events.create', ['organiser' => $eventOrganiser->id]) }}">here!</a></p>
-        @endif
-    @endisset
-    
+    @can('create', $eventOrganiser)
+        <p>Add a new event <a href="{{ route('events.create', ['organiser' => $eventOrganiser->id]) }}">here!</a></p>
+    @endcan
     <ul>
         <li><h3>{{ $eventOrganiser->name }}</h3></li>
         <li>{{ $eventOrganiser->description }}</li>

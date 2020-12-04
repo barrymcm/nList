@@ -33,16 +33,13 @@
             <li>Remaining slot allocation: {{ $slot->availability }}</li>
 
             @if($slot->slot_capacity > 0)
-                @if (@isset($user->eventOrganiser))
-                    @if (
-                        $user->eventOrganiser->id === $event->event_organiser_id
-                        && @count($slot->applicantLists) < $slot->total_lists
-                    )
+                @can('update', $event)
+                    @if (@count($slot->applicantLists) < $slot->total_lists)
                         <li>Lists:
                             <a href="{{ route('applicant_lists.create', ['slot' => $slot, 'event' => $event]) }}">Add a list</a>
                         </li>
                     @endif
-                @endif
+                @endcan
             @endif
             <ol>
                 @foreach($slot->applicantLists as $list)
@@ -51,8 +48,7 @@
                     <a href="{{ route('applicant_lists.show', [$list, 'event' => $event]) }}">{{ $list->name }}</a>
                     &nbsp; : &nbsp; List Capacity : {{ $list->max_applicants }} {{--Remaining Places :  {{ $list->max_applicants - count($list->applicants) }}--}}
                     
-                    @if (@isset($user->eventOrganiser))
-                        @if ($user->eventOrganiser->id === $event->event_organiser_id)
+                    @can('update', $event)
                         <div>
                             <a href="{{ route('applicant_lists.edit', [$list, 'event' => $event]) }}">edit</a>
 
@@ -62,8 +58,7 @@
                                 <input type="submit" name="submit" value="Cancel">
                             </form>
                         </div>
-                        @endif
-                    @endif
+                    @endcan
 
                     </li>
                 @endforeach
@@ -98,24 +93,22 @@
             <br>
         @endif
 
-        @if (@isset($user->eventOrganiser))
-            @if ($user->eventOrganiser->id === $event->event_organiser_id)
-                @if(@empty($slot->name))
-                    <a href="{{ route('slots.edit', ['slot' => $slot->id, 'event' => $event->id])}}">Add slot details</a><br>
-                @else
-                    <a href="{{ route('slots.edit', ['slot' => $slot->id, 'event' => $event->id])}}">Edit slot details</a><br>
-                @endif
-                    <br>
-                    <form action="{{ route('slots.destroy', [$slot, 'event' => $event]) }}" method="POST">
-                        @csrf
-                        {{ method_field('DELETE') }}
-                        <input type="hidden" name="slot" value="{{ $slot->id }}">
-                        <input type="hidden" name="event" value="{{ $event->id }}">
-                        <input type="submit" name="submit" value="Cancel Slot">
-                    </form>
-                    <br>
+        @can('update', $event)
+            @if(@empty($slot->name))
+                <a href="{{ route('slots.edit', ['slot' => $slot->id, 'event' => $event->id])}}">Add slot details</a><br>
+            @else
+                <a href="{{ route('slots.edit', ['slot' => $slot->id, 'event' => $event->id])}}">Edit slot details</a><br>
             @endif
-        @endif
+                <br>
+                <form action="{{ route('slots.destroy', [$slot, 'event' => $event]) }}" method="POST">
+                    @csrf
+                    {{ method_field('DELETE') }}
+                    <input type="hidden" name="slot" value="{{ $slot->id }}">
+                    <input type="hidden" name="event" value="{{ $event->id }}">
+                    <input type="submit" name="submit" value="Cancel Slot">
+                </form>
+                <br>
+        @endcan
         <br>
         <br>
     @endforeach
@@ -126,8 +119,7 @@
         <br>
         <br>
         <a href="{{ route('event_organisers.show', $event->event_organiser_id) }}">View Organiser</a>
-        @if (@isset($user->eventOrganiser))
-            @if ($user->eventOrganiser->id === $event->event_organiser_id)
+        @can('update', $event)
                 <br>
                 <br>
                 <a href="{{ route('slots.create', ['event_id' => $event]) }}">Add new Slot</a>
@@ -136,12 +128,15 @@
                 <a href="{{ route('events.edit', $event->id) }}">Edit event details</a>
                 <br>
                 <br>
-                <form action="{{ route('events.destroy', $event->id) }}" method="post">
-                    @csrf
-                    {{ method_field('DELETE') }}
-                    <input type="submit" name="submit" value="Delete">
-                </form>
-            @endif
-        @endif
+        @endcan
+
+        @can('delete', $event)
+            <form action="{{ route('events.destroy', $event->id) }}" method="post">
+                @csrf
+                {{ method_field('DELETE') }}
+                <input type="hidden" name="event_id" value="{{ $event->id }}">
+                <input type="submit" name="submit" value="Delete">
+            </form>
+        @endcan        
     </div>
 @endsection
