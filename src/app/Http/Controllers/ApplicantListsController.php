@@ -125,14 +125,10 @@ class ApplicantListsController extends Controller
         $event = $request->validate(['event' => 'required|integer']);
         $list = ApplicantListRepository::find($id);
 
-        if (!Auth::user()->eventOrganiser) {
-            return redirect()->route('applicant_lists.show', [
-                'list' => $list, 'event' => $event
-            ])->with('notice', 'You dont have permission to change this event');  
-        }
-
         return view('applicant_lists.edit', [
-            'list' => $list, 'event' => $event['event']
+            'list' => $list, 
+            'event' => $event['event'], 
+            'user' => Auth::user()
         ]);
     }
 
