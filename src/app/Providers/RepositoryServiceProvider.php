@@ -42,14 +42,35 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(RepositoryInterface::class, new ApplicantListRepository(new ApplicantList));
-        $this->app->bind(RepositoryInterface::class, new ApplicantRepository(new Applicant));
-        $this->app->bind(RepositoryInterface::class, new EventRepository(new Event));
-        $this->app->bind(RepositoryInterface::class, new SlotRepository(new Slot));
-        $this->app->bind(RepositoryInterface::class, new EventOrganiserRepository(new EventOrganiser));
-        $this->app->bind(RepositoryInterface::class, new ApplicantContactDetailsRepository(new ApplicantContactDetails));
-        $this->app->bind(RepositoryInterface::class, new UserRepository(new User));
-        $this->app->bind(RepositoryInterface::class, new CustomerRepository(new Customer, new User));
-        $this->app->bind(RepositoryInterface::class, new ApplicantApplicantListRepository(new ApplicantApplicantList));
+        $this->app->bind(RepositoryInterface::class, function ($app) {
+            return new ApplicantListRepository($app->make(ApplicantList::class));
+        });
+
+        $this->app->bind(RepositoryInterface::class, function ($app) {
+            return new ApplicantRepository($app->make(Applicant::class));
+        });
+
+        $this->app->bind(RepositoryInterface::class, function ($app) {
+            return new EventRepository($app->make(Event::class));
+        });
+
+        $this->app->bind(RepositoryInterface::class, function ($app) {
+            return new SlotRepository($app->make(Slot::class));
+        });
+        $this->app->bind(RepositoryInterface::class, function ($app) {
+            return new EventOrganiserRepository($app->make(EventOrganiser::class));
+        });
+        $this->app->bind(RepositoryInterface::class, function ($app) {
+            return new ApplicantContactDetailsRepository($app->make(ApplicantContactDetails::class));
+        });
+        $this->app->bind(RepositoryInterface::class, function ($app) {
+            return new UserRepository($app->make(User::class));
+        });
+        $this->app->bind(RepositoryInterface::class, function ($app) {
+            return new CustomerRepository(new Customer, $app->make(User::class));
+        });
+        $this->app->bind(RepositoryInterface::class, function ($app) {
+            return new ApplicantApplicantListRepository($app->make(ApplicantApplicantList::class));
+        });
     }
 }
