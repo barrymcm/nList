@@ -93,7 +93,7 @@ class ApplicantRepository implements RepositoryInterface
                     'applicant_id' => $applicant->id,
                     'created_at' => Carbon::createFromFormat('Y-m-d H:i:s', now()),
                     'updated_at' => Carbon::createFromFormat('Y-m-d H:i:s', now()),
-                ]); 
+                ]);
             DB::commit();
 
             return $applicant;

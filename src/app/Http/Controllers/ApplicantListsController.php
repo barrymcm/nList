@@ -22,8 +22,7 @@ class ApplicantListsController extends Controller
         ApplicantListService $applicantListService,
         EventRepository $eventRepository,
         ApplicantService $applicantService
-    )
-    {
+    ) {
         $this->applicantListService = $applicantListService;
         $this->eventRepository = $eventRepository;
         $this->applicantService = $applicantService;
@@ -36,7 +35,7 @@ class ApplicantListsController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -51,7 +50,7 @@ class ApplicantListsController extends Controller
         if (!Auth::user()->eventOrganiser) {
             return redirect()->route('events.show', [
                 'event' => $attributes['event']
-            ])->with('notice', 'You dont have permission to change this event');  
+            ])->with('notice', 'You dont have permission to change this event');
         }
 
         return view(
@@ -76,7 +75,7 @@ class ApplicantListsController extends Controller
         if (!Auth::user()->eventOrganiser) {
             return redirect()->route('events.show', [
                 'event' => $attributes['event_id']
-            ])->with('notice', 'You dont have permission to change this event');  
+            ])->with('notice', 'You dont have permission to change this event');
         }
 
         if (! $this->applicantListService->tryCreateApplicantList($attributes)) {
@@ -85,7 +84,8 @@ class ApplicantListsController extends Controller
             $message = 'A new list was created';
         }
 
-        return redirect()->route('events.show',
+        return redirect()->route(
+            'events.show',
             [
                 'slot' => $attributes['slot_id'],
                 'event' => $attributes['event_id'],
@@ -106,9 +106,11 @@ class ApplicantListsController extends Controller
             $isOnList = $this->applicantService->isCustomerOnList($user->customer->id, $list->id);
         }
 
-        return view('applicant_lists.show', [
-                'list' => $list, 
-                'event' => $event, 
+        return view(
+            'applicant_lists.show',
+            [
+                'list' => $list,
+                'event' => $event,
                 'user' => $user,
                 'isOnList' => $isOnList,
             ]
@@ -126,8 +128,8 @@ class ApplicantListsController extends Controller
         $list = ApplicantListRepository::find($id);
 
         return view('applicant_lists.edit', [
-            'list' => $list, 
-            'event' => $event['event'], 
+            'list' => $list,
+            'event' => $event['event'],
             'user' => Auth::user()
         ]);
     }
@@ -152,7 +154,7 @@ class ApplicantListsController extends Controller
         if (!Auth::user()->eventOrganiser) {
             return redirect()->route('applicant_lists.show', [
                 'list' => $list, 'event' => $event
-            ])->with('notice', 'You dont have permission to change this event');  
+            ])->with('notice', 'You dont have permission to change this event');
         }
 
         return redirect()->route('events.show', [
@@ -180,7 +182,6 @@ class ApplicantListsController extends Controller
 
 
         if ($this->applicantListService->hasApplicants($id)) {
-            
             return redirect()->route('applicant_lists.show', [
                 $list, 'event' => $event
             ])
@@ -188,7 +189,7 @@ class ApplicantListsController extends Controller
                     'cancel',
                     'Applicants will be automatically notified of the cancellation! 
                     <a href="'. $url .'">Confirm cancellation</a>'
-            );
+                );
         }
 
         if (ApplicantListRepository::softDelete($id)) {

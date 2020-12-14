@@ -43,10 +43,12 @@ class ApplicantsController extends Controller
 
         if (! auth()->check()) {
             return redirect()->route(
-                'applicant_lists.show', [
-                    $list, 
+                'applicant_lists.show',
+                [
+                    $list,
                     'event' => $event,
-            ])->with('warning', 'Whoops .. looks like your not logged in!');
+            ]
+            )->with('warning', 'Whoops .. looks like your not logged in!');
         }
 
         if (! $user->email_verified_at) {
@@ -55,7 +57,7 @@ class ApplicantsController extends Controller
         }
 
         if ($this->applicantService->isListFull(request('list'))) {
-            return redirect()->route('applicant_lists.show',[
+            return redirect()->route('applicant_lists.show', [
                     $list,
                     'event' => $event,
             ])->with('warning', 'Uh oh... This list is already full!');
@@ -74,9 +76,8 @@ class ApplicantsController extends Controller
             $isOnList = $this->applicantService->isCustomerOnList($user->customer->id, $list);
 
             if ($isOnList) {
-
                 return redirect()->route('applicant_lists.show', [
-                    $list, 
+                    $list,
                     'event' => $event,
                 ])->with('status', 'It looks like your already on the list!');
             }
@@ -107,7 +108,7 @@ class ApplicantsController extends Controller
         }
 
         return view('applicants.create', [
-            'list' => $list, 
+            'list' => $list,
             'event' => $event,
         ]);
     }
@@ -127,7 +128,9 @@ class ApplicantsController extends Controller
 
         $this->applicantService->userAddedToListEvent($applicant);
 
-        return redirect()->route('applicant_lists.show',[
+        return redirect()->route(
+            'applicant_lists.show',
+            [
                 $attributes['list'],
                 'event' => $attributes['event'],
             ]
