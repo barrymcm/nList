@@ -190,6 +190,14 @@ class ApplicantsController extends Controller
         ]);
     }
 
+    public function updateAttendedStatus(Request $request, $id)
+    {
+        $applicantId = (int) $request->get('applicant_id');
+        $listId = (int)  $request->get('list_id');
+
+        return 'this is the response';
+    }
+
     /**
      * Remove the specified resource from storage.
      *

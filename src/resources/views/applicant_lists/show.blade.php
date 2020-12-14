@@ -17,6 +17,7 @@
                 <th>Name</th>
                 <th>Application date</th>
                 <th>Time</th>
+                <th>Attended</th>
             </tr>
         </head>
         <tbody>
@@ -54,6 +55,14 @@
                     @endcan
 
                     @can('organiser-view', $user)
+                        <td>
+                            <input 
+                                id="applicant" 
+                                type="checkbox" 
+                                name="{{ $list->id }}"
+                                value="{{ $applicant->id }}"
+                                onclick="sendData({{ $list->id }}, {{ $applicant->id }} )">
+                        </td>
                         <td>
                             <a href="{{ route('applicants.show', [ $applicant, 'event' => $event, 'list' => $list ]) }}">Details</a>
                         </td>
@@ -115,3 +124,23 @@
         <br>
     @endcan
 @endsection
+
+<script type="text/javascript">
+    var xhro = false;
+
+    if(window.XMLHttpRequest) {
+        var xhro = new XMLHttpRequest();
+    }
+
+    function sendData(listId, applicantId) 
+    {
+        var url = '/applicants/attended';
+
+        if(xhro) {
+            xhro.open("POST", url, true);
+            xhro.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        }
+
+        xhro.send("applicant_id=" + applicantId + "&list_id=" + listId);
+    }
+</script>
