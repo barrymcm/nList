@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\ApiControllers\Applicants;
 
-use App\Applicant;
+use App\Models\Applicant;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -17,7 +17,7 @@ class ApplicantsApiController extends Controller
         /** @todo use a Resource */
 
         $applicants = Applicant::all();
-
+         
         return response()->json([
             'applicants' => $applicants,
         ]);
