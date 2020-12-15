@@ -4,4 +4,8 @@
 
 @section('content')
     <p>{{ __('home.introduction') }}</p>
+    <div id='app'> 
+    	<p v-text="message"></p>
+		<example-component></example-component>
+	</div>
 @endsection
