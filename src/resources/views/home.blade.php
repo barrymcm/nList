@@ -3,9 +3,10 @@
 @section('title', __('home.title'))
 
 @section('content')
+    <div> 
     <p>{{ __('home.introduction') }}</p>
-    <div id='app'> 
-    	<p v-text="message"></p>
 		<example-component></example-component>
+		<br>
+		<home-component></home-component>
 	</div>
 @endsection
