@@ -37,5 +37,7 @@ module.exports = {
       }
     }
   },
-  plugins: [],
+  corePlugins: [
+    'alignContent'
+  ],
 }
