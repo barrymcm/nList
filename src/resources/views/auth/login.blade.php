@@ -1,77 +1,61 @@
 @extends('layouts.app')
 
+@section('title', 'Login')
+
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+<div class="container flex w-1/3 justify-center border-grey-400 rounded-md border-2 bg-gray-200 border-gray-300 font-thin p-10 m-auto">
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        <meta name="csrf-token" content="{{ csrf_token() }}">
-                        <input type="hidden" name="list" value=" {{ $list }}">
-                        <input type="hidden" name="event" value=" {{ $event }}">
+    <form class="w-full" method="POST" action="{{ route('login') }}">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <input type="hidden" name="list" value=" {{ $list }}">
+        <input type="hidden" name="event" value=" {{ $event }}">
 
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
+        <div class="flex flex-col mb-5 w-full">
+            <label for="email" class="mb-5">{{ __('E-Mail Address') }}</label>
+            <input id="email" type="email" class="px-5 focus:outline-none focus:ring focus:border-blue-300 h-10 rounded-sm form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
+            @if ($errors->has('email'))
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $errors->first('email') }}</strong>
+                </span>
+            @endif
+        </div>
 
-                                @if ($errors->has('email'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
+        <div class="flex flex-col w-full">
+            <label for="password" class="mb-5">{{ __('Password') }}</label>
+            <input id="password" type="password" class="px-5 focus:outline-none focus:ring focus:border-blue-300 h-10 rounded-sm form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
 
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
+            @if ($errors->has('password'))
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $errors->first('password') }}</strong>
+                </span>
+            @endif
+        </div>
 
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
+        <div class="flex w-full justify-between">
+            <div class="flex my-5 text-sm items-center">
+                <input class="justify-start" type="checkbox" name="remember" id="remember" 
+                {{ old("remember") ? "checked" : "" }}>
 
-                                @if ($errors->has('password'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
+                <label class="ml-2" for="remember">
+                    {{ __('Remember Me') }}
+                </label>
+            </div>
 
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            @if (Route::has('password.request'))
-                                <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                </a>
-                            @endif    
-                        </div>
-                    </form>
-                </div>  
+            <div class="my-5 text-sm">
+            @if (Route::has('password.request'))
+                <a class="text-blue-700" href="{{ route('password.request') }}">
+                        {{ __('Forgot Your Password?') }}
+                </a>
+            @endif    
             </div>
         </div>
-    </div>
+
+        <div class="flex justify-center my-5 bg-blue-300 rounded-sm h-10 hover:bg-blue-400 transition ease-in-out duration-150 font-thin">
+            <button class="flex-grow" type="submit" >
+                {{ __('Login') }}
+            </button>
+        </div>        
+    </form>
 </div>
 @endsection
