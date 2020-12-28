@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
-@section('title', __('Register'))
+@if ($type == 'customer')
+    @section('title', 'Register new customer account')
+@elseif ($type == 'organiser')
+    @section('title', 'Register new organiser account')
+@endif
 
 @section('content')
 <div class="container flex flex-col w-1/3 justify-center border-grey-400 rounded-md border-2 bg-gray-200 border-gray-300 font-thin p-10 m-auto">
@@ -12,7 +16,12 @@
         <input type="hidden" name="event" value="{{ $event }}">
         
         <div class="flex flex-col mb-5 w-full">
-            <label for="name" class="mb-5">Username</label>
+            
+            @if ($type == 'customer')
+                <label for="name" class="mb-5">Username</label>
+            @elseif ($type == 'organiser')
+                <label for="name" class="mb-5">Organisation Name</label>
+            @endif
 
             <input id="name" type="text" class="px-5 focus:outline-none focus:ring focus:border-blue-300 h-10 rounded-sm form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" required autofocus>
 
