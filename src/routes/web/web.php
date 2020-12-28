@@ -15,7 +15,7 @@ Route::get(
     function () {
         return view('about');
     }
-)->name('about')->middleware('verified');
+)->name('about')->middleware('locale');
 
 Route::get(
     '/contact',
