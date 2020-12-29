@@ -94,7 +94,7 @@
     
         @show
 
-        <header class="mb-9 mt-14 w-3/4 border-solid rounded-md border-2 border-light-grey-500 mx-auto p-5">
+        <header class="mb-9 mt-10 w-3/4 border-solid rounded-md border-2 border-light-grey-500 bg-gray-100 mx-auto p-5">
             <h1>@yield('title')</h1>
         </header>
 
@@ -110,16 +110,16 @@
             @endif
         </section>
 
-        <main class="h-3/4 w-3/4 border-solid rounded-md border-2 border-light-grey-500 p-10 mb-auto mx-auto">
+        <main class="h-3/4 w-3/4 p-10 mb-auto mx-auto overflow-auto">
             @yield('content')
         </main>
 
-        <footer class="flex flex-row h-10 px-10 py-2 w-full border-t-2 font-thin text-sm mt-20">
+        <footer class="h-10 px-10 py-2 w-full border-t-2 font-thin text-sm mt-20">
             <div class="w-full px-3">
                 <p class="text-gray-400">This is the footer</p>
             </div>
         </footer>
     </div>
-<script src="{{ mix('js/app.js') }}"></script>
+    <script src="{{ mix('js/app.js') }}"></script>
 </body>
 </html>
