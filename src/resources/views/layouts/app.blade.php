@@ -10,7 +10,7 @@
 </head>
 <body>
     <div id="app" class="container-lg flex flex-col h-screen justify-between">
-        <nav class="w-full flex flex-row w-full justify-end py-3 px-10 bg-gray-900">
+        <nav class="w-full flex flex-row w-full justify-end py-5 px-10 bg-gray-900">
                 <div id="login-reg" class="flex flex-row space-x-10">
                     @guest
                         <div class="text-sm text-gray-300 hover:text-white">
@@ -39,10 +39,13 @@
                             <a href="{{ route('event_organisers.show', Auth::user()->eventOrganiser->id) }}">My Account</a>
                         @endif
                     </div>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <input type="submit" name="Logout" value="Logout">
-                    </form>
+
+                    <div class="text-sm text-gray-300 hover:text-white">
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <input class="bg-gray-900" type="submit" name="Logout" value="Logout">
+                        </form>
+                    </div>
                     @endif
                 </div>
         </nav>

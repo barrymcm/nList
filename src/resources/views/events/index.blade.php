@@ -20,8 +20,8 @@
 </div>
 
 @if (@isset($user->eventOrganiser))
-    <div>
-        <a href="{{ route('events.create', ['organiser' => $user->eventOrganiser->id]) }}">Create new event</a>
+    <div class="flex flex-col justify-end ml-auto mt-20 rounded-sm h-10 bg-green-400 hover:bg-green-500 transition ease-in-out duration-150 font-thin w-1/5 ">
+        <a class="flex flex-col w-full text-center p-2 text-white" href="{{ route('events.create', ['organiser' => $user->eventOrganiser->id]) }}">Create new event</a>
     </div>
 @endif
 
