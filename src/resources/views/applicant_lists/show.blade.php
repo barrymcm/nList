@@ -21,63 +21,74 @@
         <div class="my-3">{{ $list->max_applicants - count($list->applicants)}}</div>
     </div>
 
-    <div class="grid grid-cols-3 grid-flow-rows px-5">
-
+    <div class="grid grid-cols-4 grid-flow-rows px-5">
         <div class="h-10 text-medium border-b-2 border-gray-700 mb-4">Name</div>
         <div class="h-10 text-medium border-b-2 border-gray-700 mb-4">Application date</div>
-        <div class="h-10 text-medium border-b-2 border-gray-700 mb-4">Time</div>
         
         @can('organiser-view', $user)
-            <div>Attended</div>
+            <div class="h-10 text-medium border-b-2 border-gray-700 mb-4">Time</div>
+            <div class="h-10 text-medium border-b-2 border-gray-700 mb-4">Attended</div>
         @endcan
-        
+
         @foreach($list->applicants as $applicant)
-            <div class="py-1">{{ $applicant->first_name }} {{ $applicant->last_name }}</div>
-            <div class="py-1">{{ $applicant->created_at->format('l jS \\of F Y') }}</div>
-            <div class="py-1">{{ $applicant->created_at->format('h:i:s A') }}</div>
-                
-                @can('view', $applicant)
-                    <div>
+            <div class="col-start-1 py-1">
+                {{ $applicant->first_name }} {{ $applicant->last_name }}
+            </div>
+            <div class="col-start-2 py-1">
+                {{ $applicant->created_at->format('l jS \\of F Y') }}
+            </div>
+            
+            @can('organiser-view', $user)
+                <div class="col-start-3 py-1">
+                    {{ $applicant->created_at->format('h:i:s A') }}
+                </div>
+            @endcan    
+            
+            @can('view', $applicant)
+                <div class="flex flex-cols-2 col-start-4 justify-between">
+                    <div class="py-1">
                         <a href="{{ route('applicants.show', [ $applicant, 'event' => $event, 'list' => $list ]) }}">Details</a>
                     </div>
 
-                    <div>
-                        <form action="{{ route('applicants.destroy', $applicant) }}" method="POST">
+                    <div class="py-1">
+                        <form class="my-0" action="{{ route('applicants.destroy', $applicant) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
                             <input type="hidden" name="event" value="{{ $event->id }}">
                             <input type="hidden" name="list_id" value="{{ $list->id }}">
-                            <input type="submit" value="Delete">
+                            <input type="submit" value="Remove Me">
                         </form>
                     </div>
-                @endcan
+                </div>
+            @endcan
+            <br>
+            @can('organiser-view', $user)
+                <div>
+                    <input 
+                        id="applicant" 
+                        type="checkbox" 
+                        name="{{ $list->id }}"
+                        value="{{ $applicant->id }}"
+                        onclick="sendData({{ $list->id }}, {{ $applicant->id }} )">
+                </div>
+                <div>
+                    <a href="{{ route('applicants.show', [ $applicant, 'event' => $event, 'list' => $list ]) }}">Details</a>
+                </div>
 
-                @can('organiser-view', $user)
-                    <div>
-                        <input 
-                            id="applicant" 
-                            type="checkbox" 
-                            name="{{ $list->id }}"
-                            value="{{ $applicant->id }}"
-                            onclick="sendData({{ $list->id }}, {{ $applicant->id }} )">
-                    </div>
-                    <div>
-                        <a href="{{ route('applicants.show', [ $applicant, 'event' => $event, 'list' => $list ]) }}">Details</a>
-                    </div>
-
-                    <div>
-                        <form action="{{ route('applicants.destroy', $applicant) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
-                            <input type="hidden" name="event" value="{{ $event->id }}">
-                            <input type="hidden" name="list_id" value="{{ $list->id }}">
-                            <input type="submit" value="Delete">
-                        </form>
-                    </div>
-                @endcan
+                <div>
+                    <form action="{{ route('applicants.destroy', $applicant) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
+                        <input type="hidden" name="event" value="{{ $event->id }}">
+                        <input type="hidden" name="list_id" value="{{ $list->id }}">
+                        <input type="submit" value="Delete">
+                    </form>
+                </div>
+            @endcan
         @endforeach
+
     </div>
     @if( session('warning'))
         {{ session('warning') }}<a href="{{ route('login', ['list' => $list, 'event' => $event]) }}">sign in?</a>
@@ -95,9 +106,11 @@
         <p class="alert-info">{{ session('status') }}</p>
     @endif
 
-    @can('addMe', $user)
+    @can('add', $user)
         @if (count($list->applicants) < $list->max_applicants && !$isOnList)
-            <a href="{{ route('applicants.create', [ 'list' => $list, 'event' => $event]) }}">Add me!</a>
+            <div class="flex leading-loose text-blue-700 my-10">
+                <a href="{{ route('applicants.create', [ 'list' => $list, 'event' => $event]) }}">Add me!</a>
+            </div>
         @endif
     @endcan
 
@@ -121,6 +134,7 @@
         @endif
         <br>
     @endcan
+
 @endsection
 
 <script type="text/javascript">
