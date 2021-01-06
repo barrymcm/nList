@@ -31,33 +31,33 @@
         @endcan
 
         @foreach($list->applicants as $applicant)
-            <div class="col-start-1 py-1">
+            <div class="col-start-1 py-3">
                 {{ $applicant->first_name }} {{ $applicant->last_name }}
             </div>
-            <div class="col-start-2 py-1">
+            <div class="col-start-2 py-3">
                 {{ $applicant->created_at->format('l jS \\of F Y') }}
             </div>
             
             @can('organiser-view', $user)
-                <div class="col-start-3 py-1">
+                <div class="col-start-3 py-3">
                     {{ $applicant->created_at->format('h:i:s A') }}
                 </div>
             @endcan    
             
             @can('view', $applicant)
                 <div class="flex flex-cols-2 col-start-4 justify-between">
-                    <div class="py-1">
-                        <a href="{{ route('applicants.show', [ $applicant, 'event' => $event, 'list' => $list ]) }}">Details</a>
+                    <div class="bg-blue-400 text-white rounded-md h-10 px-4 py-2">
+                        <a class="w-full" href="{{ route('applicants.show', [ $applicant, 'event' => $event, 'list' => $list ]) }}">Details</a>
                     </div>
 
-                    <div class="py-1">
-                        <form class="my-0" action="{{ route('applicants.destroy', $applicant) }}" method="POST">
+                    <div>
+                        <form  action="{{ route('applicants.destroy', $applicant) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
                             <input type="hidden" name="event" value="{{ $event->id }}">
                             <input type="hidden" name="list_id" value="{{ $list->id }}">
-                            <input type="submit" value="Remove Me">
+                            <input class="bg-red-500 text-white rounded-md h-10 px-4 py-1" type="submit" value="Remove Me">
                         </form>
                     </div>
                 </div>
@@ -72,18 +72,18 @@
                         value="{{ $applicant->id }}"
                         onclick="sendData({{ $list->id }}, {{ $applicant->id }} )">
                 </div>
-                <div>
-                    <a href="{{ route('applicants.show', [ $applicant, 'event' => $event, 'list' => $list ]) }}">Details</a>
+                <div class="bg-blue-400 text-white rounded-md h-10 px-4 py-1">
+                    <a class="w-full" href="{{ route('applicants.show', [ $applicant, 'event' => $event, 'list' => $list ]) }}">Details</a>
                 </div>
 
-                <div>
+                <div class="bg-red-500 text-white rounded-md h-10 px-4 py-1">
                     <form action="{{ route('applicants.destroy', $applicant) }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
                         <input type="hidden" name="event" value="{{ $event->id }}">
                         <input type="hidden" name="list_id" value="{{ $list->id }}">
-                        <input type="submit" value="Delete">
+                        <input class="w-full bg-red-500" type="submit" value="Delete">
                     </form>
                 </div>
             @endcan
@@ -108,8 +108,8 @@
 
     @can('add', $user)
         @if (count($list->applicants) < $list->max_applicants && !$isOnList)
-            <div class="flex leading-loose text-blue-700 my-10">
-                <a href="{{ route('applicants.create', [ 'list' => $list, 'event' => $event]) }}">Add me!</a>
+            <div class="flex leading-loose text-white my-10 mx-10 justify-end">
+                <a class="bg-green-400 h-10 rounded-md px-4 py-1 w-1/8" href="{{ route('applicants.create', [ 'list' => $list, 'event' => $event]) }}">Add me!</a>
             </div>
         @endif
     @endcan
