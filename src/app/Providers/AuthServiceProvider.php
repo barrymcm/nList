@@ -39,7 +39,7 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('add', function (User $user) {
             
-             return $user->customer->is($user->customer);
+             return isset($user->customer)? $user->customer->is($user->customer) : false;
         });
 
         Gate::define('organiser-view', function (User $user) {
