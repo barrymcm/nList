@@ -22,21 +22,35 @@
         </div>
     </section>
     
-    <header class="w-1/3 grid grid-cols-1 my-10 bg-blue-400 h-14 text-white text-center rounded-md p-3"><div>There are {{ $event->total_slots }} slots allocated to this event.</div>
+    <header class="w-1/3 grid grid-cols-1 my-10 bg-blue-400 h-14 text-white text-center rounded-md p-3">
+        <p>There are {{ $event->total_slots }} slots allocated to this event.</p>
     </header>
 
     <div class="grid grid-cols-2 gap-4">
     @foreach($event->slots as $slot)
-        <div class="grid grid-cols-{{ count($event->slots) }} grid-flow-row w-full rounded-md grid-flow-row mb-5 justify-between h-auto bg-gray-300 text-thin p-5 gap-6">
-            <div class="flex col-span-3 justify-between h-14 border-b-2 border-gray-400">
-                <div class="flex flex-col text-left">
-                    <p class="font-semibold">{{ $slot->name }}</p>
-                </div>
+        <div class="w-full rounded-md grid-flow-row mb-5 justify-between h-auto bg-gray-300 text-thin p-5 gap-6">
+            <div class="flex flex-row justify-between h-14 my-5 mr-5 border-b-2 border-gray-400">
+                <p class="font-semibold">{{ $slot->name }}</p>
+
+                @can('update', $event)
+                    @if(@empty($slot->name))
+                        <a class="h-10 rounded-md bg-green-400 hover:bg-green-600 transition-ease-in-out duration-150 text-center px-3 w-auto py-1" href="{{ route('slots.edit', ['slot' => $slot->id, 'event' => $event->id])}}">Add slot details</a>
+                    @else
+                        <a class="h-10 rounded-md bg-yellow-400 hover:bg-yellow-600 transition-ease-in-out duration-150 text-center px-3 w-auto py-1" href="{{ route('slots.edit', ['slot' => $slot->id, 'event' => $event->id])}}">Edit slot</a>
+                    @endif
+                        <form action="{{ route('slots.destroy', [$slot, 'event' => $event]) }}" method="POST">
+                            @csrf
+                            {{ method_field('DELETE') }}
+                            <input type="hidden" name="slot" value="{{ $slot->id }}">
+                            <input type="hidden" name="event" value="{{ $event->id }}">
+                            <input class="h-10 cursor-pointer rounded-md bg-red-600 transition-ease-in-out duration-150 text-center text-white px-3 w-auto" type="submit" name="submit" value="Cancel Slot">
+                        </form>
+                @endcan
                 
                 @if ($slot->deleted_at != null) 
-                    <div class="flex flex-col text-center rounded-md h-10 w-1/6 bg-red-400 text-white py-1">Canceled</div>
+                    <div class="text-center rounded-md h-10 w-1/6 bg-red-400 text-white py-1">Canceled</div>
                 @else
-                    <div class="flex flex-col text-center align-middle rounded-md h-10 w-1/6 bg-green-500 text-white py-1">Active</div>
+                    <div class="text-center align-middle rounded-md h-10 w-1/6 bg-green-500 text-white py-1">Active</div>
                 @endif
             </div>
 
@@ -60,88 +74,59 @@
             @endif
             
             @if ($slot->deleted_at != null) 
-                <div class="flex col-span-3">
+                <div class="flex flex-row w-full">
                     <p class="inline-block text-right w-full">
                         This slot has been canceled!
                     </p>
                 </div>
             @else
-                
-                <div class="flex col-span-3 h-16 border-b-2 border-gray-700">
-                    <p class="inline-block text-right w-full">
-                        Capacity: {{ $slot->slot_capacity }}
-                    </p>
-                </div>
 
                 @can('update', $event)
-                    <div class="flex col-span-2 justify-end">
-                        <p class="inline-block text-right">
-                            Availability: {{ $slot->availability }}
-                        </p>
+                    <div class="flex flex-row mb-5 justify-between">
+                        <p>Slot capacity {{ $slot->slot_capacity }}</p>
+                        <p>Slot availability {{ $slot->availability }}</p>
                     </div>
                 @endcan
-
-                @if($slot->slot_capacity > 0)
-                    @can('update', $event)
-                        @if (@count($slot->applicantLists) < $slot->total_lists)
-                            <div>Lists:
-                                <a href="{{ route('applicant_lists.create', ['slot' => $slot, 'event' => $event]) }}">Add a list</a>
-                            </div>
-                        @endif
-                    @endcan
-                @endif
+                
+                    @if($slot->slot_capacity > 0)
+                        @can('update', $event)
+                        <div class="flex flex-row mb-5 pt-5 border-t-2 border-gray-700 justify-between">
+                            <p class="flex flex-row-reverse">Lists {{$slot->total_lists}}</p>
+                            @if (@count($slot->applicantLists) < $slot->total_lists)
+                                    <a class="w-1/4 rounded-md h-10 bg-green-500 text-white text-center py-1 w-1/4 hover:bg-green-700 transition-ease-in-out duration-150" href="{{ route('applicant_lists.create', ['slot' => $slot, 'event' => $event]) }}">Create new list</a>
+                            @endif
+                        </div>
+                        @endcan
+                    @endif    
 
                 @foreach($slot->applicantLists as $list)
-                    @can('update', $event)
-                        <div class="flex col-span-3">
-                            Lists allocated to the slot: {{ $slot->total_lists }}
-                        </div>
-                    @endcan
-
-                    <div class="flex col-start-1">
-                        <a class="bg-blue-400 hover:bg-blue-700 transition-ease-in-out duration-150 rounded-md text-center text-white px-3" href="{{ route('applicant_lists.show', [$list, 'event' => $event]) }}">{{ $list->name }}</a>
-                    </div>
-                    <div class="flex col-start-2">
-                        <p class="inline-block text-right w-full">
-                            Capacity : {{ $list->max_applicants }}
-                        </p>
-                    </div>
-                    <div class="flex">
-                        <p class="inline-block text-right w-full">
-                            Availability :  {{ $list->max_applicants - count($list->applicants) }}
-                        </p>
-                    </div>
-                
-                    @can('update', $event)
-                        <div>
-                            <a href="{{ route('applicant_lists.edit', [$list, 'event' => $event]) }}">edit</a>
+                    @if (!isset($list->deleted_at))
+                    <div class="grid grid-rows-{{ @count($slot->applicantLists) }} grid-cols-7 gap-3 grid-flow-auto my-5 pt-5 border-t-2 border-gray-700 text-center">
+                    @else
+                    <div class="grid grid-rows-2 grid-cols-5 grid-flow-auto mb-5 pt-5 text-center">
+                    @endif
+                        <div class=""></div>
+                        <div class=""></div>
+                        <div class=""></div>
+                        <div class="">Capacity</div>
+                        <div class="">Availability</div>
+                        <a class="col-span-3 bg-blue-400 hover:bg-blue-700 transition-ease-in-out duration-150 rounded-md text-center text-white px-3 w-auto" href="{{ route('applicant_lists.show', [$list, 'event' => $event]) }}">{{ $list->name }}</a>
+                        <p class="col-start-4">{{ $list->max_applicants }}</p>
+                        <p class="col-start-5">{{ $list->max_applicants - count($list->applicants) }}</p>
+                   
+                        @can('update', $event)
+                            <a class="rounded-md bg-yellow-400 hover:bg-yellow-600 transition-ease-in-out duration-150 text-center px-3 w-auto" href="{{ route('applicant_lists.edit', [$list, 'event' => $event]) }}">edit</a>
 
                             <form action="{{ route('applicant_lists.destroy', [$list, 'event' => $event]) }}" method="post">
                                 @csrf
                                 {{ method_field('DELETE') }}
-                                <input type="submit" name="submit" value="Cancel">
+                                <input class="cursor-pointer rounded-md bg-red-600 transition-ease-in-out duration-150 text-center text-white px-3 w-auto" type="submit" name="submit" value="Cancel">
                             </form>
-                        </div>
-                    @endcan
+                        @endcan
+                    </div>
                 @endforeach
             @endif
         </div>
-
-        @can('update', $event)
-            @if(@empty($slot->name))
-                <a href="{{ route('slots.edit', ['slot' => $slot->id, 'event' => $event->id])}}">Add slot details</a><br>
-            @else
-                <a href="{{ route('slots.edit', ['slot' => $slot->id, 'event' => $event->id])}}">Edit slot details</a><br>
-            @endif
-                <form action="{{ route('slots.destroy', [$slot, 'event' => $event]) }}" method="POST">
-                    @csrf
-                    {{ method_field('DELETE') }}
-                    <input type="hidden" name="slot" value="{{ $slot->id }}">
-                    <input type="hidden" name="event" value="{{ $event->id }}">
-                    <input type="submit" name="submit" value="Cancel Slot">
-                </form>
-        @endcan
- 
     @endforeach
     </div>
 </div>
@@ -158,7 +143,7 @@
             View Organiser
         </a>        
     </div>
-    <div>
+    <div class="flex flex-row justify-between">
         @can('update', $event)
             <a href="{{ route('slots.create', ['event_id' => $event]) }}">Add new Slot</a>
             <a href="{{ route('events.edit', $event->id) }}">Edit event details</a>
@@ -171,8 +156,7 @@
                 <input type="hidden" name="event_id" value="{{ $event->id }}">
                 <input type="submit" name="submit" value="Delete">
             </form>
-        @endcan       
-
+        @endcan
     </div>
 </div>
 @endsection
