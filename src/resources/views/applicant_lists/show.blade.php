@@ -62,36 +62,33 @@
                     </div>
                 </div>
             @endcan
-            <br>
+
             @can('organiser-view', $user)
-                <div>
-                    <input 
-                        id="applicant" 
-                        type="checkbox" 
-                        name="{{ $list->id }}"
-                        value="{{ $applicant->id }}"
-                        onclick="sendData({{ $list->id }}, {{ $applicant->id }} )">
+            <div class="flex flex-cols-3 col-start-4 h-10 justify-between text-white text-center">
+                <div class="align-center ml-7 pt-3">
+                    <input id="applicant" type="checkbox" name="{{ $list->id }}" value="{{ $applicant->id }}" onclick="sendData({{ $list->id }}, {{ $applicant->id }})">
                 </div>
-                <div class="bg-blue-400 text-white rounded-md h-10 px-4 py-1">
-                    <a class="w-full" href="{{ route('applicants.show', [ $applicant, 'event' => $event, 'list' => $list ]) }}">Details</a>
+                <div class="bg-blue-400 rounded-md ml-7 py-2 cursor-pointer">
+                    <a class="w-1/3 px-3" href="{{ route('applicants.show', [ $applicant, 'event' => $event, 'list' => $list ]) }}">Details</a>
                 </div>
 
-                <div class="bg-red-500 text-white rounded-md h-10 px-4 py-1">
+                <div class="w-1/3">
                     <form action="{{ route('applicants.destroy', $applicant) }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
                         <input type="hidden" name="event" value="{{ $event->id }}">
                         <input type="hidden" name="list_id" value="{{ $list->id }}">
-                        <input class="w-full bg-red-500" type="submit" value="Delete">
+                        <input class="bg-red-500 rounded-md py-2 px-3 cursor-pointer" type="submit" value="Delete">
                     </form>
                 </div>
+            </div>
             @endcan
         @endforeach
-
     </div>
     @if( session('warning'))
-        {{ session('warning') }}<a href="{{ route('login', ['list' => $list, 'event' => $event]) }}">sign in?</a>
+        {{ session('warning') }}
+        <a href="{{ route('login', ['list' => $list, 'event' => $event]) }}">sign in?</a>
         or if you dont have an account you can
         <a href="{{ route('register.select_account_type', ['list' => $list, 'event' => $event]) }}">register</a>
     @endif
@@ -114,6 +111,20 @@
         @endif
     @endcan
 
+    @can('organiser-view', $user)
+    <div class="flex flex-row justify-end text-white">
+        <a class="rounded-md bg-yellow-400 my-10 px-3 py-2 mr-5" href="{{ route('applicant_lists.edit', [$list, 'event' => $event]) }}">Edit List</a>
+        @if(count($list->applicants) < 1)
+            <form action="{{ route('applicant_lists.destroy', $list->id) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <input type="hidden" name="event" value="{{ $event->id }}">
+                <input class="rounded-md bg-red-500 my-10 px-3 py-1 mr-5" type="submit" name="submit" value="Cancel List">
+            </form>
+        @endif
+    </div>
+    @endcan
+
     <div class="flex leading-loose text-blue-700 my-10">
         <a class="flex items-center pb-3" href="{{ route('events.show', $event) }}">
             <svg class="align-center" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
@@ -121,19 +132,6 @@
             </svg>
         Back to Slot</a>
     </div>
-
-    @can('organiser-view', $user)
-        <a href="{{ route('applicant_lists.edit', [$list, 'event' => $event]) }}">Edit List</a>
-        @if(count($list->applicants) < 1)
-            <form action="{{ route('applicant_lists.destroy', $list->id) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <input type="hidden" name="event" value="{{ $event->id }}">
-                <input type="submit" name="submit" value="Cancel List">
-            </form>
-        @endif
-        <br>
-    @endcan
 
 @endsection
 
