@@ -12,6 +12,21 @@
     @endif
 
     <section class="w-full">
+        <div class="flex flex-row justify-end h-10 mb-5">
+            @can('update', $event)
+                <a class="bg-green-500 text-white rounded-md px-3 pt-1 mx-5" href="{{ route('slots.create', ['event_id' => $event]) }}">Add new Slot</a>
+                <a class="bg-yellow-400 text-white rounded-md px-3 pt-1 mx-5" href="{{ route('events.edit', $event->id) }}">Edit event details</a>
+            @endcan
+
+            @can('delete', $event)
+                <form action="{{ route('events.destroy', $event->id) }}" method="post">
+                    @csrf
+                    {{ method_field('DELETE') }}
+                    <input type="hidden" name="event_id" value="{{ $event->id }}">
+                    <input class="bg-red-600 text-white rounded-md px-3 ml-5 h-10 cursor-pointer" type="submit" name="submit" value="Delete">
+                </form>
+            @endcan
+        </div>
         <div class="grid grid-cols-2 rounded-md grid-flow-row mb-5 justify-between h-10 bg-blue-400 text-white px-5 py-1">
             <div class="text-left ">Event Name: {{ $event->name }}</div>
             <div class="text-right">Organiser: {{ $event->organiser }}</div>
@@ -142,21 +157,6 @@
         <a class="block leading-loose text-blue-700" href="{{ route('event_organisers.show', $event->event_organiser_id) }}">
             View Organiser
         </a>        
-    </div>
-    <div class="flex flex-row justify-between">
-        @can('update', $event)
-            <a href="{{ route('slots.create', ['event_id' => $event]) }}">Add new Slot</a>
-            <a href="{{ route('events.edit', $event->id) }}">Edit event details</a>
-        @endcan
-
-        @can('delete', $event)
-            <form action="{{ route('events.destroy', $event->id) }}" method="post">
-                @csrf
-                {{ method_field('DELETE') }}
-                <input type="hidden" name="event_id" value="{{ $event->id }}">
-                <input type="submit" name="submit" value="Delete">
-            </form>
-        @endcan
     </div>
 </div>
 @endsection
