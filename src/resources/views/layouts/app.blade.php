@@ -10,44 +10,50 @@
 </head>
 <body>
     <div id="app" class="container-lg flex flex-col h-screen justify-between">
-        <nav class="w-full flex flex-row w-full justify-end py-5 px-10 bg-gray-900">
-                <div id="login-reg" class="flex flex-row space-x-10">
-                    @guest
-                        <div class="text-sm text-gray-300 hover:text-white">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                        </div>
-                        @if (Route::has('register'))
-                            <div class="text-sm text-gray-300 hover:text-white">
-                                <a class="nav-link" href="{{ route('register.select_account_type') }}">{{ __('Register') }}</a>
-                            </div>
-                        @endif
-                    @endguest
 
-                    @if (Auth::check())
-                    <div>
-                        {{ Auth::user()->name }} <span class="caret"></span>
-                    </div>
-                    <div>
-                        @if (Auth::user()->customer)
-                            {{--Note: Watch this as there was an orphan user that didnt have a role that broke this--}}
-
-                            <a href="{{ route('customers.show', Auth::user()->customer->id) }}">My Account</a>
-                        @endif
-                    </div>
-                    <div>
-                        @if (Auth::user()->eventOrganiser)
-                            <a href="{{ route('event_organisers.show', Auth::user()->eventOrganiser->id) }}">My Account</a>
-                        @endif
-                    </div>
-
+        <nav class="w-full flex flex-row w-full justify-between py-5 px-10 bg-gray-900">
+            <div class="flex items-center text-white ">
+                <p class="flex px-5">nlist
+                <svg class="pr-1" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M3 6.25a.75.75 0 01.75-.75h13.5a.75.75 0 010 1.5H3.75A.75.75 0 013 6.25zM3.75 11a.75.75 0 01.75.75v7a.75.75 0 01-1.5 0v-7a.75.75 0 01.75-.75zM8 12.313a.75.75 0 01.75-.75h11.5a.75.75 0 010 1.5H8.75a.75.75 0 01-.75-.75zm0 5.937a.75.75 0 01.75-.75h11.5a.75.75 0 010 1.5H8.75a.75.75 0 01-.75-.75z"></path></svg>
+                </p>
+            </div>
+            <div id="login-reg" class="flex flex-row space-x-10">
+                @guest
                     <div class="text-sm text-gray-300 hover:text-white">
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST">
-                            @csrf
-                            <input class="bg-gray-900" type="submit" name="Logout" value="Logout">
-                        </form>
+                        <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                     </div>
+                    @if (Route::has('register'))
+                        <div class="text-sm text-gray-300 hover:text-white">
+                            <a class="nav-link" href="{{ route('register.select_account_type') }}">{{ __('Register') }}</a>
+                        </div>
+                    @endif
+                @endguest
+
+                @if (Auth::check())
+                <div>
+                    {{ Auth::user()->name }} <span class="caret"></span>
+                </div>
+                <div>
+                    @if (Auth::user()->customer)
+                        {{--Note: Watch this as there was an orphan user that didnt have a role that broke this--}}
+
+                        <a href="{{ route('customers.show', Auth::user()->customer->id) }}">My Account</a>
                     @endif
                 </div>
+                <div class="text-sm text-gray-300 hover:text-white">
+                    @if (Auth::user()->eventOrganiser)
+                        <a href="{{ route('event_organisers.show', Auth::user()->eventOrganiser->id) }}">My Account</a>
+                    @endif
+                </div>
+
+                <div class="text-sm text-gray-300 hover:text-white">
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <input class="bg-gray-900" type="submit" name="Logout" value="Logout">
+                    </form>
+                </div>
+                @endif
+            </div>
         </nav>
          
         <nav>
