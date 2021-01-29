@@ -4,6 +4,7 @@
 
 @section('content')
 
+    @can('create-list', $user)
     <form action="{{ route('applicant_lists.store', ['slot' => $slot, 'event' => $event]) }}" method="POST">
         @csrf
         <input type="hidden" name="event_id" value="{{ $event }}">
@@ -18,5 +19,6 @@
     </form>
     <br>
     <a href="{{ route('events.show', $event) }}">Back to event</a>
+    @endcan
 
 @endsection
