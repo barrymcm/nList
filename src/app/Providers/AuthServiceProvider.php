@@ -48,6 +48,16 @@ class AuthServiceProvider extends ServiceProvider
             return isset($eventOrganiser)? $eventOrganiser->user->is($user) : false;
         });
 
+        Gate::define('update-list', function (User $user) {
+            $eventOrganiser = $user->eventOrganiser;
+        
+            if (isset($eventOrganiser)) {
+                return $eventOrganiser->user->is($user);
+            }
+
+            return false;
+        });
+
         Passport::routes();
     }
 }
