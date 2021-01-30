@@ -71,6 +71,10 @@ class EventsController extends Controller
 
     public function edit(Event $event)
     {
+        if (!Auth::check()) {
+            return redirect()->route('events.show', ['event' => $event]);
+        }
+
         $categories = Category::all();
 
         return view('events.edit', [
